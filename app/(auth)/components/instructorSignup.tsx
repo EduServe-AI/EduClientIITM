@@ -37,6 +37,10 @@ export default function InstructorSignup({
 
   // Handling the instructor signup
   const handleSignup = async () => {
+    if (!username || !email || !password) {
+      toast.error('Please enter all fields')
+      return
+    }
     setIsLoading(true)
     try {
       const response = await fetch(`${BaseUrl}/auth/instructor-signup`, {

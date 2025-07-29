@@ -38,6 +38,10 @@ export default function StudentLogin({
 
   // Handling the student login
   const handleLogin = async () => {
+    if (!email || !password) {
+      toast.error('Please enter both email and password')
+      return
+    }
     setIsLoading(true)
     try {
       const response = await fetch(`${BaseUrl}/auth/student-login`, {
@@ -55,7 +59,7 @@ export default function StudentLogin({
       const data = await response.json()
 
       if (!response.ok) {
-        toast.error(`Login failed ${data.message}}`)
+        toast.error(`Login failed ${data.message}`)
         return
       }
 

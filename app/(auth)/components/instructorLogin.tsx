@@ -37,6 +37,10 @@ export default function InstructorLogin({
 
   // Handling the student login
   const handleLogin = async () => {
+    if (!email || !password) {
+      toast.error('Please enter both email and password')
+      return
+    }
     setIsLoading(true)
     try {
       const response = await fetch(`${BaseUrl}/auth/instructor-login`, {
