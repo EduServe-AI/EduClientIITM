@@ -7,16 +7,21 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff, Loader2 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import Image from 'next/image'
 import Link from 'next/link'
+import { toast } from 'sonner'
+import { saveAccessToken } from '@/lib/auth'
+import { useRouter } from 'next/navigation'
 
 interface InstructorLoginProps {
   isSignin: boolean
   setIsSignin: (value: boolean) => void
 }
+
+const BaseUrl = process.env.NEXT_PUBLIC_API_URL
 
 export default function InstructorLogin({
   isSignin,
@@ -25,6 +30,53 @@ export default function InstructorLogin({
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [showPassword, setShowPassword] = useState<boolean>(false)
+
+  const router = useRouter()
+
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  // Handling the student login
+  const handleLogin = async () => {
+    setIsLoading(true)
+    try {
+      const response = await fetch(`${BaseUrl}/auth/instructor-login`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        toast.error('Login failed')
+        console.error(`Login failed ${data.message}`)
+        return
+      }
+
+      // Save the access token
+      saveAccessToken(data.data.accessToken)
+
+      toast.success('Instructor Signed In')
+
+      // If user onboarded , need to redirect to instructor dashboard else redirect to student onboarding
+      const instructor = data.data.instructor
+      instructor.onboarded
+        ? router.push('/dashboard/instructor')
+        : router.push('/onboarding/instructor')
+    } catch (error) {
+      console.error(`Login error : ${error}`)
+      toast.error('Login Failed')
+      return
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   return (
     <div className="flex ml-15 mt-10 items-center gap-10">
@@ -125,9 +177,16 @@ export default function InstructorLogin({
                 variant="outline"
                 size="lg"
                 className="bg-sky-400 hover:cursor-pointer hover:bg-sky-500 hover:text-white text-white "
-                onClick={() => {}}
+                onClick={handleLogin}
               >
-                Sign in
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Loading..
+                  </>
+                ) : (
+                  'Sign in'
+                )}
               </Button>
 
               <Button

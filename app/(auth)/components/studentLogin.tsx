@@ -38,8 +38,6 @@ export default function StudentLogin({
 
   // Handling the student login
   const handleLogin = async () => {
-    console.log(`BaseUrl : ${BaseUrl}`)
-    alert(`BaseUrl : ${BaseUrl}`)
     setIsLoading(true)
     try {
       const response = await fetch(`${BaseUrl}/auth/student-login`, {
@@ -57,20 +55,17 @@ export default function StudentLogin({
       const data = await response.json()
 
       if (!response.ok) {
-        toast.error('Login failed')
-        console.error(`Login failed ${data.message}`)
+        toast.error(`Login failed ${data.message}}`)
         return
       }
 
       // Save the access token
       saveAccessToken(data.data.accessToken)
 
-      console.log('User logged in ', data.data)
-
-      toast.success('User Signed In')
+      toast.success('Student Signed In Successfully!')
 
       // If user onboarded , need to redirect to student dashboard else redirect to student onboarding
-      const student = data.data.user
+      const student = data.data.student
       student.onboarded
         ? router.push('/dashboard/student')
         : router.push('/onboarding/student')

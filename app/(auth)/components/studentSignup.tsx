@@ -57,8 +57,7 @@ export default function StudentSignup({
       const data = await response.json()
 
       if (!response.ok) {
-        toast.error('Signup failed')
-        console.error(`Signup failed ${data.message}`)
+        toast.error(data.message)
         return
       }
 
