@@ -39,6 +39,10 @@ export default function StudentSignup({
 
   // Handling the student signup
   const handleSignup = async () => {
+    if (!username || !email || !password) {
+      toast.error('Please enter all fields')
+      return
+    }
     setIsLoading(true)
     try {
       const response = await fetch(`${BaseUrl}/auth/student-signup`, {
@@ -57,8 +61,7 @@ export default function StudentSignup({
       const data = await response.json()
 
       if (!response.ok) {
-        toast.error('Signup failed')
-        console.error(`Signup failed ${data.message}`)
+        toast.error(data.message)
         return
       }
 

@@ -38,8 +38,10 @@ export default function StudentLogin({
 
   // Handling the student login
   const handleLogin = async () => {
-    console.log(`BaseUrl : ${BaseUrl}`)
-    alert(`BaseUrl : ${BaseUrl}`)
+    if (!email || !password) {
+      toast.error('Please enter both email and password')
+      return
+    }
     setIsLoading(true)
     try {
       const response = await fetch(`${BaseUrl}/auth/student-login`, {
@@ -57,20 +59,17 @@ export default function StudentLogin({
       const data = await response.json()
 
       if (!response.ok) {
-        toast.error('Login failed')
-        console.error(`Login failed ${data.message}`)
+        toast.error(`Login failed ${data.message}`)
         return
       }
 
       // Save the access token
       saveAccessToken(data.data.accessToken)
 
-      console.log('User logged in ', data.data)
-
-      toast.success('User Signed In')
+      toast.success('Student Signed In Successfully!')
 
       // If user onboarded , need to redirect to student dashboard else redirect to student onboarding
-      const student = data.data.user
+      const student = data.data.student
       student.onboarded
         ? router.push('/dashboard/student')
         : router.push('/onboarding/student')
@@ -184,6 +183,7 @@ export default function StudentLogin({
                 size="lg"
                 className="bg-sky-400 hover:cursor-pointer hover:bg-sky-500 hover:text-white text-white "
                 onClick={handleLogin}
+                disabled={isLoading}
               >
                 {isLoading ? (
                   <>
