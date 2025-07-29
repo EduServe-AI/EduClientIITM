@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
@@ -23,11 +23,13 @@ interface StudentSignupProps {
   setIsSignin: (value: boolean) => void
 }
 
+const BaseUrl = process.env.NEXT_PUBLIC_API_URL
+
 export default function StudentSignup({
   isSignin,
   setIsSignin,
 }: StudentSignupProps) {
-   const router = useRouter()
+  const router = useRouter()
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [username, setUsername] = useState<string>('')
@@ -39,21 +41,18 @@ export default function StudentSignup({
   const handleSignup = async () => {
     setIsLoading(true)
     try {
-      const response = await fetch(
-        'http://localhost:5000/api/v1/auth/student-signup',
-        {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            username,
-            email,
-            password,
-          }),
-        }
-      )
+      const response = await fetch(`${BaseUrl}/auth/student-signup`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username,
+          email,
+          password,
+        }),
+      })
 
       const data = await response.json()
 
@@ -72,10 +71,11 @@ export default function StudentSignup({
 
       // Redirecting to onboarding
       router.push('/onboarding/student')
-
     } catch (error) {
       console.error(`Signup error : ${error}`)
-      throw new Error('Error in signing up student')
+      toast.error('Signup failed')
+    } finally {
+      setIsLoading(false)
     }
   }
 

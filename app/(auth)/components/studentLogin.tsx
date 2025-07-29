@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import {
@@ -7,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Eye, EyeOff , Loader2 } from 'lucide-react'
+import { Eye, EyeOff, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -21,12 +23,12 @@ interface StudentLoginProps {
   setIsSignin: (value: boolean) => void
 }
 
+const BaseUrl = process.env.NEXT_PUBLIC_API_URL
+
 export default function StudentLogin({
   isSignin,
   setIsSignin,
 }: StudentLoginProps) {
-
-
   const router = useRouter()
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -34,50 +36,52 @@ export default function StudentLogin({
   const [password, setPassword] = useState<string>('')
   const [showPassword, setShowPassword] = useState<boolean>(false)
 
-  // Handling the student login 
-    const handleLogin = async () => {
-      setIsLoading(true)
-      try {
-        const response = await fetch(
-          'http://localhost:5000/api/v1/auth/student-login',
-          {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              email,
-              password,
-            }),
-          }
-        )
-  
-        const data = await response.json()
-  
-        if (!response.ok) {
-          toast.error('Login failed')
-          console.error(`Login failed ${data.message}`)
-          return
-        }
-  
-        // Save the access token
-        saveAccessToken(data.data.accessToken)
-  
-        console.log('User logged in ', data.data)
-  
-        toast.success('User Signed In')
-  
-        // If user onboarded , need to redirect to student dashboard else redirect to student onboarding
-        const student = data.data.user
-        student.onboarded ? router.push('/dashboard/student') 
-                          : router.push('/onboarding/student') 
-  
-      } catch (error) {
-        console.error(`Login error : ${error}`)
-        throw new Error('Error in signing in student')
+  // Handling the student login
+  const handleLogin = async () => {
+    console.log(`BaseUrl : ${BaseUrl}`)
+    alert(`BaseUrl : ${BaseUrl}`)
+    setIsLoading(true)
+    try {
+      const response = await fetch(`${BaseUrl}/auth/student-login`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        toast.error('Login failed')
+        console.error(`Login failed ${data.message}`)
+        return
       }
+
+      // Save the access token
+      saveAccessToken(data.data.accessToken)
+
+      console.log('User logged in ', data.data)
+
+      toast.success('User Signed In')
+
+      // If user onboarded , need to redirect to student dashboard else redirect to student onboarding
+      const student = data.data.user
+      student.onboarded
+        ? router.push('/dashboard/student')
+        : router.push('/onboarding/student')
+    } catch (error) {
+      console.error(`Login error : ${error}`)
+      toast.error('Login Failed')
+      return
+    } finally {
+      setIsLoading(false)
     }
+  }
 
   return (
     <div className="flex ml-15 mt-10 items-center gap-10">
@@ -215,7 +219,7 @@ export default function StudentLogin({
                   onClick={() => setIsSignin(false)}
                   className="text-sky-800 hover:cursor-pointer"
                 >
-                  Hire one
+                  Sign up here
                 </button>
               </div>
             </div>
