@@ -183,6 +183,7 @@ export default function StudentLogin({
                 size="lg"
                 className="bg-sky-400 hover:cursor-pointer hover:bg-sky-500 hover:text-white text-white "
                 onClick={handleLogin}
+                disabled={isLoading}
               >
                 {isLoading ? (
                   <>
