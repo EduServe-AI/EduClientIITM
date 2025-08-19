@@ -68,8 +68,6 @@ export default function StudentSignup({
       // Save the access token
       saveAccessToken(data.data.accessToken)
 
-      console.log('User logged in ', data.data)
-
       toast.success('User Signed In')
 
       // Redirecting to onboarding
