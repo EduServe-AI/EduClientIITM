@@ -10,6 +10,7 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { ProgramLevelId } from '@/types/types'
 import { useRouter } from 'next/navigation'
+import { apiService } from '@/lib/api'
 
 interface SubjectSelectorProps {
   selectedLevel: ProgramLevelId | null
@@ -94,26 +95,19 @@ export default function SubjectSelector({
     )
 
     try {
-      const response = await fetch(`${BaseUrl}/enrollment/add-courses`, {
+      await apiService('/enrollment/add-courses', {
         method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({ selected_courses }),
+        body: { selected_courses },
       })
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => null)
-        toast.error(errorData?.message || 'Failed to enroll in courses')
-        return
-      }
 
       toast.success('Courses enrolled successfully')
       router.push('/dashboard/student')
     } catch (error) {
-      toast.error('Network error. Please try again')
+      if (error instanceof Error) {
+        toast.error(error.message || 'An unknown network error occurred.')
+      } else {
+        toast.error('An unknown error occurred.')
+      }
     }
   }
 

@@ -5,8 +5,7 @@ import LevelSelector from '../components/levelSelector'
 import SubjectSelector from '../components/subjectsSelector'
 import { ProgramLevelId } from '@/types/types'
 import { toast } from 'sonner'
-
-const BaseUrl = process.env.NEXT_PUBLIC_API_URL
+import { apiService } from '@/lib/api'
 
 export default function StudentOnboarding() {
   // state controlling level selection
@@ -33,35 +32,24 @@ export default function StudentOnboarding() {
       return
     }
 
-    //
     try {
-      const response = await fetch(`${BaseUrl}/user/update`, {
+      await apiService('/user/update', {
         method: 'PATCH',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({
-          level: selectedLevel,
-        }),
+        body: { level: selectedLevel },
       })
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => null)
-        toast.error(errorData?.message || 'Failed to update level')
-        return
-      }
+      // making the level component to hide
+      setLevelOpen(false)
+
+      // set the subject selection component to open
+      setSubjectOpen(true)
     } catch (error) {
-      toast.error('Network error')
-      return
+      if (error instanceof Error) {
+        toast.error(error.message || 'Failed to update level')
+      } else {
+        toast.error('An unknown error occurred.')
+      }
     }
-
-    // making the level component to hide
-    setLevelOpen(false)
-
-    // set the subject selection component to open
-    setSubjectOpen(true)
   }
 
   return (

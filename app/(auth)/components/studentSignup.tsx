@@ -17,6 +17,14 @@ import { Eye, EyeOff, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { saveAccessToken } from '@/lib/auth'
 import { useRouter } from 'next/navigation'
+import { apiService } from '@/lib/api'
+
+interface SignupResponse {
+  data: {
+    accessToken: string
+    student: any
+  }
+}
 
 interface StudentSignupProps {
   isSignin: boolean
@@ -45,25 +53,25 @@ export default function StudentSignup({
     }
     setIsLoading(true)
     try {
-      const response = await fetch(`${BaseUrl}/auth/student-signup`, {
+      // const response = await fetch(`${BaseUrl}/auth/student-signup`, {
+      //   method: 'POST',
+      //   credentials: 'include',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({
+      //     username,
+      //     email,
+      //     password,
+      //   }),
+      // })
+
+      // const data = await response.json()
+
+      const data = await apiService<SignupResponse>('/auth/student-signup', {
         method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username,
-          email,
-          password,
-        }),
+        body: { username, email, password },
       })
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        toast.error(data.message)
-        return
-      }
 
       // Save the access token
       saveAccessToken(data.data.accessToken)
