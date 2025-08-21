@@ -1,79 +1,122 @@
-import { FOUNDATION_SUBJECTS } from "@/constants/foundation-subjects";
-import { DIPLOMADS_SUBJECTS } from "@/constants/diplomads-subjects";
-import { DIPLOMAPR_SUBJECTS } from "@/constants/diplomapr-subjects";
-import { DIPLOMA_PROJECTS } from "@/constants/diploma-projects"
-import { BSC_SUBJECTS } from "@/constants/bsc-subjects";
-import { getLevelProperties } from "./levelSelector";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { toast } from "sonner";
-import { ProgramLevelId } from "@/types/types";
+import { FOUNDATION_SUBJECTS } from '@/constants/foundation-subjects'
+import { DIPLOMADS_SUBJECTS } from '@/constants/diplomads-subjects'
+import { DIPLOMAPR_SUBJECTS } from '@/constants/diplomapr-subjects'
+import { DIPLOMA_PROJECTS } from '@/constants/diploma-projects'
+import { BSC_SUBJECTS } from '@/constants/bsc-subjects'
+import { getLevelProperties } from './levelSelector'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { useState } from 'react'
+import { toast } from 'sonner'
+import { ProgramLevelId } from '@/types/types'
 import { useRouter } from 'next/navigation'
-
+import { apiService } from '@/lib/api'
 
 interface SubjectSelectorProps {
-  selectedLevel: ProgramLevelId | null;
-  onBack: () => void;
+  selectedLevel: ProgramLevelId | null
+  onBack: () => void
 }
 
-export default function SubjectSelector({ selectedLevel, onBack }: SubjectSelectorProps) {
+const BaseUrl = process.env.NEXT_PUBLIC_API_URL
+
+export default function SubjectSelector({
+  selectedLevel,
+  onBack,
+}: SubjectSelectorProps) {
   if (!selectedLevel) {
-    toast.error("No selected Programme Level");
-    throw new Error("No selected Programme Level");
+    toast.error('No selected Programme Level')
+    throw new Error('No selected Programme Level')
   }
 
   const router = useRouter()
 
-
-  const color = getLevelProperties(selectedLevel);
-  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
-  const [selectedProjects, setSelectedProjects] = useState<string[]>([]);
+  const color = getLevelProperties(selectedLevel)
+  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([])
+  const [selectedProjects, setSelectedProjects] = useState<string[]>([])
 
   const isProjectCourse = (name: string) => {
-    return DIPLOMA_PROJECTS.some(project => project.name === name);
-  };
+    return DIPLOMA_PROJECTS.some(project => project.name === name)
+  }
 
   const toggleSubject = (name: string) => {
-    const isProject = isProjectCourse(name);
-    
+    const isProject = isProjectCourse(name)
+
     if (isProject) {
       setSelectedProjects(prev => {
         if (prev.includes(name)) {
-          return prev.filter(s => s !== name);
+          return prev.filter(s => s !== name)
         } else {
           if (prev.length >= 2) {
-            toast.error("You can only select up to 2 project courses");
-            return prev;
+            toast.error('You can only select up to 2 project courses')
+            return prev
           }
-          return [...prev, name];
+          return [...prev, name]
         }
-      });
+      })
     } else {
       setSelectedSubjects(prev => {
         if (prev.includes(name)) {
-          return prev.filter(s => s !== name);
+          return prev.filter(s => s !== name)
         } else {
           if (prev.length >= 4) {
-            toast.error("You can only select up to 4 regular subjects");
-            return prev;
+            toast.error('You can only select up to 4 regular subjects')
+            return prev
           }
-          return [...prev, name];
+          return [...prev, name]
         }
-      });
+      })
     }
-  };
+  }
 
-  const handleNext = () => {
-    router.push('/dashboard/student')
+  const handleNext = async () => {
+    const accessToken = localStorage.getItem('accessToken')
+    if (!accessToken) {
+      toast.error('No access token found. Please log in again')
+    }
+
+    // Validate selection constraints before calling API
+    if (selectedSubjects.length === 0 && selectedProjects.length === 0) {
+      toast.error('Please select at least one course.')
+      return
+    }
+
+    if (selectedSubjects.length > 4) {
+      toast.error('You can only select up to 4 regular subjects')
+      return
+    }
+
+    if (selectedProjects.length > 2) {
+      toast.error('You can only select up to 2 project courses')
+      return
+    }
+
+    const selected_courses = Array.from(
+      new Set([...selectedSubjects, ...selectedProjects])
+    )
+
+    try {
+      await apiService('/enrollment/add-courses', {
+        method: 'POST',
+        body: { selected_courses },
+      })
+
+      toast.success('Courses enrolled successfully')
+      router.push('/dashboard/student')
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message || 'An unknown network error occurred.')
+      } else {
+        toast.error('An unknown error occurred.')
+      }
+    }
   }
 
   const renderSubjects = (subjects: any[]) => (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mb-6">
       {subjects.map((subject, index) => {
-        const isSelected = isProjectCourse(subject.name) 
+        const isSelected = isProjectCourse(subject.name)
           ? selectedProjects.includes(subject.name)
-          : selectedSubjects.includes(subject.name);
+          : selectedSubjects.includes(subject.name)
 
         return (
           <Card
@@ -95,15 +138,15 @@ export default function SubjectSelector({ selectedLevel, onBack }: SubjectSelect
               </p>
               {subject.prerequisites?.length > 0 && (
                 <p className="text-sm mt-2 text-gray-500">
-                  Prerequisites: {subject.prerequisites.join(", ")}
+                  Prerequisites: {subject.prerequisites.join(', ')}
                 </p>
               )}
             </CardContent>
           </Card>
-        );
+        )
       })}
     </div>
-  );
+  )
 
   return (
     <div className="w-full max-w-6xl mx-auto px-4 py-6">
@@ -111,24 +154,30 @@ export default function SubjectSelector({ selectedLevel, onBack }: SubjectSelect
         {selectedLevel.toUpperCase()} LEVEL
       </h2>
 
-      {selectedLevel === "diploma" ? (
+      {selectedLevel === 'diploma' ? (
         <>
-          <h3 className="text-lg font-semibold mb-2 text-gray-800 text-center">Diploma in Data Science</h3>
+          <h3 className="text-lg font-semibold mb-2 text-gray-800 text-center">
+            Diploma in Data Science
+          </h3>
           {renderSubjects(DIPLOMADS_SUBJECTS)}
 
-          <h3 className="text-lg font-semibold mb-2 text-gray-800 mt-6 text-center">Diploma in Programming</h3>
+          <h3 className="text-lg font-semibold mb-2 text-gray-800 mt-6 text-center">
+            Diploma in Programming
+          </h3>
           {renderSubjects(DIPLOMAPR_SUBJECTS)}
-          
-          <h3 className="text-lg font-semibold mb-2 text-gray-800 mt-6 text-center">Project Courses</h3>
+
+          <h3 className="text-lg font-semibold mb-2 text-gray-800 mt-6 text-center">
+            Project Courses
+          </h3>
           {renderSubjects(DIPLOMA_PROJECTS)}
         </>
       ) : (
         renderSubjects(
-          selectedLevel === "foundation"
+          selectedLevel === 'foundation'
             ? FOUNDATION_SUBJECTS
-            : selectedLevel === "bsc"
-            ? BSC_SUBJECTS
-            : []
+            : selectedLevel === 'bsc'
+              ? BSC_SUBJECTS
+              : []
         )
       )}
 
@@ -137,7 +186,9 @@ export default function SubjectSelector({ selectedLevel, onBack }: SubjectSelect
         <div className="flex-grow space-y-3">
           {selectedSubjects.length > 0 && (
             <div className="flex items-center gap-3 flex-wrap">
-              <span className="text-gray-700 font-medium whitespace-nowrap">Selected Subjects:</span>
+              <span className="text-gray-700 font-medium whitespace-nowrap">
+                Selected Subjects:
+              </span>
               <div className="flex flex-wrap gap-2">
                 {selectedSubjects.map((subject, index) => (
                   <span
@@ -147,14 +198,18 @@ export default function SubjectSelector({ selectedLevel, onBack }: SubjectSelect
                     {subject}
                   </span>
                 ))}
-                <span className="text-xs text-gray-500">({selectedSubjects.length}/4)</span>
+                <span className="text-xs text-gray-500">
+                  ({selectedSubjects.length}/4)
+                </span>
               </div>
             </div>
           )}
-          
-          {selectedLevel === "diploma" && selectedProjects.length > 0 && (
+
+          {selectedLevel === 'diploma' && selectedProjects.length > 0 && (
             <div className="flex items-center gap-3 flex-wrap">
-              <span className="text-gray-700 font-medium whitespace-nowrap">Selected Projects:</span>
+              <span className="text-gray-700 font-medium whitespace-nowrap">
+                Selected Projects:
+              </span>
               <div className="flex flex-wrap gap-2">
                 {selectedProjects.map((project, index) => (
                   <span
@@ -164,7 +219,9 @@ export default function SubjectSelector({ selectedLevel, onBack }: SubjectSelect
                     {project}
                   </span>
                 ))}
-                <span className="text-xs text-gray-500">({selectedProjects.length}/2)</span>
+                <span className="text-xs text-gray-500">
+                  ({selectedProjects.length}/2)
+                </span>
               </div>
             </div>
           )}
@@ -179,14 +236,15 @@ export default function SubjectSelector({ selectedLevel, onBack }: SubjectSelect
           </Button>
           <Button
             onClick={handleNext}
-            disabled={selectedSubjects.length === 0 && selectedProjects.length === 0}
-            className="px-6 py-2 text-md rounded-md bg-sky-600 hover:bg-sky-800 text-white hover:cursor-pointer" 
+            disabled={
+              selectedSubjects.length === 0 && selectedProjects.length === 0
+            }
+            className="px-6 py-2 text-md rounded-md bg-sky-600 hover:bg-sky-800 text-white hover:cursor-pointer"
           >
             Next
           </Button>
         </div>
       </div>
     </div>
-  );
+  )
 }
-

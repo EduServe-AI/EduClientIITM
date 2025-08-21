@@ -17,13 +17,21 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { saveAccessToken } from '@/lib/auth'
+import { apiService } from '@/lib/api'
+
+interface LoginResponse {
+  data: {
+    accessToken: string
+    student: {
+      onboarded: boolean
+    }
+  }
+}
 
 interface StudentLoginProps {
   isSignin: boolean
   setIsSignin: (value: boolean) => void
 }
-
-const BaseUrl = process.env.NEXT_PUBLIC_API_URL
 
 export default function StudentLogin({
   isSignin,
@@ -44,24 +52,10 @@ export default function StudentLogin({
     }
     setIsLoading(true)
     try {
-      const response = await fetch(`${BaseUrl}/auth/student-login`, {
+      const data = await apiService<LoginResponse>('/auth/student-login', {
         method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+        body: { email, password },
       })
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        toast.error(`Login failed ${data.message}`)
-        return
-      }
 
       // Save the access token
       saveAccessToken(data.data.accessToken)
@@ -74,9 +68,11 @@ export default function StudentLogin({
         ? router.push('/dashboard/student')
         : router.push('/onboarding/student')
     } catch (error) {
-      console.error(`Login error : ${error}`)
-      toast.error('Login Failed')
-      return
+      if (error instanceof Error) {
+        toast.error(error.message || 'Login failed. Please try again.')
+      } else {
+        toast.error('An unknown error occurred during login.')
+      }
     } finally {
       setIsLoading(false)
     }

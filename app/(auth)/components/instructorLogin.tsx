@@ -15,13 +15,21 @@ import Link from 'next/link'
 import { toast } from 'sonner'
 import { saveAccessToken } from '@/lib/auth'
 import { useRouter } from 'next/navigation'
+import { apiService } from '@/lib/api'
+
+interface LoginResponse {
+  data: {
+    accessToken: string
+    instructor: {
+      onboarded: boolean
+    }
+  }
+}
 
 interface InstructorLoginProps {
   isSignin: boolean
   setIsSignin: (value: boolean) => void
 }
-
-const BaseUrl = process.env.NEXT_PUBLIC_API_URL
 
 export default function InstructorLogin({
   isSignin,
@@ -43,25 +51,10 @@ export default function InstructorLogin({
     }
     setIsLoading(true)
     try {
-      const response = await fetch(`${BaseUrl}/auth/instructor-login`, {
+      const data = await apiService<LoginResponse>('/auth/instructor-login', {
         method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+        body: { email, password },
       })
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        toast.error('Login failed')
-        console.error(`Login failed ${data.message}`)
-        return
-      }
 
       // Save the access token
       saveAccessToken(data.data.accessToken)
