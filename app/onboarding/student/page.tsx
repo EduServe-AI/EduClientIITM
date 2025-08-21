@@ -33,20 +33,28 @@ export default function StudentOnboarding() {
       return
     }
 
-    const response = await fetch(`${BaseUrl}/user/update`, {
-      method: 'PATCH',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify({
-        level: selectedLevel,
-      }),
-    })
+    //
+    try {
+      const response = await fetch(`${BaseUrl}/user/update`, {
+        method: 'PATCH',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          level: selectedLevel,
+        }),
+      })
 
-    if (!response.ok) {
-      toast.error('Network Error')
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null)
+        toast.error(errorData?.message || 'Failed to update level')
+        return
+      }
+    } catch (error) {
+      toast.error('Network error')
+      return
     }
 
     // making the level component to hide

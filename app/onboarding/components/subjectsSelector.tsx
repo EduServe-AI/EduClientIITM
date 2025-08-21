@@ -69,22 +69,52 @@ export default function SubjectSelector({
 
   const handleNext = async () => {
     const accessToken = localStorage.getItem('accessToken')
+    if (!accessToken) {
+      toast.error('No access token found. Please log in again')
+    }
 
-    const response = await fetch(`${BaseUrl}/enrollment/add-courses`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify({
-        selected_courses: [...selectedSubjects, ...selectedProjects],
-      }),
-    })
+    // Validate selection constraints before calling API
+    if (selectedSubjects.length === 0 && selectedProjects.length === 0) {
+      toast.error('Please select at least one course.')
+      return
+    }
 
-    const data = await response.json()
+    if (selectedSubjects.length > 4) {
+      toast.error('You can only select up to 4 regular subjects')
+      return
+    }
 
-    router.push('/dashboard/student')
+    if (selectedProjects.length > 2) {
+      toast.error('You can only select up to 2 project courses')
+      return
+    }
+
+    const selected_courses = Array.from(
+      new Set([...selectedSubjects, ...selectedProjects])
+    )
+
+    try {
+      const response = await fetch(`${BaseUrl}/enrollment/add-courses`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({ selected_courses }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => null)
+        toast.error(errorData?.message || 'Failed to enroll in courses')
+        return
+      }
+
+      toast.success('Courses enrolled successfully')
+      router.push('/dashboard/student')
+    } catch (error) {
+      toast.error('Network error. Please try again')
+    }
   }
 
   const renderSubjects = (subjects: any[]) => (
