@@ -50,6 +50,8 @@ export default function StudentLogin({
       toast.error('Please enter both email and password')
       return
     }
+    console.log('password', password)
+
     setIsLoading(true)
     try {
       const data = await apiService<LoginResponse>('/auth/student-login', {

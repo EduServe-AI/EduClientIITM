@@ -49,6 +49,9 @@ export default function InstructorSignup({
       toast.error('Please enter all fields')
       return
     }
+
+    console.log('password', password)
+
     setIsLoading(true)
     try {
       // const response = await fetch(`${BaseUrl}/auth/instructor-signup`, {

@@ -6,7 +6,7 @@ import { motion } from 'framer-motion'
 import { ProgramLevelId } from '@/types/types'
 
 interface LevelSelectorProps {
-  selectedLevel: string | null
+  selectedLevel: ProgramLevelId | null
   setSelectedLevel: (value: ProgramLevelId) => void
   handleLevelClick: () => void
 }
