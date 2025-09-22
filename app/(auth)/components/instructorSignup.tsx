@@ -49,21 +49,9 @@ export default function InstructorSignup({
       toast.error('Please enter all fields')
       return
     }
+
     setIsLoading(true)
     try {
-      // const response = await fetch(`${BaseUrl}/auth/instructor-signup`, {
-      //   method: 'POST',
-      //   credentials: 'include',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({
-      //     username,
-      //     email,
-      //     password,
-      //   }),
-      // })
-
       const data = await apiService<SignupResponse>('/auth/instructor-signup', {
         method: 'POST',
         body: { username, email, password },

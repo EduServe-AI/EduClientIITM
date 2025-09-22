@@ -122,10 +122,10 @@ export default function SubjectSelector({
           <Card
             key={index}
             onClick={() => toggleSubject(subject.name)}
-            className={`flex flex-col justify-between p-5 h-full transition-all duration-200 rounded-xl cursor-pointer
+            className={`flex flex-col justify-between p-5 h-full transition-all duration-200 rounded-md cursor-pointer
             ${color.color}
             ${isSelected ? 'border-2 ' + color.selectedColor : 'border ' + color.color}
-            hover:shadow-xl`}
+            hover:shadow-xl rounded-md`}
           >
             <CardHeader>
               <CardTitle className="text-lg text-center font-bold text-gray-900">
