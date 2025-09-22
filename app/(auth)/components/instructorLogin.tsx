@@ -39,8 +39,6 @@ export default function InstructorLogin({
   const [password, setPassword] = useState<string>('')
   const [showPassword, setShowPassword] = useState<boolean>(false)
 
-  console.log('password', password)
-
   const router = useRouter()
 
   const [isLoading, setIsLoading] = useState<boolean>(false)

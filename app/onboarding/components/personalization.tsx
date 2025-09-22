@@ -163,7 +163,7 @@ export default function Personalization({
             </Label>
             <div className="relative">
               <Input
-                id="githubUrl"
+                id="linkedinUrl"
                 type="url"
                 placeholder="https://linkedin.com/in/yourusername"
                 value={formData.linkedinUrl}

@@ -65,7 +65,6 @@ export default function instructorOnboarding() {
 
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
-      console.log('form data', formData)
       setCurrentStep(currentStep + 1)
     }
   }
@@ -153,7 +152,6 @@ export default function instructorOnboarding() {
   // seperate validation messages for step-2 : Expertise component
   const getExpertiseValidationMessages = (): string[] => {
     const messages: string[] = []
-    console.log('messages', messages)
     if (currentStep === 1) {
       // Need to implement
       if (formData.subjects.length === 0) {
@@ -230,8 +228,6 @@ export default function instructorOnboarding() {
   }
 
   const handleSubmit = async () => {
-    console.log('formdata', formData)
-
     setIsPending(true)
 
     const submission_data = {
@@ -247,15 +243,11 @@ export default function instructorOnboarding() {
       availability: formData.availability,
     }
 
-    console.log('submitting', submission_data)
-
     try {
       const response = await apiService('/instructor/onboarding', {
         body: submission_data,
         method: 'POST',
       })
-
-      console.log('response', response)
 
       setIsPending(false)
 

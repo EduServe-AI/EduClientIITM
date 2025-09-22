@@ -65,7 +65,9 @@ export default function Verification({
             min={0}
             max={10}
             value={formData.cgpa}
-            onChange={e => setFormData({ ...formData, cgpa: e.target.value })}
+            onChange={e =>
+              setFormData({ ...formData, cgpa: parseFloat(e.target.value) })
+            }
             required
             className="py-6 transition-all duration-200 focus:ring-2 focus:ring-blue-500"
           />

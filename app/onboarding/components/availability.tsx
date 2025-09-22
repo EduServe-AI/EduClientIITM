@@ -168,19 +168,7 @@ export default function Availability({
                   <div className="flex items-center space-x-4">
                     <Switch
                       checked={formData.availability[day].isEnabled}
-                      onCheckedChange={checked => {
-                        const updatedAvailability = {
-                          ...formData.availability,
-                          [day]: {
-                            ...formData.availability[day],
-                            isEnabled: checked,
-                          },
-                        }
-                        setFormData({
-                          ...formData,
-                          availability: updatedAvailability,
-                        })
-                      }}
+                      onCheckedChange={checked => handleDayToggle(day, checked)}
                     />
                     <span className="font-medium text-gray-700 w-28 text-base">
                       {day}

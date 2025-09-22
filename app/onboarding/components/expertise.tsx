@@ -63,7 +63,6 @@ export default function Expertise({ formData, setFormData }: ExpertiseProps) {
       // Check if maximum limit reached (5 subjects)
       if (formData.subjects.length >= 5) {
         toast.error("You can't select more than 5 subjects")
-        alert("You can't select more than 5 subjects")
         return
       }
       // Add subject if not at limit

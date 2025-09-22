@@ -51,25 +51,9 @@ export default function StudentSignup({
       toast.error('Please enter all fields')
       return
     }
-    console.log('password', password)
 
     setIsLoading(true)
     try {
-      // const response = await fetch(`${BaseUrl}/auth/student-signup`, {
-      //   method: 'POST',
-      //   credentials: 'include',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({
-      //     username,
-      //     email,
-      //     password,
-      //   }),
-      // })
-
-      // const data = await response.json()
-
       const data = await apiService<SignupResponse>('/auth/student-signup', {
         method: 'POST',
         body: { username, email, password },
