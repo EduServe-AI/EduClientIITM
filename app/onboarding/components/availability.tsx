@@ -126,7 +126,7 @@ export default function Availability({
         // Skip Monday itself
         newAvailability[day] = {
           isEnabled: mondaySchedule.isEnabled,
-          slots: [...mondaySchedule.slots], // Deep copy slots
+          slots: mondaySchedule.slots.map(slot => ({ ...slot })), // Deep copy slots
         } // changed
       })
       return {
