@@ -44,6 +44,7 @@ export default function StudentOnboarding() {
       // set the subject selection component to open
       setSubjectOpen(true)
     } catch (error) {
+      console.error('Error ', error)
       if (error instanceof Error) {
         toast.error(error.message || 'Failed to update level')
       } else {

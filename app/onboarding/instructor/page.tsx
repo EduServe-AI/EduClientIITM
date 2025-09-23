@@ -256,7 +256,7 @@ export default function instructorOnboarding() {
       router.push('/dashboard/instructor')
     } catch (error) {
       if (error instanceof Error) {
-        console.error('Error', error)
+        console.error('Error has been occurred', error)
         toast.error(error.message || 'Failed to update level')
       } else {
         toast.error('An unknown error occurred.')
