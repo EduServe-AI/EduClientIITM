@@ -67,7 +67,8 @@ export default function InstructorLogin({
         ? router.push('/dashboard/instructor')
         : router.push('/onboarding/instructor')
     } catch (error) {
-      console.error(`Login error : ${error}`)
+      // console.error(`Login error : ${error}`)
+      router.push('/instructor')
       toast.error('Login Failed')
       return
     } finally {
