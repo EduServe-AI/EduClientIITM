@@ -22,6 +22,7 @@ interface LoginResponse {
     accessToken: string
     instructor: {
       onboarded: boolean
+      verified: boolean
     }
   }
 }
@@ -63,11 +64,18 @@ export default function InstructorLogin({
 
       // If user onboarded , need to redirect to instructor dashboard else redirect to student onboarding
       const instructor = data.data.instructor
-      instructor.onboarded
-        ? router.push('/dashboard/instructor')
-        : router.push('/onboarding/instructor')
+      if (instructor.onboarded) {
+        if (instructor.verified) {
+          router.push('/dashboard/instructor')
+        } else {
+          router.push('/verification')
+        }
+      } else {
+        router.push('/onboarding/instructor')
+      }
     } catch (error) {
-      console.error(`Login error : ${error}`)
+      // console.error(`Login error : ${error}`)
+      router.push('/instructor')
       toast.error('Login Failed')
       return
     } finally {

@@ -253,7 +253,8 @@ export default function instructorOnboarding() {
 
       toast.success('Instructor Onboarded successfully')
 
-      router.push('/dashboard/instructor')
+      router.push('/verification')
+      //here we redirect to verification
     } catch (error) {
       if (error instanceof Error) {
         console.error('Error has been occurred', error)
