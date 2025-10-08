@@ -6,7 +6,6 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -15,15 +14,7 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar'
 import { NavItem } from '@/types/types'
-import {
-  Calendar,
-  ChevronLeft,
-  ChevronsLeft,
-  Home,
-  Inbox,
-  Search,
-  Settings,
-} from 'lucide-react'
+import { ChevronsLeft } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { BRAND_ASSETS } from '@/constants/brandAssets'
@@ -101,10 +92,10 @@ export function AppSidebar({ mainNavItems, footerNavItems }: SidebarProps) {
                     asChild
                     className="gap-5 group hover:bg-sidebar-primary hover:text-sidebar-primary-foreground"
                   >
-                    <a href={item.href}>
+                    <Link href={item.href}>
                       <item.icon className="w-20 h-10 min-w-7" />
                       <span className="text-lg font-serif">{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -120,10 +111,10 @@ export function AppSidebar({ mainNavItems, footerNavItems }: SidebarProps) {
           {footerNavItems.map(item => (
             <SidebarMenuItem key={item.href}>
               <SidebarMenuButton asChild>
-                <a href={item.href}>
+                <Link href={item.href}>
                   <item.icon size={20} className="" />
                   <span>{item.title}</span>
-                </a>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}

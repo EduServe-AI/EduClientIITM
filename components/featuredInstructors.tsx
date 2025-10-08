@@ -94,6 +94,7 @@ export default function FeauturedInstructors() {
         {instructors.map(feature_instructor => (
           <FeaturedInstructorCard
             key={feature_instructor.id}
+            id={feature_instructor.id}
             name={feature_instructor.user.username}
             bio={feature_instructor.bio}
             level={feature_instructor.level}

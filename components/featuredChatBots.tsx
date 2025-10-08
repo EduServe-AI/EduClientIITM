@@ -40,7 +40,7 @@ export default function FeauturedChatBots() {
         const data = await apiService<ResponseType>('/chats/featured')
         const chatbots = data.data.featuredChatBots
         console.log('instructors', chatbots)
-        setChatBots(chatBots)
+        setChatBots(chatbots)
       } catch (error) {
         console.error('Failed to Fetch Featured ChatBots')
         toast.error('Failed to Fetch Featured ChatBOts')

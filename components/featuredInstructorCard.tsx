@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 
 // Defining the shape of the featured instructor object
 interface FeaturedInstructorProps {
+  id: string
   name: string
   bio: string
   level: ProgramLevelId
@@ -21,7 +22,7 @@ export function FeaturedInstructorCard(instructor: FeaturedInstructorProps) {
     <div
       className="group cursor-pointer"
       onClick={() => {
-        router.push(`/dashboard/instructors/${instructor.name}`)
+        router.push(`/dashboard/instructors/${instructor.id}`)
       }}
     >
       {/* Card with Image and name */}
