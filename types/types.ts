@@ -1,3 +1,5 @@
+import { LucideIcon } from 'lucide-react'
+
 export type ProgramLevelId = 'foundation' | 'diploma' | 'bsc' | 'bs' | undefined
 
 export type foundationSubjects =
@@ -118,4 +120,16 @@ export type OnboardingFormData = {
   githubUrl: string
   linkedinUrl: string
   availability: AvailabilityType
+}
+
+export type NavItem = {
+  title: string
+  href: string
+  icon: LucideIcon
+}
+
+export type CarouselItem = {
+  title: string
+  subtitle: string
+  image: string
 }
