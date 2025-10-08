@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import { Toaster } from '@/components/ui/sonner'
+import { BRAND_ASSETS } from '@/constants/brandAssets'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
   title: 'Eduserve AI',
   description: 'On Demand Human and AI Teaching Assistance',
   icons: {
-    icon: '/222072039.png',
+    icon: BRAND_ASSETS.FAVICON,
   },
 }
 
@@ -32,7 +33,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
-        <Toaster richColors position="top-center" />
+        <Toaster richColors position="top-center" closeButton duration={2} />
       </body>
     </html>
   )

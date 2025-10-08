@@ -33,16 +33,18 @@
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-accent: oklch(9.121% 0.02352 22.916);
+  --sidebar-accent-foreground: oklch(100% 0.00011 271.152);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 }
 
 @media (prefers-color-scheme: light) {
   :root {
-    --background: rgb(250, 246, 250);
-    --foreground: #0a0a0a;
+    /* --background: rgb(250, 246, 250);
+    --foreground: #0a0a0a; */
+    --background: #0a0a0a;
+    --foreground: rgb(250, 246, 250);
   }
 }
 
@@ -128,7 +130,48 @@ body {
   * {
     @apply border-border outline-ring/50;
   }
+
+  :root {
+    --sidebar-background: 70 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 0 0% 98%;
+    --sidebar-primary-foreground: 240 5.9% 10%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* For Webkit-based browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(214, 199, 156, 0.26); /* --- Color of the track --- */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #000000; /* --- Color of the scrollbar handle --- */
+  border-radius: 6px; /* --- Makes the handle rounded --- */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: skyblue; /* --- Color of the handle on hover --- */
 }
