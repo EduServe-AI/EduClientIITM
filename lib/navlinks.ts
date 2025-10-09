@@ -10,6 +10,7 @@ import {
   UserCircle,
   LogOut,
   LucideIcon,
+  Star,
 } from 'lucide-react'
 
 // ----------- NAV Links for Student -----------
@@ -37,7 +38,28 @@ export const studentNavItems: NavItem[] = [
 ]
 
 // ----------- NAV Links for Student -----------
-export const instructorNavItems: NavItem[] = []
+export const instructorNavItems: NavItem[] = [
+  {
+    title: 'Home',
+    href: '/dashboard/instructor',
+    icon: Home,
+  },
+  {
+    title: 'Sessions',
+    href: '/dashboard/instructor/sessions',
+    icon: CalendarClockIcon,
+  },
+  {
+    title: 'My Payouts',
+    href: '/dashboard/instructor/payouts',
+    icon: BarChart3,
+  },
+  {
+    title: 'Testimonials',
+    href: '/dashboard/instructor/testimonials',
+    icon: Star,
+  },
+]
 
 // ----------- Common Footer Links -------------
 export const footerNavItems: NavItem[] = [
