@@ -30,25 +30,30 @@ interface SidebarProps {
   footerNavItems: NavItem[]
 }
 
-export function AppSidebar({ mainNavItems, footerNavItems }: SidebarProps) {
+export function AppSidebar({ mainNavItems }: SidebarProps) {
   const { toggleSidebar, state, isMobile, setOpenMobile } = useSidebar()
   const router = useRouter()
 
   const handleLogout = async () => {
-    // calling the backend route for clearing cookies
-    await apiService('/auth/logout', {
-      method: 'POST',
-    })
+    try {
+      // calling the backend route for clearing cookies
+      await apiService('/auth/logout', {
+        method: 'POST',
+      })
 
-    // removing the accessToken
-    removeAccessToken()
+      // removing the accessToken
+      removeAccessToken()
 
-    toast.success('You have been logged out.')
+      toast.success('You have been logged out.')
 
-    // redirecting to the login page
-    router.push('/')
+      // redirecting to the login page
+      router.push('/')
 
-    router.refresh()
+      router.refresh()
+    } catch (error) {
+      console.error('Logout failed: ', error)
+      toast.error('Logout failed. Please try again.')
+    }
   }
 
   return (
