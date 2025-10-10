@@ -14,11 +14,15 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar'
 import { NavItem } from '@/types/types'
-import { ChevronsLeft } from 'lucide-react'
+import { ChevronsLeft, LogOutIcon, UserCircle2Icon } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { BRAND_ASSETS } from '@/constants/brandAssets'
 import { Button } from './ui/button'
+import { apiService } from '@/lib/api'
+import { removeAccessToken } from '@/lib/auth'
+import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
 // Defining the props the sidebar should accept
 interface SidebarProps {
@@ -26,8 +30,31 @@ interface SidebarProps {
   footerNavItems: NavItem[]
 }
 
-export function AppSidebar({ mainNavItems, footerNavItems }: SidebarProps) {
+export function AppSidebar({ mainNavItems }: SidebarProps) {
   const { toggleSidebar, state, isMobile, setOpenMobile } = useSidebar()
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    try {
+      // calling the backend route for clearing cookies
+      await apiService('/auth/logout', {
+        method: 'POST',
+      })
+
+      // removing the accessToken
+      removeAccessToken()
+
+      toast.success('You have been logged out.')
+
+      // redirecting to the login page
+      router.push('/')
+
+      router.refresh()
+    } catch (error) {
+      console.error('Logout failed: ', error)
+      toast.error('Logout failed. Please try again.')
+    }
+  }
 
   return (
     <Sidebar
@@ -108,16 +135,29 @@ export function AppSidebar({ mainNavItems, footerNavItems }: SidebarProps) {
       <SidebarFooter className="p-4 mb-9">
         <SidebarSeparator className="border-neutral-900" color="cyan-900" />
         <SidebarMenu>
-          {footerNavItems.map(item => (
-            <SidebarMenuItem key={item.href}>
-              <SidebarMenuButton asChild>
-                <Link href={item.href}>
-                  <item.icon size={20} className="" />
-                  <span>{item.title}</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
+          {/* For profile */}
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              className="gap-5 group hover:bg-sidebar-primary hover:text-sidebar-primary-foreground"
+            >
+              <Link href="#">
+                <UserCircle2Icon size={30} />
+                <span>Profile</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+
+          {/* For Logout */}
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              onClick={handleLogout}
+              className="gap-5 group hover:bg-sidebar-primary hover:text-sidebar-primary-foreground cursor-pointer"
+            >
+              <LogOutIcon size={20} />
+              <span>Logout</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
