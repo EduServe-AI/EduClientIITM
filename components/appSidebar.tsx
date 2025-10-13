@@ -23,6 +23,7 @@ import { apiService } from '@/lib/api'
 import { removeAccessToken } from '@/lib/auth'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 // Defining the props the sidebar should accept
 interface SidebarProps {
@@ -31,6 +32,7 @@ interface SidebarProps {
 }
 
 export function AppSidebar({ mainNavItems }: SidebarProps) {
+  const [showLogoutModal, setShowLogoutModal] = useState(false)
   const { toggleSidebar, state, isMobile, setOpenMobile } = useSidebar()
   const router = useRouter()
 
@@ -151,7 +153,7 @@ export function AppSidebar({ mainNavItems }: SidebarProps) {
           {/* For Logout */}
           <SidebarMenuItem>
             <SidebarMenuButton
-              onClick={handleLogout}
+              onClick={() => setShowLogoutModal(true)}
               className="gap-5 group hover:bg-sidebar-primary hover:text-sidebar-primary-foreground cursor-pointer"
             >
               <LogOutIcon size={20} />
@@ -160,6 +162,36 @@ export function AppSidebar({ mainNavItems }: SidebarProps) {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
+      {showLogoutModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-transparent bg-opacity-2 backdrop-blur-sm z-10">
+          <div className="bg-white rounded-2xl shadow-xl p-6 w-80 text-center">
+            <h2 className="text-xl font-semibold mb-4 text-gray-900">
+              Confirm Logout
+            </h2>
+            <p className="text-gray-600 mb-6">
+              Are you sure you want to log out?
+            </p>
+
+            <div className="flex justify-center gap-4">
+              <Button
+                onClick={() => setShowLogoutModal(false)}
+                className="bg-gray-300 hover:bg-gray-400 text-black"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={() => {
+                  setShowLogoutModal(false)
+                  handleLogout()
+                }}
+                className="bg-red-600 hover:bg-red-700 text-white"
+              >
+                Logout
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </Sidebar>
   )
 }
