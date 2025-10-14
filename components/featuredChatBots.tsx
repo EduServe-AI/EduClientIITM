@@ -14,9 +14,10 @@ import FeaturedChatBotCard from '@/components/featuredChatBotCard'
 // Defining the shape of instructor object
 interface ChatBot {
   id: string
-  level: ProgramLevelId
   name: string
-  interactions: string
+  description: string
+  level: ProgramLevelId
+  numInteractions: number
 }
 
 // Defining the shape of the api response
@@ -37,9 +38,9 @@ export default function FeauturedChatBots() {
     setIsLoading(true)
     async function fetchChatBots() {
       try {
-        const data = await apiService<ResponseType>('/chats/featured')
+        const data = await apiService<ResponseType>('/bot/featured')
         const chatbots = data.data.featuredChatBots
-        console.log('instructors', chatbots)
+        console.log('ChatBots', chatbots)
         setChatBots(chatbots)
       } catch (error) {
         console.error('Failed to Fetch Featured ChatBots')
@@ -87,7 +88,13 @@ export default function FeauturedChatBots() {
       {/* Here comes the featured instructors card */}
       <div className="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-3 gap-4 mt-3">
         {chatBots.map(feature_chatbot => (
-          <FeaturedChatBotCard />
+          <FeaturedChatBotCard
+            id={feature_chatbot.id}
+            name={feature_chatbot.name}
+            level={feature_chatbot.level}
+            description={feature_chatbot.description}
+            numInteractions={feature_chatbot.numInteractions}
+          />
         ))}
       </div>
     </div>
