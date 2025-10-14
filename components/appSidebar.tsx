@@ -13,6 +13,7 @@ import {
   SidebarSeparator,
   useSidebar,
 } from '@/components/ui/sidebar'
+import { LogoutConfirmation } from '@/components/logoutConfirmation'
 import { NavItem } from '@/types/types'
 import { ChevronsLeft, LogOutIcon, UserCircle2Icon } from 'lucide-react'
 import Link from 'next/link'
@@ -23,6 +24,7 @@ import { apiService } from '@/lib/api'
 import { removeAccessToken } from '@/lib/auth'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 // Defining the props the sidebar should accept
 interface SidebarProps {
@@ -31,6 +33,7 @@ interface SidebarProps {
 }
 
 export function AppSidebar({ mainNavItems }: SidebarProps) {
+  const [showLogoutModal, setShowLogoutModal] = useState(false)
   const { toggleSidebar, state, isMobile, setOpenMobile } = useSidebar()
   const router = useRouter()
 
@@ -151,7 +154,7 @@ export function AppSidebar({ mainNavItems }: SidebarProps) {
           {/* For Logout */}
           <SidebarMenuItem>
             <SidebarMenuButton
-              onClick={handleLogout}
+              onClick={() => setShowLogoutModal(true)}
               className="gap-5 group hover:bg-sidebar-primary hover:text-sidebar-primary-foreground cursor-pointer"
             >
               <LogOutIcon size={20} />
@@ -160,6 +163,15 @@ export function AppSidebar({ mainNavItems }: SidebarProps) {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
+      {showLogoutModal && (
+        <LogoutConfirmation
+          onClose={() => setShowLogoutModal(false)}
+          onConfirm={() => {
+            setShowLogoutModal(false)
+            handleLogout()
+          }}
+        />
+      )}
     </Sidebar>
   )
 }
