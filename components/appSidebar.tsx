@@ -13,6 +13,7 @@ import {
   SidebarSeparator,
   useSidebar,
 } from '@/components/ui/sidebar'
+import { LogoutConfirmation } from '@/components/logoutConfirmation'
 import { NavItem } from '@/types/types'
 import { ChevronsLeft, LogOutIcon, UserCircle2Icon } from 'lucide-react'
 import Link from 'next/link'
@@ -163,34 +164,13 @@ export function AppSidebar({ mainNavItems }: SidebarProps) {
         </SidebarMenu>
       </SidebarFooter>
       {showLogoutModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-transparent bg-opacity-2 backdrop-blur-sm z-10">
-          <div className="bg-white rounded-2xl shadow-xl p-6 w-80 text-center">
-            <h2 className="text-xl font-semibold mb-4 text-gray-900">
-              Confirm Logout
-            </h2>
-            <p className="text-gray-600 mb-6">
-              Are you sure you want to log out?
-            </p>
-
-            <div className="flex justify-center gap-4">
-              <Button
-                onClick={() => setShowLogoutModal(false)}
-                className="bg-gray-300 hover:bg-gray-400 text-black"
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={() => {
-                  setShowLogoutModal(false)
-                  handleLogout()
-                }}
-                className="bg-red-600 hover:bg-red-700 text-white"
-              >
-                Logout
-              </Button>
-            </div>
-          </div>
-        </div>
+        <LogoutConfirmation
+          onClose={() => setShowLogoutModal(false)}
+          onConfirm={() => {
+            setShowLogoutModal(false)
+            handleLogout()
+          }}
+        />
       )}
     </Sidebar>
   )
