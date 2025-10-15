@@ -23,7 +23,7 @@ export default function FeaturedChatBotCard(chatBot: FeaturedChatBotProps) {
       role="button"
       tabIndex={0}
       onKeyDown={e => {
-        if (e.key === 'Enter' || e.key === '') {
+        if (e.key === 'Enter' || e.key === ' ') {
           router.push(`/dashboard/student/bots/${chatBot.id}`)
         }
       }}
