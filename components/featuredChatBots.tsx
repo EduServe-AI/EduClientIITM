@@ -89,6 +89,7 @@ export default function FeauturedChatBots() {
       <div className="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-3 gap-4 mt-3">
         {chatBots.map(feature_chatbot => (
           <FeaturedChatBotCard
+            key={feature_chatbot.id}
             id={feature_chatbot.id}
             name={feature_chatbot.name}
             level={feature_chatbot.level}

@@ -20,6 +20,13 @@ export default function FeaturedChatBotCard(chatBot: FeaturedChatBotProps) {
   return (
     <div
       className="group cursor-pointer"
+      role="button"
+      tabIndex={0}
+      onKeyDown={e => {
+        if (e.key === 'Enter' || e.key === '') {
+          router.push(`/dashboard/student/bots/${chatBot.id}`)
+        }
+      }}
       onClick={() => {
         router.push(`/dashboard/student/bots/${chatBot.id}`)
       }}
