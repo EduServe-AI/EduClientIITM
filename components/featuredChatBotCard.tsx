@@ -10,7 +10,7 @@ interface FeaturedChatBotProps {
   id: string
   name: string
   description: string
-  level: ProgramLevelId
+  level: string | number | ProgramLevelId
   numInteractions: number
 }
 
