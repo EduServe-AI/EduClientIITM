@@ -1,17 +1,19 @@
 'use client'
 
-import { useInstructor } from '@/app/contexts/instructorContext'
+import { useStudent } from '@/app/contexts/studentContext'
+import { useEffect, useRef, useState } from 'react'
+import EditProfileField from './components/editField'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
+import { Camera, EditIcon } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import { EditIcon } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
-import EditProfileField from '../../student/profile/components/editField'
-import { useImageUrl } from '@/lib/utils'
 import { toast } from 'sonner'
+import { useImageUrl } from '@/lib/utils'
 
 export default function Profile() {
-  const { instructor, isLoading } = useInstructor()
+  const { student, isLoading } = useStudent()
 
   // for image
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -20,11 +22,11 @@ export default function Profile() {
   const [profileImage, setProfileImage] = useState('')
 
   // This hook gets the saved image from the Azure
-  const savedImageUrl = useImageUrl(instructor?.id, 'profile')
+  const savedImageUrl = useImageUrl(student?.id, 'profile')
 
   useEffect(() => {
-    console.log('instructor data from the context', instructor)
-  }, [instructor])
+    console.log('student data from the context', student)
+  }, [student])
 
   // You can show a loading state while the context is initializing
   if (isLoading) {
@@ -32,9 +34,13 @@ export default function Profile() {
   }
 
   // Once loading is false, you know if the student exists or not
-  if (!instructor) {
+  if (!student) {
     // This could happen if someone tries to access the URL directly without logging in
-    return <div>No Instructor data found. Please log in.</div>
+    return <div>No student data found. Please log in.</div>
+  }
+
+  const handleUpdateUsername = async () => {
+    alert('clicked')
   }
 
   const handleFileChange = async (
@@ -63,7 +69,7 @@ export default function Profile() {
       // Create form data
       const formData = new FormData()
       formData.append('file', file)
-      formData.append('userId', instructor.id)
+      formData.append('studentId', student.id)
       if (previousImageExtension) {
         formData.append('previousImageExtension', previousImageExtension)
       }
@@ -96,7 +102,7 @@ export default function Profile() {
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       <h1 className="text-start text-2xl font-serif font-semibold">
-        Instructors Profile
+        Students Profile
       </h1>
 
       {/* Card with border showing the profile attributes of student */}
@@ -116,7 +122,7 @@ export default function Profile() {
             <Avatar className="h-30 w-30 border-2 border-black">
               <AvatarImage src={displayImageUrl} alt="profile" />
               <AvatarFallback>
-                {instructor.username.substring(0, 2).toUpperCase()}
+                {student.username.substring(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <Button
@@ -136,11 +142,11 @@ export default function Profile() {
         <div className="flex items-center justify-between rounded-md border-1">
           <div className="px-6 py-3">
             <p className="text-sm font-medium text-neutral-500">Username</p>
-            <p className="text-md font-normal">{instructor.username}</p>
+            <p className="text-md font-normal">{student.username}</p>
           </div>
           <EditProfileField
             label="Username"
-            currentValue={instructor.username}
+            currentValue={student.username}
             // onSave={handleUpdateUsername}
           />
         </div>
@@ -149,37 +155,20 @@ export default function Profile() {
         <div className="flex items-center justify-between rounded-md border-1">
           <div className="px-6 py-3">
             <p className="text-sm font-medium text-neutral-500">Email</p>
-            <p className="text-md font-normal">{instructor.email}</p>
+            <p className="text-md font-normal">{student.email}</p>
           </div>
-          <EditProfileField label="Email" currentValue={instructor.email} />
+          <EditProfileField label="Email" currentValue={student.email} />
         </div>
 
         {/* Level  card */}
         <div className="flex items-center justify-between rounded-md border-1">
           <div className="px-6 py-3">
             <p className="text-sm font-medium text-neutral-500">Level</p>
-            <p className="text-md font-normal">
-              {instructor.instructorProfile.level}
-            </p>
+            <p className="text-md font-normal">{student.level}</p>
           </div>
           <EditProfileField
             label="Level"
-            currentValue={instructor.instructorProfile.level}
-            // onSave={handleUpdateUsername}
-          />
-        </div>
-
-        {/* Bio */}
-        <div className="flex items-center justify-between rounded-md border-1">
-          <div className="px-6 py-3">
-            <p className="text-sm font-medium text-neutral-500">Bio</p>
-            <p className="text-md font-normal">
-              {instructor.instructorProfile.bio}
-            </p>
-          </div>
-          <EditProfileField
-            label="Level"
-            currentValue={instructor.instructorProfile.bio}
+            currentValue={student.level}
             // onSave={handleUpdateUsername}
           />
         </div>
