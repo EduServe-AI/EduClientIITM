@@ -6,6 +6,7 @@ import { FOUNDATION_SUBJECTS } from '@/constants/foundation-subjects'
 import { ProgramLevelId, Subjects } from '@/types/types'
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import { useMemo } from 'react'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -35,4 +36,30 @@ export const subjectNames = (level: ProgramLevelId): Subjects[] => {
   }
 
   return subjects
+}
+
+export const getImageUrl = (name: string, type: 'bot' | 'profile') => {
+  const baseUrl = process.env.NEXT_PUBLIC_STORGAE_URL
+
+  const paths = {
+    profile: `/profileimages/${name}.jpg`,
+    bot: `/botimages/${name}.jpg`,
+  }
+
+  return `${baseUrl}${paths[type]}`
+}
+
+export const useImageUrl = (
+  name: string | undefined,
+  type: 'bot' | 'profile'
+) => {
+  return useMemo(() => {
+    // If there's no file name , return an empty string or a default placeholder
+    if (!name) {
+      return '' // Or return '/placeholder-image.jpg'
+    }
+
+    // Only call getImageUrl if an id exists
+    return getImageUrl(name, type)
+  }, [name, type])
 }
