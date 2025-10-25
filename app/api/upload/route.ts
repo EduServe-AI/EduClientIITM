@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { BlobServiceClient } from '@azure/storage-blob'
 import path from 'path'
+import { getAccessToken } from '@/lib/auth'
 
 // Get the connection string and container name from environment variables
 const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING
@@ -21,6 +22,13 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData()
     const file = formData.get('file') as File | null
     const userId = formData.get('userId') as string
+
+    const accessToken = getAccessToken()
+
+    if (!accessToken) {
+      return NextResponse.json({ error: 'Un-Authorized User' }, { status: 403 })
+    }
+
     const previousImageExtension = formData.get('previousImageExtension') as
       | string
       | null

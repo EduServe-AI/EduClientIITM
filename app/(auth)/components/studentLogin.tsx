@@ -64,9 +64,6 @@ export default function StudentLogin({
       // Save the access token
       saveAccessToken(accessToken)
 
-      // Temporarily storing the full student object inside the session to pass to the dashboard
-      sessionStorage.setItem('loggedInUser', JSON.stringify(studentData))
-
       toast.success('Student Signed In Successfully!')
 
       // If user onboarded , need to redirect to student dashboard else redirect to student onboarding

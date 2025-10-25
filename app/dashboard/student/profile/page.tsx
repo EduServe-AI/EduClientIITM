@@ -69,7 +69,7 @@ export default function Profile() {
       // Create form data
       const formData = new FormData()
       formData.append('file', file)
-      formData.append('studentId', student.id)
+      formData.append('userId', student.id)
       if (previousImageExtension) {
         formData.append('previousImageExtension', previousImageExtension)
       }
