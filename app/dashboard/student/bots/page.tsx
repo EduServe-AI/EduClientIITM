@@ -21,20 +21,36 @@ export default function StudentBotsPage() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    let isMounted = true
+
     const fetchRecommendedBots = async () => {
       try {
         const response = await apiService<{
           data: { recommendedBots: ChatBot[] }
         }>('/bot/recommended')
-        setBots(response.data.recommendedBots)
-      } catch (err: any) {
-        setError(err.message)
+        if (isMounted) {
+          setBots(response?.data?.recommendedBots ?? [])
+        }
+      } catch (err) {
+        if (err instanceof Error && isMounted) {
+          setError(err.message)
+        } else if (typeof err === 'string') {
+          setError(err)
+        } else {
+          setError('An unexpected error occurred while fetching chatbots.')
+        }
       } finally {
-        setLoading(false)
+        if (isMounted) {
+          setLoading(false)
+        }
       }
     }
 
     fetchRecommendedBots()
+
+    return () => {
+      isMounted = false
+    }
   }, [])
 
   if (loading) return <p>Loading recommended chatbots...</p>
