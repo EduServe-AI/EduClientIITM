@@ -23,7 +23,7 @@ import { Button } from './ui/button'
 import { apiService } from '@/lib/api'
 import { removeAccessToken } from '@/lib/auth'
 import { toast } from 'sonner'
-import { useRouter } from 'next/navigation'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 // Defining the props the sidebar should accept
@@ -36,6 +36,13 @@ export function AppSidebar({ mainNavItems }: SidebarProps) {
   const [showLogoutModal, setShowLogoutModal] = useState(false)
   const { toggleSidebar, state, isMobile, setOpenMobile } = useSidebar()
   const router = useRouter()
+  const params = useParams()
+  const pathname = usePathname()
+
+  const userType = pathname.includes('/dashboard/student')
+    ? 'student'
+    : 'instructor'
+  const profileLink = `/dashboard/${userType}/profile`
 
   const handleLogout = async () => {
     try {
@@ -120,10 +127,12 @@ export function AppSidebar({ mainNavItems }: SidebarProps) {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     asChild
-                    className="gap-5 group hover:bg-sidebar-primary hover:text-sidebar-primary-foreground"
+                    className="gap-2 group hover:bg-sidebar-primary hover:text-sidebar-primary-foreground"
                   >
-                    <Link href={item.href}>
-                      <item.icon className="w-20 h-10 min-w-7" />
+                    <Link href={item.href} className="flex items-center gap-5">
+                      <div className="flex-shrink-0 min-w-[20px]">
+                        <item.icon className="h-5 w-5" strokeWidth={2} />
+                      </div>
                       <span className="text-lg font-serif">{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
@@ -144,9 +153,11 @@ export function AppSidebar({ mainNavItems }: SidebarProps) {
               asChild
               className="gap-5 group hover:bg-sidebar-primary hover:text-sidebar-primary-foreground"
             >
-              <Link href="#">
-                <UserCircle2Icon size={30} />
-                <span>Profile</span>
+              <Link href={profileLink} className="flex items-center">
+                <div className="flex-shrink-0 min-w-[20px]">
+                  <UserCircle2Icon className="h-5 w-5" strokeWidth={2} />
+                </div>
+                <span className="text-lg font-serif">Profile</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -157,8 +168,10 @@ export function AppSidebar({ mainNavItems }: SidebarProps) {
               onClick={() => setShowLogoutModal(true)}
               className="gap-5 group hover:bg-sidebar-primary hover:text-sidebar-primary-foreground cursor-pointer"
             >
-              <LogOutIcon size={20} />
-              <span>Logout</span>
+              <div className="flex-shrink-0 min-w-[20px]">
+                <LogOutIcon className="h-5 w-5" strokeWidth={2} />
+              </div>
+              <span className="text-lg font-serif">Logout</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

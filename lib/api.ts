@@ -1,3 +1,5 @@
+import { toast } from 'sonner'
+
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL!
 
 interface ApiOptions extends RequestInit {
@@ -41,8 +43,12 @@ export async function apiService<T>(
     // validating the response
     if (!response.ok) {
       const errorData = await response.json().catch(() => null)
+      console.log('errorData', errorData)
+      console.log('errorData', errorData.message)
       const errorMessage =
-        errorData?.message || `HTTP error : status : ${response.status} `
+        errorData?.error ||
+        errorData?.message ||
+        `HTTP error : status : ${response.status} `
       throw new Error(errorMessage)
     }
 

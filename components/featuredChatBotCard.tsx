@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { IndianRupee, MapPin, Star, MessageCircle } from 'lucide-react'
 import { Badge } from './ui/badge'
 import { useRouter } from 'next/navigation'
+import { useImageUrl } from '@/lib/utils'
 
 // Defining the shape of the featured instructor object
 interface FeaturedChatBotProps {
@@ -17,6 +18,8 @@ interface FeaturedChatBotProps {
 export default function FeaturedChatBotCard(chatBot: FeaturedChatBotProps) {
   const router = useRouter()
 
+  const savedImageUrl = useImageUrl(chatBot.name, 'bot')
+
   return (
     <div
       className="group cursor-pointer"
@@ -28,7 +31,7 @@ export default function FeaturedChatBotCard(chatBot: FeaturedChatBotProps) {
         }
       }}
       onClick={() => {
-        router.push(`/dashboard/student/bots/${chatBot.id}`)
+        router.push(`/dashboard/student/chat/${chatBot.id}`)
       }}
     >
       {/* Card with Image , Name , Level and NumInteractions */}
@@ -36,7 +39,7 @@ export default function FeaturedChatBotCard(chatBot: FeaturedChatBotProps) {
         {/* Image should cover the whole card - overlay */}
         <div className="aspect-[4/3] w-full">
           <Image
-            src={'/Chat-Bot.jpg'}
+            src={savedImageUrl || '/Chat-Bot.jpg'}
             alt={`Profile picture of ${chatBot.name}`}
             className="object-cover"
             fill

@@ -18,6 +18,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { saveAccessToken } from '@/lib/auth'
 import { apiService } from '@/lib/api'
+import { student } from '@/app/contexts/studentContext'
 
 interface LoginResponse {
   data: {
@@ -53,19 +54,20 @@ export default function StudentLogin({
 
     setIsLoading(true)
     try {
-      const data = await apiService<LoginResponse>('/auth/student-login', {
+      const response = await apiService<LoginResponse>('/auth/student-login', {
         method: 'POST',
         body: { email, password },
       })
 
+      const { accessToken, student: studentData } = response.data
+
       // Save the access token
-      saveAccessToken(data.data.accessToken)
+      saveAccessToken(accessToken)
 
       toast.success('Student Signed In Successfully!')
 
       // If user onboarded , need to redirect to student dashboard else redirect to student onboarding
-      const student = data.data.student
-      student.onboarded
+      studentData.onboarded
         ? router.push('/dashboard/student')
         : router.push('/onboarding/student')
     } catch (error) {

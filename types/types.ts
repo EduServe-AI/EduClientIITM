@@ -126,6 +126,7 @@ export type NavItem = {
   title: string
   href: string
   icon: LucideIcon
+  size?: number
 }
 
 export type CarouselItem = {
