@@ -7,6 +7,8 @@ import { ProgramLevelId, Subjects } from '@/types/types'
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { useMemo } from 'react'
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
+import { toast } from 'sonner'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -62,4 +64,29 @@ export const useImageUrl = (
     // Only call getImageUrl if an id exists
     return getImageUrl(name, type)
   }, [name, type])
+}
+
+export const createChatAndNavigate = async (
+  botId: string,
+  router: AppRouterInstance
+) => {
+  try {
+    // Generate a new chat ID
+    const newChatId = crypto.randomUUID()
+
+    // Navigate to the new chat
+    router.push(`/dashboard/student/chat/${botId}/${newChatId}`)
+  } catch (error) {
+    console.error('Failed to create chat:', error)
+    toast.error('Failed to create chat. Please try again.')
+  }
+}
+
+/**
+ * Hook to use the createChatAndNavigate function
+ */
+
+export const useCreateChatAndNavigate = () => {
+  return (botId: string, router: AppRouterInstance) =>
+    createChatAndNavigate(botId, router)
 }

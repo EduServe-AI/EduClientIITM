@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { IndianRupee, MapPin, Star, MessageCircle } from 'lucide-react'
 import { Badge } from './ui/badge'
 import { useRouter } from 'next/navigation'
-import { useImageUrl } from '@/lib/utils'
+import { useCreateChatAndNavigate, useImageUrl } from '@/lib/utils'
 
 // Defining the shape of the featured instructor object
 interface FeaturedChatBotProps {
@@ -17,6 +17,7 @@ interface FeaturedChatBotProps {
 
 export default function FeaturedChatBotCard(chatBot: FeaturedChatBotProps) {
   const router = useRouter()
+  const createChatAndNavigate = useCreateChatAndNavigate()
 
   const savedImageUrl = useImageUrl(chatBot.name, 'bot')
 
@@ -27,11 +28,12 @@ export default function FeaturedChatBotCard(chatBot: FeaturedChatBotProps) {
       tabIndex={0}
       onKeyDown={e => {
         if (e.key === 'Enter' || e.key === ' ') {
-          router.push(`/dashboard/student/bots/${chatBot.id}`)
+          // router.push(`/dashboard/student/bots/${chatBot.id}`)
         }
       }}
       onClick={() => {
-        router.push(`/dashboard/student/chat/${chatBot.id}`)
+        // router.push(`/dashboard/student/chat/${chatBot.id}`)
+        createChatAndNavigate(chatBot.id, router)
       }}
     >
       {/* Card with Image , Name , Level and NumInteractions */}
