@@ -11,6 +11,7 @@ import { Camera, EditIcon } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
 import { useImageUrl } from '@/lib/utils'
+import { getAccessToken } from '@/lib/auth'
 
 export default function Profile() {
   const { student, isLoading } = useStudent()
@@ -74,10 +75,15 @@ export default function Profile() {
         formData.append('previousImageExtension', previousImageExtension)
       }
 
+      // Retreiving the accessToken
+      const accessToken = getAccessToken()
       // Upload file
       const response = await fetch('/api/upload', {
         method: 'POST',
         body: formData,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       })
 
       const data = await response.json()

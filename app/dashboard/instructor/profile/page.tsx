@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from 'react'
 import EditProfileField from '../../student/profile/components/editField'
 import { useImageUrl } from '@/lib/utils'
 import { toast } from 'sonner'
+import { getAccessToken } from '@/lib/auth'
 
 export default function Profile() {
   const { instructor, isLoading } = useInstructor()
@@ -68,10 +69,15 @@ export default function Profile() {
         formData.append('previousImageExtension', previousImageExtension)
       }
 
+      // Retreiving the accessToken
+      const accessToken = getAccessToken()
       // Upload file
       const response = await fetch('/api/upload', {
         method: 'POST',
         body: formData,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       })
 
       const data = await response.json()
