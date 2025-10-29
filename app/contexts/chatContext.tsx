@@ -4,73 +4,94 @@ import { apiService } from '@/lib/api'
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
-export interface chatProfile {}
-
 export interface chat {
   id: string
-  email: string
-  username: string
-  chatProfile: chatProfile
+  botId: string
+  botName: string
+  title: string
+  userId: string
 }
 
-interface chatResponseDataType {
-  data: {
-    chat: chat
-  }
+export interface chatMessage {
+  id: string
+  chatId: string
+  content: string
+  sender: 'user' | 'bot'
 }
 
-interface chatContextType {
+interface ChatContextType {
   chat: chat | null
-  setchat: (chat: any) => void
+  setChat: (chat: chat) => void
+  messages: chatMessage[]
+  setMessages: (messages: any[]) => void
   isLoading: boolean
 }
 
-const chatContext = createContext<chatContextType | undefined>(undefined)
+const ChatContext = createContext<ChatContextType | undefined>(undefined)
 
-export function chatProvider({ children }: { children: React.ReactNode }) {
-  const [chat, setchat] = useState<chat | null>(null)
+interface ChatProviderProps {
+  children: React.ReactNode
+  botId: string
+  chatId: string
+}
+
+interface ChatResponse {
+  data: {
+    chat: chat
+    messages: chatMessage[] | []
+  }
+}
+
+export function ChatProvider({ children, botId, chatId }: ChatProviderProps) {
+  const [chat, setChat] = useState<chat | null>(null)
+  const [messages, setMessages] = useState<chatMessage[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
+  // Calling the backend for populating the chatcontext state
   useEffect(() => {
-    async function loadchatData() {
+    async function loadChatData() {
+      if (!botId || !chatId) return
+
+      setIsLoading(true)
+
       try {
-        const response = await apiService<chatResponseDataType>('/chat/me')
+        // Calling the backend api
+        const response = await apiService<ChatResponse>(`/chat/${chatId}`)
 
-        console.log('response', response)
-        const chatData = response.data.chat
+        const { chat, messages } = response.data
 
-        console.log('chatData', chatData)
-
-        // Here we populate the chat Data in the context
-        setchat(chatData)
+        setChat(chat)
+        setMessages(messages)
       } catch (error) {
-        console.error('Failed to load chat data')
-        toast.error('Failed to load chat data for context')
+        console.error('Failed to load chat data', error)
+        toast.error('Failed to load chat session ')
       } finally {
         setIsLoading(false)
       }
     }
 
-    loadchatData()
-  }, [])
+    loadChatData()
+  }, [botId, chatId])
 
   return (
-    <chatContext.Provider
+    <ChatContext.Provider
       value={{
         chat,
-        setchat,
+        setChat,
+        messages,
+        setMessages,
         isLoading,
       }}
     >
       {children}
-    </chatContext.Provider>
+    </ChatContext.Provider>
   )
 }
 
-export function usechat() {
-  const context = useContext(chatContext)
+export function useChat() {
+  const context = useContext(ChatContext)
   if (context === undefined) {
-    throw new Error('Usechat must be used within a chat Provider context')
+    throw new Error('UseChat must be used within a  Chat Provider context')
   }
   return context
 }

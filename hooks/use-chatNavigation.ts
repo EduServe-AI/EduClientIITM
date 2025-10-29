@@ -7,7 +7,7 @@ import { toast } from 'sonner'
 // Define the shape of the API response
 interface CreateChatResponse {
   data: {
-    chatId: string
+    id: string
     botId: string
     userId: string
     botName: string
@@ -26,7 +26,7 @@ export const useChatNavigation = () => {
         body: { botId },
       })
 
-      const newChatId = response.data.chatId
+      const newChatId = response.data.id
       const botName = response.data.botName
 
       router.push(`/dashboard/student/chat/${botId}/${newChatId}`)
