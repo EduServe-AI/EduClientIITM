@@ -10,77 +10,59 @@ import EditProfileField from '../../student/profile/components/editField'
 import { useImageUrl } from '@/lib/utils'
 import { toast } from 'sonner'
 
+const LEVEL_DATA = {
+  foundation: { totalCourses: 12, credits: 36 },
+  diploma: { totalCourses: 18, credits: 54 },
+  bsc: { totalCourses: 24, credits: 72 },
+  bs: { totalCourses: 36, credits: 108 },
+} as const
+
 export default function Profile() {
   const { instructor, isLoading } = useInstructor()
 
-  // for image
   const fileInputRef = useRef<HTMLInputElement>(null)
-
-  // This state is only for new profile image when updated or changed
   const [profileImage, setProfileImage] = useState('')
-
-  // This hook gets the saved image from the Azure
   const savedImageUrl = useImageUrl(instructor?.id, 'profile')
 
   useEffect(() => {
     console.log('instructor data from the context', instructor)
   }, [instructor])
 
-  // You can show a loading state while the context is initializing
-  if (isLoading) {
-    return <div>Loading Profile Data...</div>
-  }
+  if (isLoading) return <div>Loading Profile Data...</div>
 
-  // Once loading is false, you know if the student exists or not
-  if (!instructor) {
-    // This could happen if someone tries to access the URL directly without logging in
-    return <div>No Instructor data found. Please log in.</div>
-  }
+  if (!instructor) return <div>No Instructor data found. Please log in.</div>
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0]
+    if (!file) return toast.error('No file selected')
 
-    if (!file) {
-      toast.error('No file selected')
-      return
-    }
-
-    // Validate file size
-    if (file.size > 2 * 1024 * 1024) {
-      toast.error('File size exceeds 2MB. Please upload a smaller image.')
-      return
-    }
+    if (file.size > 2 * 1024 * 1024)
+      return toast.error(
+        'File size exceeds 2MB. Please upload a smaller image.'
+      )
 
     try {
-      // Get the extension of the previous image if it exists
       const previousImageUrl = savedImageUrl
       const previousImageExtension = previousImageUrl
         ? '.' + previousImageUrl.split('.').pop()
         : null
 
-      // Create form data
       const formData = new FormData()
       formData.append('file', file)
       formData.append('userId', instructor.id)
-      if (previousImageExtension) {
+      if (previousImageExtension)
         formData.append('previousImageExtension', previousImageExtension)
-      }
 
-      // Upload file
       const response = await fetch('/api/upload', {
         method: 'POST',
         body: formData,
       })
-
       const data = await response.json()
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to upload image')
-      }
+      if (!response.ok) throw new Error(data.error || 'Failed to upload image')
 
-      // Update profile image with the returned URL
       setProfileImage(data.url)
       toast.success('Profile image updated successfully')
     } catch (error) {
@@ -89,29 +71,25 @@ export default function Profile() {
     }
   }
 
-  // If `profileImage` (the preview state) has something, use it.
-  // Otherwise, use `savedImageUrl` (the one from Azure).
   const displayImageUrl = profileImage || savedImageUrl
+  const levelInfo =
+    LEVEL_DATA[instructor?.instructorProfile?.level || 'foundation']
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       <h1 className="text-start text-2xl font-serif font-semibold">
-        Instructors Profile
+        Instructor Profile
       </h1>
 
-      {/* Card with border showing the profile attributes of student */}
-
-      <div className="rounded-2xl border-1 border-black min-h-screen p-5 space-y-7">
-        {/* Rounded image with edit button */}
+      <div className="rounded-2xl border border-black min-h-screen p-5 space-y-7">
+        {/* Profile Image */}
         <div className="flex items-center justify-center p-5">
-          {/* Image uploading */}
           <Input
             type="file"
             className="hidden"
             ref={fileInputRef}
             onChange={handleFileChange}
-          ></Input>
-          {/* Relative container wrapping the avatar and the edit buttont  */}
+          />
           <div className="relative">
             <Avatar className="h-30 w-30 border-2 border-black">
               <AvatarImage src={displayImageUrl} alt="profile" />
@@ -130,62 +108,139 @@ export default function Profile() {
           </div>
         </div>
 
-        {/* Attributes to edit - username , email , level etc., */}
-
-        {/* Username card */}
-        <div className="flex items-center justify-between rounded-md border-1">
+        {/* Username */}
+        <div className="flex items-center justify-between rounded-md border">
           <div className="px-6 py-3">
-            <p className="text-sm font-medium text-neutral-500">Username</p>
+            <p className="text-sm text-neutral-500">Username</p>
             <p className="text-md font-normal">{instructor.username}</p>
           </div>
           <EditProfileField
             label="Username"
             currentValue={instructor.username}
-            // onSave={handleUpdateUsername}
           />
         </div>
 
-        {/* email  card */}
-        <div className="flex items-center justify-between rounded-md border-1">
+        {/* Email */}
+        <div className="flex items-center justify-between rounded-md border">
           <div className="px-6 py-3">
-            <p className="text-sm font-medium text-neutral-500">Email</p>
+            <p className="text-sm text-neutral-500">Email</p>
             <p className="text-md font-normal">{instructor.email}</p>
           </div>
           <EditProfileField label="Email" currentValue={instructor.email} />
         </div>
 
-        {/* Level  card */}
-        <div className="flex items-center justify-between rounded-md border-1">
+        {/* Level */}
+        <div className="flex items-center justify-between rounded-md border">
           <div className="px-6 py-3">
-            <p className="text-sm font-medium text-neutral-500">Level</p>
-            <p className="text-md font-normal">
+            <p className="text-sm text-neutral-500">Level</p>
+            <p className="text-md font-normal capitalize">
               {instructor.instructorProfile.level}
             </p>
           </div>
           <EditProfileField
             label="Level"
             currentValue={instructor.instructorProfile.level}
-            // onSave={handleUpdateUsername}
           />
         </div>
 
         {/* Bio */}
-        <div className="flex items-center justify-between rounded-md border-1">
+        <div className="flex items-center justify-between rounded-md border">
           <div className="px-6 py-3">
-            <p className="text-sm font-medium text-neutral-500">Bio</p>
+            <p className="text-sm text-neutral-500">Bio</p>
             <p className="text-md font-normal">
               {instructor.instructorProfile.bio}
             </p>
           </div>
           <EditProfileField
-            label="Level"
+            label="Bio"
             currentValue={instructor.instructorProfile.bio}
-            // onSave={handleUpdateUsername}
           />
         </div>
 
-        {/* Displaying list of enrolled courses */}
-        <div></div>
+        {/* Social URLs */}
+        <div className="space-y-3">
+          <h2 className="text-lg font-semibold flex items-center gap-2">
+            <EditIcon className="h-5 w-5" /> Social Links
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            {/* GitHub */}
+            <div className="flex items-center justify-between rounded-md border p-4">
+              <div>
+                <p className="text-sm text-neutral-500">GitHub</p>
+                <p className="text-md break-all">
+                  {instructor.instructorProfile.githubUrl || 'Not provided'}
+                </p>
+              </div>
+              <EditProfileField
+                label="GitHub URL"
+                currentValue={instructor.instructorProfile.githubUrl}
+              />
+            </div>
+
+            {/* LinkedIn */}
+            <div className="flex items-center justify-between rounded-md border p-4">
+              <div>
+                <p className="text-sm text-neutral-500">LinkedIn</p>
+                <p className="text-md break-all">
+                  {instructor.instructorProfile.linkedinUrl || 'Not provided'}
+                </p>
+              </div>
+              <EditProfileField
+                label="LinkedIn URL"
+                currentValue={instructor.instructorProfile.linkedinUrl}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Skills */}
+        <div className="space-y-3 mt-8">
+          <h2 className="text-lg font-semibold flex items-center gap-2">
+            ⚡ Skills
+          </h2>
+
+          <div className="flex flex-wrap gap-3">
+            {instructor.instructorProfile.skills?.length ? (
+              instructor.instructorProfile.skills.map((skill: any) => (
+                <span
+                  key={skill.id}
+                  className="px-4 py-1.5 bg-neutral-100 rounded-full border text-sm font-medium hover:bg-neutral-200 transition"
+                >
+                  {skill.name}
+                </span>
+              ))
+            ) : (
+              <p className="text-neutral-500 italic">No skills added yet</p>
+            )}
+          </div>
+        </div>
+
+        {/* Level Details */}
+        <div className="space-y-3 mt-8">
+          <h2 className="text-lg font-semibold flex items-center gap-2">
+            🎓 Level Information
+          </h2>
+
+          <div className="grid sm:grid-cols-3 gap-4">
+            <div className="rounded-md border p-4">
+              <p className="text-sm text-neutral-500">Level</p>
+              <p className="text-md font-semibold capitalize">
+                {instructor.instructorProfile.level}
+              </p>
+            </div>
+
+            <div className="rounded-md border p-4">
+              <p className="text-sm text-neutral-500">Total Courses</p>
+              <p className="text-md font-semibold">{levelInfo.totalCourses}</p>
+            </div>
+
+            <div className="rounded-md border p-4">
+              <p className="text-sm text-neutral-500">Credits</p>
+              <p className="text-md font-semibold">{levelInfo.credits}</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )

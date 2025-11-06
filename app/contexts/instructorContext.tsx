@@ -5,6 +5,14 @@ import { ProgramLevelId } from '@/types/types'
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
+export interface Skill {
+  id: string
+  name: string
+  courseId: string
+  instructorProfileId: string
+  userId: string
+}
+
 export interface instructorProfile {
   bio: string
   cgpa: string
@@ -12,6 +20,7 @@ export interface instructorProfile {
   linkedinUrl?: string
   level: ProgramLevelId
   basePrice: number
+  skills?: Skill[]
 }
 
 export interface instructor {
