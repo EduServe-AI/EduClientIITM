@@ -4,10 +4,12 @@ import Image from 'next/image'
 import { IndianRupee, MapPin, Star } from 'lucide-react'
 import { Badge } from './ui/badge'
 import { useRouter } from 'next/navigation'
+import { useImageUrl } from '@/lib/utils'
 
 // Defining the shape of the featured instructor object
 interface FeaturedInstructorProps {
   id: string
+  instructorId: string
   name: string
   bio: string
   level: ProgramLevelId
@@ -18,6 +20,9 @@ interface FeaturedInstructorProps {
 
 export function FeaturedInstructorCard(instructor: FeaturedInstructorProps) {
   const router = useRouter()
+
+  const profileUrl =
+    useImageUrl(instructor.instructorId, 'profile') || '/placeholder.jpg'
   return (
     <div
       className="group cursor-pointer"
@@ -30,7 +35,7 @@ export function FeaturedInstructorCard(instructor: FeaturedInstructorProps) {
         {/* Image should cover the whole card - overlay */}
         <div className="aspect-[16/9] w-full">
           <Image
-            src={instructor.profileUrl || '/placeholder.jpg'}
+            src={profileUrl}
             alt={`Profile picture of ${instructor.name}`}
             className="object-cover"
             fill

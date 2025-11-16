@@ -17,6 +17,7 @@ interface Instructor {
   level: ProgramLevelId
   bio: string
   basePrice: string
+  instructorId: string
   user: {
     username: string
     profileUrl: string | null
@@ -95,6 +96,7 @@ export default function FeauturedInstructors() {
           <FeaturedInstructorCard
             key={feature_instructor.id}
             id={feature_instructor.id}
+            instructorId={feature_instructor.instructorId}
             name={feature_instructor.user.username}
             bio={feature_instructor.bio}
             level={feature_instructor.level}
