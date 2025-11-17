@@ -83,10 +83,15 @@ export function ChatProvider({ children, botId, chatId }: ChatProviderProps) {
       throw Error('ChatId or BotId is Missing')
     }
 
+    if (!chat) {
+      toast.error('Chat session not initialized. Please wait or refresh.')
+      return
+    }
+
     // Adding the user's message to the state immediately
     const userMessage: chatMessage = {
       id: crypto.randomUUID(),
-      chatId: chat?.id!,
+      chatId: chat?.id,
       content: content,
       sender: 'user',
     }
@@ -144,14 +149,17 @@ export function ChatProvider({ children, botId, chatId }: ChatProviderProps) {
 
         const chunk = decoder.decode(value)
 
-        // 5. Update the *last* message (the empty bot one) with the new chunk
-        setMessages(prev =>
-          prev.map(msg =>
-            msg.id === botMessage.id
-              ? { ...msg, content: msg.content + chunk }
-              : msg
-          )
-        )
+        setMessages(prev => {
+          const lastMessage = prev[prev.length - 1]
+          if (lastMessage && lastMessage.id === botMessage.id) {
+            const updatedLastMessage = {
+              ...lastMessage,
+              content: lastMessage.content + chunk,
+            }
+            return [...prev.slice(0, -1), updatedLastMessage]
+          }
+          return prev
+        })
       }
     } catch (error) {
       console.error('Error in generating ai response', error)
