@@ -13,9 +13,7 @@ export default function ChatLayout({
 
   //Retreiving the botId and the chatId
   const botId = params.bot_id as string
-  console.log('botId', botId)
   const chatId = params.chat_id as string
-  console.log('chatId', chatId)
 
   // Render a loading state or null if params are not yet available
   if (!botId || !chatId) {

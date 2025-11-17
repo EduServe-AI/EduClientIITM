@@ -49,8 +49,6 @@ export function ChatProvider({ children, botId, chatId }: ChatProviderProps) {
   const [messages, setMessages] = useState<chatMessage[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
-  console.log('messages from context', messages)
-
   // Calling the backend for populating the chatcontext state
   useEffect(() => {
     async function loadChatData() {
@@ -102,7 +100,7 @@ export function ChatProvider({ children, botId, chatId }: ChatProviderProps) {
     const botMessageId = crypto.randomUUID()
 
     const botMessage: chatMessage = {
-      id: crypto.randomUUID(),
+      id: botMessageId,
       chatId: chat?.id!,
       content: '',
       sender: 'bot',

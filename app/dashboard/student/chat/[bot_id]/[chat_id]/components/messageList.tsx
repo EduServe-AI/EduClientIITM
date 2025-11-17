@@ -6,8 +6,6 @@ import Message from './message' // We'll create this next
 export default function MessageList() {
   const { messages, isLoading, chat } = useChat()
 
-  console.log('messages', messages)
-
   return (
     <div className="space-y-6">
       {messages.map(msg => (
