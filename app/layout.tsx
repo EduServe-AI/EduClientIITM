@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import { Toaster } from '@/components/ui/sonner'
 import { BRAND_ASSETS } from '@/constants/brandAssets'
+import 'katex/dist/katex.min.css'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',

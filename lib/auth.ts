@@ -9,4 +9,4 @@ export const getAccessToken = () => {
 
 export const removeAccessToken = () => {
   localStorage.removeItem('accessToken')
-} 
+}
