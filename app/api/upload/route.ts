@@ -19,6 +19,16 @@ const containerClient = blobServiceClient.getContainerClient(containerName)
 
 export async function POST(request: NextRequest) {
   try {
+    // 1. Get the token from the request headers
+    const authHeader = request.headers.get('Authorization')
+    const token = authHeader?.split(' ')[1] // Extracts the token from "Bearer <token>"
+
+    // 2. Add authentication logic here
+    if (!token) {
+      // Here you would typically verify the token's validity
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     const formData = await request.formData()
     const file = formData.get('file') as File | null
     const userId = formData.get('userId') as string
