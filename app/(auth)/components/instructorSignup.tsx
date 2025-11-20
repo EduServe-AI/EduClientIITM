@@ -11,21 +11,66 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff, Loader2 } from 'lucide-react'
+import { toast } from 'sonner'
+import { saveAccessToken } from '@/lib/auth'
+import { useRouter } from 'next/navigation'
+import { apiService } from '@/lib/api'
+
+interface SignupResponse {
+  data: {
+    accessToken: string
+    instructor: any
+  }
+}
 
 interface InstructorSignupProps {
   isSignin: boolean
   setIsSignin: (value: boolean) => void
 }
 
+const BaseUrl = process.env.NEXT_PUBLIC_API_URL
+
 export default function InstructorSignup({
   isSignin,
   setIsSignin,
 }: InstructorSignupProps) {
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [username, setUsername] = useState<string>('')
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [showPassword, setShowPassword] = useState<boolean>(false)
+
+  const router = useRouter()
+
+  // Handling the instructor signup
+  const handleSignup = async () => {
+    if (!username || !email || !password) {
+      toast.error('Please enter all fields')
+      return
+    }
+
+    setIsLoading(true)
+    try {
+      const data = await apiService<SignupResponse>('/auth/instructor-signup', {
+        method: 'POST',
+        body: { username, email, password },
+      })
+
+      // Save the access token
+      saveAccessToken(data.data.accessToken)
+
+      toast.success('Instructor Registered successfully!')
+
+      // Redirecting to onboarding
+      router.push('/onboarding/instructor')
+    } catch (error) {
+      console.error(`Signup error : ${error}`)
+      toast.error('Signup failed')
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   return (
     <div className="flex ml-15 items-center gap-10">
@@ -115,10 +160,18 @@ export default function InstructorSignup({
               <Button
                 variant="outline"
                 size="lg"
-                className="bg-sky-400 hover:cursor-pointer hover:bg-sky-500 hover:text-white text-white "
-                onClick={() => {}}
+                className="bg-sky-400 hover:cursor-pointer hover:bg-sky-500 hover:text-white text-white"
+                onClick={handleSignup}
+                disabled={isLoading}
               >
-                Sign up
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Loading..
+                  </>
+                ) : (
+                  'Sign up'
+                )}
               </Button>
 
               <Button

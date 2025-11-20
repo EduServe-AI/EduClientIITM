@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
 import {
@@ -7,11 +9,25 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff, Loader2 } from 'lucide-react'
+import { toast } from 'sonner'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { saveAccessToken } from '@/lib/auth'
+import { apiService } from '@/lib/api'
+import { student } from '@/app/contexts/studentContext'
+
+interface LoginResponse {
+  data: {
+    accessToken: string
+    student: {
+      onboarded: boolean
+    }
+  }
+}
 
 interface StudentLoginProps {
   isSignin: boolean
@@ -22,9 +38,48 @@ export default function StudentLogin({
   isSignin,
   setIsSignin,
 }: StudentLoginProps) {
+  const router = useRouter()
+
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [showPassword, setShowPassword] = useState<boolean>(false)
+
+  // Handling the student login
+  const handleLogin = async () => {
+    if (!email || !password) {
+      toast.error('Please enter both email and password')
+      return
+    }
+
+    setIsLoading(true)
+    try {
+      const response = await apiService<LoginResponse>('/auth/student-login', {
+        method: 'POST',
+        body: { email, password },
+      })
+
+      const { accessToken, student: studentData } = response.data
+
+      // Save the access token
+      saveAccessToken(accessToken)
+
+      toast.success('Student Signed In Successfully!')
+
+      // If user onboarded , need to redirect to student dashboard else redirect to student onboarding
+      studentData.onboarded
+        ? router.push('/dashboard/student')
+        : router.push('/onboarding/student')
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message || 'Login failed. Please try again.')
+      } else {
+        toast.error('An unknown error occurred during login.')
+      }
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   return (
     <div className="flex ml-15 mt-10 items-center gap-10">
@@ -126,9 +181,17 @@ export default function StudentLogin({
                 variant="outline"
                 size="lg"
                 className="bg-sky-400 hover:cursor-pointer hover:bg-sky-500 hover:text-white text-white "
-                onClick={() => {}}
+                onClick={handleLogin}
+                disabled={isLoading}
               >
-                Sign in
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Loading..
+                  </>
+                ) : (
+                  'Sign in'
+                )}
               </Button>
 
               <Button
@@ -155,7 +218,7 @@ export default function StudentLogin({
                   onClick={() => setIsSignin(false)}
                   className="text-sky-800 hover:cursor-pointer"
                 >
-                  Hire one
+                  Sign up here
                 </button>
               </div>
             </div>

@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
@@ -17,17 +17,27 @@ import { Eye, EyeOff, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { saveAccessToken } from '@/lib/auth'
 import { useRouter } from 'next/navigation'
+import { apiService } from '@/lib/api'
+
+interface SignupResponse {
+  data: {
+    accessToken: string
+    student: any
+  }
+}
 
 interface StudentSignupProps {
   isSignin: boolean
   setIsSignin: (value: boolean) => void
 }
 
+const BaseUrl = process.env.NEXT_PUBLIC_API_URL
+
 export default function StudentSignup({
   isSignin,
   setIsSignin,
 }: StudentSignupProps) {
-   const router = useRouter()
+  const router = useRouter()
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [username, setUsername] = useState<string>('')
@@ -37,45 +47,30 @@ export default function StudentSignup({
 
   // Handling the student signup
   const handleSignup = async () => {
+    if (!username || !email || !password) {
+      toast.error('Please enter all fields')
+      return
+    }
+
     setIsLoading(true)
     try {
-      const response = await fetch(
-        'http://localhost:5000/api/v1/auth/student-signup',
-        {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            username,
-            email,
-            password,
-          }),
-        }
-      )
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        toast.error('Signup failed')
-        console.error(`Signup failed ${data.message}`)
-        return
-      }
+      const data = await apiService<SignupResponse>('/auth/student-signup', {
+        method: 'POST',
+        body: { username, email, password },
+      })
 
       // Save the access token
       saveAccessToken(data.data.accessToken)
-
-      console.log('User logged in ', data.data)
 
       toast.success('User Signed In')
 
       // Redirecting to onboarding
       router.push('/onboarding/student')
-
     } catch (error) {
       console.error(`Signup error : ${error}`)
-      throw new Error('Error in signing up student')
+      toast.error('Signup failed')
+    } finally {
+      setIsLoading(false)
     }
   }
 
