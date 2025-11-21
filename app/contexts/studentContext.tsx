@@ -48,7 +48,7 @@ export function StudentProvider({ children }: { children: React.ReactNode }) {
         // Here we populate the student Data in the context
         setStudent(studentData)
       } catch (error) {
-        console.error('Failed to load student data')
+        console.error('Failed to load student data', error)
         toast.error('Failed to load student data for context')
       } finally {
         setIsLoading(false)

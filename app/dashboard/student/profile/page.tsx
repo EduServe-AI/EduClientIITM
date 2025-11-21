@@ -1,17 +1,16 @@
 'use client'
 
 import { useStudent } from '@/app/contexts/studentContext'
-import { useEffect, useRef, useState } from 'react'
-import EditProfileField from './components/editField'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { Camera, EditIcon } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import { toast } from 'sonner'
-import { useImageUrl } from '@/lib/utils'
+import { Separator } from '@/components/ui/separator'
 import { getAccessToken } from '@/lib/auth'
+import { useImageUrl } from '@/lib/utils'
+import { EditIcon } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { toast } from 'sonner'
+import EditProfileField from './components/editField'
 
 export default function Profile() {
   const { student, isLoading } = useStudent()
@@ -38,10 +37,6 @@ export default function Profile() {
   if (!student) {
     // This could happen if someone tries to access the URL directly without logging in
     return <div>No student data found. Please log in.</div>
-  }
-
-  const handleUpdateUsername = async () => {
-    alert('clicked')
   }
 
   const handleFileChange = async (
@@ -122,6 +117,7 @@ export default function Profile() {
               className="hidden"
               ref={fileInputRef}
               onChange={handleFileChange}
+              accept="jpg"
             />
 
             {/* Avatar with edit button */}

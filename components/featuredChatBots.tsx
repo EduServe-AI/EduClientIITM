@@ -1,15 +1,15 @@
 'use client'
 
-import { Tooltip } from '@radix-ui/react-tooltip'
-import { TooltipContent, TooltipTrigger } from './ui/tooltip'
-import { Button } from './ui/button'
-import { Info } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import { ProgramLevelId } from '@/types/types'
-import { useEffect, useState } from 'react'
-import { apiService } from '@/lib/api'
-import { toast } from 'sonner'
 import FeaturedChatBotCard from '@/components/featuredChatBotCard'
+import { apiService } from '@/lib/api'
+import { ProgramLevelId } from '@/types/types'
+import { Tooltip } from '@radix-ui/react-tooltip'
+import { Info, Loader2 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
+import { Button } from './ui/button'
+import { TooltipContent, TooltipTrigger } from './ui/tooltip'
 
 // Defining the shape of instructor object
 interface ChatBot {
@@ -42,7 +42,7 @@ export default function FeauturedChatBots() {
         const chatbots = data.data.featuredChatBots
         console.log('ChatBots', chatbots)
         setChatBots(chatbots)
-      } catch (error) {
+      } catch {
         console.error('Failed to Fetch Featured ChatBots')
         toast.error('Failed to Fetch Featured ChatBOts')
         return
@@ -85,19 +85,31 @@ export default function FeauturedChatBots() {
         </Button>
       </div>
 
-      {/* Here comes the featured instructors card */}
-      <div className="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-3 gap-4 mt-3">
-        {chatBots.map(feature_chatbot => (
-          <FeaturedChatBotCard
-            key={feature_chatbot.id}
-            id={feature_chatbot.id}
-            name={feature_chatbot.name}
-            level={feature_chatbot.level}
-            description={feature_chatbot.description}
-            numInteractions={feature_chatbot.numInteractions}
-          />
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="flex justify-center items-center h-40">
+          <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
+        </div>
+      ) : (
+        /* Here comes the featured instructors card */
+        <div className="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-3 gap-4 mt-3">
+          {chatBots.length > 0 ? (
+            chatBots.map(feature_chatbot => (
+              <FeaturedChatBotCard
+                key={feature_chatbot.id}
+                id={feature_chatbot.id}
+                name={feature_chatbot.name}
+                level={feature_chatbot.level}
+                description={feature_chatbot.description}
+                numInteractions={feature_chatbot.numInteractions}
+              />
+            ))
+          ) : (
+            <div className="col-span-full text-center text-gray-500 py-10">
+              No featured instructors found.
+            </div>
+          )}
+        </div>
+      )}
     </div>
   )
 }

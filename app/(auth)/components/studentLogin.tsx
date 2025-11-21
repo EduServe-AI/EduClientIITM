@@ -1,7 +1,6 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { useState } from 'react'
 import {
   Card,
   CardContent,
@@ -9,16 +8,16 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Eye, EyeOff, Loader2 } from 'lucide-react'
-import { toast } from 'sonner'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { apiService } from '@/lib/api'
+import { saveAccessToken } from '@/lib/auth'
+import { Eye, EyeOff, Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { saveAccessToken } from '@/lib/auth'
-import { apiService } from '@/lib/api'
-import { student } from '@/app/contexts/studentContext'
+import { useState } from 'react'
+import { toast } from 'sonner'
 
 interface LoginResponse {
   data: {
@@ -34,10 +33,7 @@ interface StudentLoginProps {
   setIsSignin: (value: boolean) => void
 }
 
-export default function StudentLogin({
-  isSignin,
-  setIsSignin,
-}: StudentLoginProps) {
+export default function StudentLogin({ setIsSignin }: StudentLoginProps) {
   const router = useRouter()
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -67,9 +63,11 @@ export default function StudentLogin({
       toast.success('Student Signed In Successfully!')
 
       // If user onboarded , need to redirect to student dashboard else redirect to student onboarding
-      studentData.onboarded
-        ? router.push('/dashboard/student')
-        : router.push('/onboarding/student')
+      if (studentData.onboarded) {
+        router.push('/dashboard/student')
+      } else {
+        router.push('/onboarding/student')
+      }
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message || 'Login failed. Please try again.')
@@ -212,7 +210,7 @@ export default function StudentLogin({
 
               <div className="flex gap-2 justify-center">
                 <span className="text-base font-light">
-                  Don't have an account ?
+                  Don&apos;t have an account ?
                 </span>
                 <button
                   onClick={() => setIsSignin(false)}

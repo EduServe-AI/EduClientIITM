@@ -1,30 +1,30 @@
 'use client'
 
+import { LogoutConfirmation } from '@/components/logoutConfirmation'
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarHeader,
   SidebarSeparator,
   useSidebar,
 } from '@/components/ui/sidebar'
-import { LogoutConfirmation } from '@/components/logoutConfirmation'
-import { NavItem } from '@/types/types'
-import { ChevronsLeft, LogOutIcon, UserCircle2Icon } from 'lucide-react'
-import Link from 'next/link'
-import Image from 'next/image'
 import { BRAND_ASSETS } from '@/constants/brandAssets'
-import { Button } from './ui/button'
 import { apiService } from '@/lib/api'
 import { removeAccessToken } from '@/lib/auth'
-import { toast } from 'sonner'
-import { useParams, usePathname, useRouter } from 'next/navigation'
+import { NavItem } from '@/types/types'
+import { ChevronsLeft, LogOutIcon, UserCircle2Icon } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { toast } from 'sonner'
+import { Button } from './ui/button'
 
 // Defining the props the sidebar should accept
 interface SidebarProps {
@@ -34,9 +34,8 @@ interface SidebarProps {
 
 export function AppSidebar({ mainNavItems }: SidebarProps) {
   const [showLogoutModal, setShowLogoutModal] = useState(false)
-  const { toggleSidebar, state, isMobile, setOpenMobile } = useSidebar()
+  const { toggleSidebar, isMobile } = useSidebar()
   const router = useRouter()
-  const params = useParams()
   const pathname = usePathname()
 
   const userType = pathname.includes('/dashboard/student')
@@ -128,6 +127,12 @@ export function AppSidebar({ mainNavItems }: SidebarProps) {
                   <SidebarMenuButton
                     asChild
                     className="gap-2 group hover:bg-sidebar-primary hover:text-sidebar-primary-foreground"
+                    onClick={() => {
+                      // Close sidebar on mobile after navigation
+                      if (isMobile) {
+                        toggleSidebar()
+                      }
+                    }}
                   >
                     <Link href={item.href} className="flex items-center gap-5">
                       <div className="flex-shrink-0 min-w-[20px]">
@@ -152,6 +157,12 @@ export function AppSidebar({ mainNavItems }: SidebarProps) {
             <SidebarMenuButton
               asChild
               className="gap-5 group hover:bg-sidebar-primary hover:text-sidebar-primary-foreground"
+              onClick={() => {
+                // Close sidebar on mobile after navigation
+                if (isMobile) {
+                  toggleSidebar()
+                }
+              }}
             >
               <Link href={profileLink} className="flex items-center">
                 <div className="flex-shrink-0 min-w-[20px]">

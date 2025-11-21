@@ -1,17 +1,17 @@
 'use client'
-import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { useIsMobile } from '@/hooks/use-mobile'
+import { apiService } from '@/lib/api'
+import { AvailabilityType, OnboardingFormData } from '@/types/types'
 import { ChevronLeft, Loader2 } from 'lucide-react'
-import Verification from '../components/verification'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { toast } from 'sonner'
+import Availability from '../components/availability'
 import Expertise from '../components/expertise'
 import Personalization from '../components/personalization'
 import Pricing from '../components/pricing'
-import Availability from '../components/availability'
-import { AvailabilityType, OnboardingFormData } from '@/types/types'
-import { useIsMobile } from '@/hooks/use-mobile'
-import { Button } from '@/components/ui/button'
-import { apiService } from '@/lib/api'
-import { toast } from 'sonner'
-import { useRouter } from 'next/navigation'
+import Verification from '../components/verification'
 
 const initialAvailability = (): AvailabilityType => {
   const days = [
@@ -35,7 +35,7 @@ const initialAvailability = (): AvailabilityType => {
   return availability
 }
 
-export default function instructorOnboarding() {
+export default function InstructorOnboarding() {
   const steps = [
     'Verification',
     'Expertise',
@@ -116,7 +116,7 @@ export default function instructorOnboarding() {
 
       // Check if enabled days have valid slots
       const hasValidSlots = Object.entries(formData.availability).every(
-        ([_, day]) => {
+        ([, day]) => {
           if (!day.isEnabled) return true // Skip validation for disabled days
           return day.slots.every(slot => {
             const fromTime = new Date(`2000/01/01 ${slot.from}`)
@@ -244,7 +244,7 @@ export default function instructorOnboarding() {
     }
 
     try {
-      const response = await apiService('/instructor/onboarding', {
+      await apiService('/instructor/onboarding', {
         body: submission_data,
         method: 'POST',
       })
@@ -327,9 +327,7 @@ export default function instructorOnboarding() {
           {currentStep === 2 && (
             <Personalization formData={formData} setFormData={setFormData} />
           )}
-          {currentStep === 3 && (
-            <Pricing formData={formData} setFormData={setFormData} />
-          )}
+          {currentStep === 3 && <Pricing formData={formData} />}
           {currentStep === 4 && (
             <Availability formData={formData} setFormData={setFormData} />
           )}

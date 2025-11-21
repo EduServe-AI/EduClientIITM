@@ -1,7 +1,6 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { useState } from 'react'
 import {
   Card,
   CardContent,
@@ -11,18 +10,28 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { apiService } from '@/lib/api'
+import { saveAccessToken } from '@/lib/auth'
+import { Eye, EyeOff, Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Eye, EyeOff, Loader2 } from 'lucide-react'
-import { toast } from 'sonner'
-import { saveAccessToken } from '@/lib/auth'
 import { useRouter } from 'next/navigation'
-import { apiService } from '@/lib/api'
+import { useState } from 'react'
+import { toast } from 'sonner'
+
+interface Student {
+  username: string
+  email: string
+  password: string
+  role: string
+  onboarded: boolean
+  verified: boolean
+}
 
 interface SignupResponse {
   data: {
     accessToken: string
-    student: any
+    student: Student
   }
 }
 
@@ -31,12 +40,7 @@ interface StudentSignupProps {
   setIsSignin: (value: boolean) => void
 }
 
-const BaseUrl = process.env.NEXT_PUBLIC_API_URL
-
-export default function StudentSignup({
-  isSignin,
-  setIsSignin,
-}: StudentSignupProps) {
+export default function StudentSignup({ setIsSignin }: StudentSignupProps) {
   const router = useRouter()
 
   const [isLoading, setIsLoading] = useState<boolean>(false)

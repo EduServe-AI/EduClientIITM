@@ -24,7 +24,7 @@ interface ChatContextType {
   chat: chat | null
   setChat: (chat: chat) => void
   messages: chatMessage[]
-  setMessages: (messages: any[]) => void
+  setMessages: (messages: []) => void
   isLoading: boolean
   handleSendMessage: (content: string) => void
 }
@@ -101,7 +101,7 @@ export function ChatProvider({ children, botId, chatId }: ChatProviderProps) {
 
     const botMessage: chatMessage = {
       id: botMessageId,
-      chatId: chat?.id!,
+      chatId: chat.id,
       content: '',
       sender: 'bot',
     }

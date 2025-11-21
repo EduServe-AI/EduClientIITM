@@ -1,11 +1,9 @@
 import { Card } from '@/components/ui/card'
-import { ProgramLevelId } from '@/types/types'
-import Image from 'next/image'
-import { IndianRupee, MapPin, Star, MessageCircle } from 'lucide-react'
-import { Badge } from './ui/badge'
-import { useRouter } from 'next/navigation'
-import { useImageUrl } from '@/lib/utils'
 import { useChatNavigation } from '@/hooks/use-chatNavigation'
+import { useImageUrl } from '@/lib/utils'
+import { ProgramLevelId } from '@/types/types'
+import { MessageCircle } from 'lucide-react'
+import Image from 'next/image'
 
 // Defining the shape of the featured instructor object
 interface FeaturedChatBotProps {
@@ -17,8 +15,6 @@ interface FeaturedChatBotProps {
 }
 
 export default function FeaturedChatBotCard(chatBot: FeaturedChatBotProps) {
-  const router = useRouter()
-
   const savedImageUrl = useImageUrl(chatBot.name, 'bot')
   const createAndNavigateToChat = useChatNavigation()
 

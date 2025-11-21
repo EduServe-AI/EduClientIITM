@@ -1,9 +1,9 @@
 'use client'
 
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
-import { AppSidebar } from '@/components/appSidebar'
-import { footerNavItems, instructorNavItems } from '@/lib/navlinks'
 import { InstructorProvider } from '@/app/contexts/instructorContext'
+import { AppSidebar } from '@/components/appSidebar'
+import { SidebarProvider } from '@/components/ui/sidebar'
+import { footerNavItems, instructorNavItems } from '@/lib/navlinks'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

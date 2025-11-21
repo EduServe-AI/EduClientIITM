@@ -1,7 +1,7 @@
 'use client'
-import { useEffect, useState } from 'react'
-import { apiService } from '@/lib/api'
 import FeaturedChatBotCard from '@/components/featuredChatBotCard'
+import { apiService } from '@/lib/api'
+import { useEffect, useState } from 'react'
 
 interface ChatBot {
   id: string
@@ -15,20 +15,20 @@ interface ChatBot {
   }
 }
 
-interface Chat {
-  id: string
-  botId: string
-  botName: string
-  title?: string | undefined
-  lastInteractionTime?: Date | undefined
-}
+// interface Chat {
+//   id: string
+//   botId: string
+//   botName: string
+//   title?: string | undefined
+//   lastInteractionTime?: Date | undefined
+// }
 
 export default function StudentBotsPage() {
   const [bots, setBots] = useState<ChatBot[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  const [userChats, setUserChats] = useState<Chat[]>([])
+  // const [userChats, setUserChats] = useState<Chat[]>([])
 
   useEffect(() => {
     let isMounted = true

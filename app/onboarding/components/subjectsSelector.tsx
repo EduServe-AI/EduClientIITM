@@ -1,23 +1,27 @@
-import { FOUNDATION_SUBJECTS } from '@/constants/foundation-subjects'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { BSC_SUBJECTS } from '@/constants/bsc-subjects'
+import { DIPLOMA_PROJECTS } from '@/constants/diploma-projects'
 import { DIPLOMADS_SUBJECTS } from '@/constants/diplomads-subjects'
 import { DIPLOMAPR_SUBJECTS } from '@/constants/diplomapr-subjects'
-import { DIPLOMA_PROJECTS } from '@/constants/diploma-projects'
-import { BSC_SUBJECTS } from '@/constants/bsc-subjects'
-import { getLevelProperties } from './levelSelector'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { useState } from 'react'
-import { toast } from 'sonner'
+import { FOUNDATION_SUBJECTS } from '@/constants/foundation-subjects'
+import { apiService } from '@/lib/api'
 import { ProgramLevelId } from '@/types/types'
 import { useRouter } from 'next/navigation'
-import { apiService } from '@/lib/api'
+import { useState } from 'react'
+import { toast } from 'sonner'
+import { getLevelProperties } from './levelSelector'
+
+interface Subject {
+  name: string
+  credits: number
+  prerequisites?: string[]
+}
 
 interface SubjectSelectorProps {
   selectedLevel: ProgramLevelId | null
   onBack: () => void
 }
-
-const BaseUrl = process.env.NEXT_PUBLIC_API_URL
 
 export default function SubjectSelector({
   selectedLevel,
@@ -111,7 +115,9 @@ export default function SubjectSelector({
     }
   }
 
-  const renderSubjects = (subjects: any[]) => (
+  // If prerequisites is undefined, this evaluates to 0
+
+  const renderSubjects = (subjects: Subject[]) => (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mb-6">
       {subjects.map((subject, index) => {
         const isSelected = isProjectCourse(subject.name)
@@ -136,7 +142,7 @@ export default function SubjectSelector({
               <p className="text-md font-medium text-gray-700">
                 Credits: {subject.credits}
               </p>
-              {subject.prerequisites?.length > 0 && (
+              {subject.prerequisites && subject.prerequisites.length > 0 && (
                 <p className="text-sm mt-2 text-gray-500">
                   Prerequisites: {subject.prerequisites.join(', ')}
                 </p>

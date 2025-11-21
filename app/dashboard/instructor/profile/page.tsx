@@ -4,12 +4,12 @@ import { useInstructor } from '@/app/contexts/instructorContext'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { getAccessToken } from '@/lib/auth'
+import { useImageUrl } from '@/lib/utils'
 import { EditIcon, Github, Linkedin, User } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import EditProfileField from '../../student/profile/components/editField'
-import { useImageUrl } from '@/lib/utils'
 import { toast } from 'sonner'
-import { getAccessToken } from '@/lib/auth'
+import EditProfileField from '../../student/profile/components/editField'
 
 export default function Profile() {
   const { instructor, isLoading } = useInstructor()
@@ -189,7 +189,7 @@ export default function Profile() {
 
         <div className="flex flex-wrap gap-3">
           {instructor.instructorProfile.skills?.length ? (
-            instructor.instructorProfile.skills.map((skill: any) => (
+            instructor.instructorProfile.skills.map(skill => (
               <span
                 key={skill.id}
                 className="px-4 py-1.5 bg-neutral-100 rounded-full border border-neutral-300 text-sm font-medium hover:bg-neutral-200 transition"

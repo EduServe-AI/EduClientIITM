@@ -1,9 +1,4 @@
-import { useMemo, useState } from 'react'
-import { Languages, ProgramLevelId, Subjects } from '@/types/types'
-import { subjectNames } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { Languages as Medium } from '@/constants/languages'
-import { GraduationCap, Languages as LangIcon, InfoIcon } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import {
@@ -12,15 +7,17 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { Languages as Medium } from '@/constants/languages'
+import { subjectNames } from '@/lib/utils'
+import type { OnboardingFormData } from '@/types/types'
+import { Languages, Subjects } from '@/types/types'
+import { GraduationCap, InfoIcon, Languages as LangIcon } from 'lucide-react'
+import { useMemo } from 'react'
 import { toast } from 'sonner'
 
 interface ExpertiseProps {
-  formData: {
-    level: ProgramLevelId
-    subjects: Subjects[]
-    languages: Languages[]
-  }
-  setFormData: React.Dispatch<React.SetStateAction<any>>
+  formData: OnboardingFormData
+  setFormData: React.Dispatch<React.SetStateAction<OnboardingFormData>>
 }
 
 const foundation_subjects = subjectNames('foundation')
@@ -126,7 +123,7 @@ export default function Expertise({ formData, setFormData }: ExpertiseProps) {
         <ScrollArea className="h-60 w-full">
           <div className="flex flex-wrap gap-3 mt-5 ml-2">
             {subjectToDisplay.map(subject => {
-              let bgColor =
+              const bgColor =
                 subject.level === 'foundation'
                   ? 'bg-blue-50 border-blue-200'
                   : subject.level === 'diploma'

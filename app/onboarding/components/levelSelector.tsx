@@ -1,9 +1,9 @@
-import { PROGRAM_LEVELS } from '@/constants/levels'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { GraduationCap, Book, ScrollText, Trophy } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { Card } from '@/components/ui/card'
+import { PROGRAM_LEVELS } from '@/constants/levels'
 import { ProgramLevelId } from '@/types/types'
+import { motion } from 'framer-motion'
+import { Book, GraduationCap, ScrollText, Trophy } from 'lucide-react'
 
 interface LevelSelectorProps {
   selectedLevel: ProgramLevelId | null
