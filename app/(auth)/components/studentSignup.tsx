@@ -1,7 +1,6 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { useState } from 'react'
 import {
   Card,
   CardContent,
@@ -11,18 +10,28 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { apiService } from '@/lib/api'
+import { saveAccessToken } from '@/lib/auth'
+import { Eye, EyeOff, Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Eye, EyeOff, Loader2 } from 'lucide-react'
-import { toast } from 'sonner'
-import { saveAccessToken } from '@/lib/auth'
 import { useRouter } from 'next/navigation'
-import { apiService } from '@/lib/api'
+import { useState } from 'react'
+import { toast } from 'sonner'
+
+interface Student {
+  username: string
+  email: string
+  password: string
+  role: string
+  onboarded: boolean
+  verified: boolean
+}
 
 interface SignupResponse {
   data: {
     accessToken: string
-    student: any
+    student: Student
   }
 }
 
@@ -31,12 +40,7 @@ interface StudentSignupProps {
   setIsSignin: (value: boolean) => void
 }
 
-const BaseUrl = process.env.NEXT_PUBLIC_API_URL
-
-export default function StudentSignup({
-  isSignin,
-  setIsSignin,
-}: StudentSignupProps) {
+export default function StudentSignup({ setIsSignin }: StudentSignupProps) {
   const router = useRouter()
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -75,10 +79,10 @@ export default function StudentSignup({
   }
 
   return (
-    <div className="flex ml-15 mt-10 items-center gap-10">
+    <div className="flex flex-col-reverse lg:flex-row items-center justify-center min-h-screen gap-10 p-4 bg-white">
       {/* Right side signup form */}
 
-      <Card className="w-120 rounded-md justify-center">
+      <Card className="w-full max-w-md rounded-md justify-center">
         <CardHeader>
           <CardTitle className="text-2xl font-[360] mb-9 ml-1">
             Sign up
@@ -211,10 +215,15 @@ export default function StudentSignup({
         <CardFooter></CardFooter>
       </Card>
 
+      {/* Mobile Branding */}
+      <h1 className="text-4xl font-serif tracking-wide italic lg:hidden mb-2">
+        Eduserve AI
+      </h1>
+
       {/* Right side : Heading and Image */}
-      <div className="p-10 space-y-8 bg-neutral-50 rounded-lg mb-10">
+      <div className="hidden lg:flex p-6 lg:p-10 space-y-8 bg-neutral-50 rounded-lg w-full lg:w-auto flex-col items-center lg:items-start">
         {/* Heading */}
-        <h1 className="text-5xl font-serif tracking-wide italic">
+        <h1 className="text-4xl lg:text-5xl font-serif tracking-wide italic">
           Eduserve AI
         </h1>
 
@@ -224,7 +233,7 @@ export default function StudentSignup({
           alt="Student Illustration"
           width={550}
           height={800}
-          className="object-cover ml-1"
+          className="object-cover w-full h-auto max-w-[300px] lg:max-w-[550px]"
         />
 
         {/* Copyright */}

@@ -1,6 +1,4 @@
-import { CalendarDays, PlusCircle, MinusCircle } from 'lucide-react'
-import { DayType, TimeSlot } from '@/types/types'
-import { Switch } from '@/components/ui/switch'
+import { Card, CardContent } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import {
   Select,
@@ -9,13 +7,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Switch } from '@/components/ui/switch'
+import type { OnboardingFormData } from '@/types/types'
+import { DayType } from '@/types/types'
+import { CalendarDays, MinusCircle, PlusCircle } from 'lucide-react'
 
 const weekdays: DayType[] = [
   'Monday',
@@ -44,12 +39,13 @@ const generateTimeOptions = () => {
 const timeOptions = generateTimeOptions()
 
 interface AvailabilityProps {
-  formData: {
-    availability: {
-      [key in DayType]: { isEnabled: boolean; slots: TimeSlot[] }
-    }
-  }
-  setFormData: React.Dispatch<React.SetStateAction<any>>
+  // formData: {
+  //   availability: {
+  //     [key in DayType]: { isEnabled: boolean; slots: TimeSlot[] }
+  //   }
+  // }
+  formData: OnboardingFormData
+  setFormData: React.Dispatch<React.SetStateAction<OnboardingFormData>>
 }
 
 export default function Availability({
@@ -57,8 +53,8 @@ export default function Availability({
   setFormData,
 }: AvailabilityProps) {
   // --- Handlers for Availability Changes ---
-  const handleDayToggle = (day: string, checked: boolean) => {
-    setFormData((prev: any) => ({
+  const handleDayToggle = (day: DayType, checked: boolean) => {
+    setFormData(prev => ({
       ...prev,
       availability: {
         ...prev.availability,
@@ -68,12 +64,12 @@ export default function Availability({
   }
 
   const handleSlotChange = (
-    day: string,
+    day: DayType,
     slotIndex: number,
     field: 'from' | 'to',
     value: string
   ) => {
-    setFormData((prev: any) => {
+    setFormData(prev => {
       const newSlots = [...prev.availability[day].slots]
       newSlots[slotIndex] = { ...newSlots[slotIndex], [field]: value }
       return {
@@ -86,8 +82,8 @@ export default function Availability({
     })
   }
 
-  const addSlot = (day: string) => {
-    setFormData((prev: any) => {
+  const addSlot = (day: DayType) => {
+    setFormData(prev => {
       const newSlots = [
         ...prev.availability[day].slots,
         { from: '19:00', to: '20:00' },
@@ -102,10 +98,10 @@ export default function Availability({
     })
   }
 
-  const removeSlot = (day: string, slotIndex: number) => {
-    setFormData((prev: any) => {
+  const removeSlot = (day: DayType, slotIndex: number) => {
+    setFormData(prev => {
       const newSlots = prev.availability[day].slots.filter(
-        (_: any, index: number) => index !== slotIndex
+        (_, index: number) => index !== slotIndex
       )
       return {
         ...prev,
@@ -120,7 +116,7 @@ export default function Availability({
   // Apply Monday's schedule to all other days
   const applyMondayToAllDays = () => {
     const mondaySchedule = formData.availability.Monday
-    setFormData((prev: any) => {
+    setFormData(prev => {
       const newAvailability = { ...prev.availability }
       weekdays.slice(1).forEach(day => {
         // Skip Monday itself
@@ -244,7 +240,8 @@ export default function Availability({
                         ))
                       ) : (
                         <p className="text-sm text-gray-400 italic">
-                          Click 'Add slot' to set your available times.
+                          Click &apos;Add slot&apos; to set your available
+                          times.
                         </p>
                       )}
                       {day === 'Monday' && (

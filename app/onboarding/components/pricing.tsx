@@ -1,15 +1,14 @@
+import { pricingTiers } from '@/constants/pricing'
 import { ProgramLevelId } from '@/types/types'
 import { IndianRupee, InfoIcon } from 'lucide-react'
-import { pricingTiers } from '@/constants/pricing'
 
 interface PricingProps {
   formData: {
     level: ProgramLevelId
   }
-  setFormData: React.Dispatch<React.SetStateAction<any>>
 }
 
-export default function Pricing({ formData, setFormData }: PricingProps) {
+export default function Pricing({ formData }: PricingProps) {
   return (
     <section className="max-w-4xl mx-auto w-full">
       {/* <header className="mb-8 text-center flex flex-row gap-3 items-center justify-center mr-5">

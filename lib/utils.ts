@@ -5,10 +5,8 @@ import { DIPLOMAPR_SUBJECTS } from '@/constants/diplomapr-subjects'
 import { FOUNDATION_SUBJECTS } from '@/constants/foundation-subjects'
 import { ProgramLevelId, Subjects } from '@/types/types'
 import { clsx, type ClassValue } from 'clsx'
-import { twMerge } from 'tailwind-merge'
 import { useMemo } from 'react'
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
-import { toast } from 'sonner'
+import { twMerge } from 'tailwind-merge'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))

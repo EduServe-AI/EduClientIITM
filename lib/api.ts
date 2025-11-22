@@ -2,8 +2,8 @@ import { toast } from 'sonner'
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL!
 
-interface ApiOptions extends RequestInit {
-  body?: any
+interface ApiOptions extends Omit<RequestInit, 'body'> {
+  body?: unknown
 }
 
 export async function apiService<T>(
@@ -20,20 +20,23 @@ export async function apiService<T>(
     defaultHeaders['Authorization'] = `Bearer ${accessToken}`
   }
 
+  // Destructuring the body out so that we wont pass the raw object to the fetch config
+  const { body, ...restOptions } = options
+
   // Merging default options with any custom options provided
   const config: RequestInit = {
-    method: options.method || 'GET',
+    method: restOptions.method || 'GET',
     credentials: 'include',
-    ...options,
+    ...restOptions,
     headers: {
       ...defaultHeaders,
-      ...options.headers,
+      ...restOptions.headers,
     },
   }
 
   // Stringifying the body if it is present
-  if (options.body) {
-    config.body = JSON.stringify(options.body)
+  if (body) {
+    config.body = JSON.stringify(body)
   }
 
   // Performing the actual fetch request
@@ -44,7 +47,7 @@ export async function apiService<T>(
     if (!response.ok) {
       const errorData = await response.json().catch(() => null)
       console.log('errorData', errorData)
-      console.log('errorData', errorData.message)
+      toast.error(errorData.message)
       const errorMessage =
         errorData?.error ||
         errorData?.message ||

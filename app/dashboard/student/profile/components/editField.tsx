@@ -1,20 +1,19 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
+  DialogClose,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogFooter,
-  DialogClose,
 } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Pencil, Loader2 } from 'lucide-react'
-import { toast } from 'sonner'
+import { Loader2, Pencil } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
 interface EditProfileFieldProps {
   label: string
@@ -69,6 +68,7 @@ export default function EditProfileField({
           <Button
             onClick={() => {
               alert('saving')
+              setIsSaving(true)
             }}
             disabled={isSaving}
             className="cursor-pointer"

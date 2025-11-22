@@ -1,9 +1,9 @@
 'use client'
 
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
-import { AppSidebar } from '@/components/appSidebar'
-import { footerNavItems, studentNavItems } from '@/lib/navlinks'
 import { StudentProvider } from '@/app/contexts/studentContext'
+import { AppSidebar } from '@/components/appSidebar'
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import { footerNavItems, studentNavItems } from '@/lib/navlinks'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -15,7 +15,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             footerNavItems={footerNavItems}
           />
           <main className="flex-1 flex flex-col overflow-hidden">
-            {/* <SidebarTrigger /> */}
+            <div className="p-4 md:hidden">
+              <SidebarTrigger />
+            </div>
             {children}
           </main>
         </div>

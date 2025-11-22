@@ -1,15 +1,15 @@
 'use client'
 
-import { Tooltip } from '@radix-ui/react-tooltip'
-import { TooltipContent, TooltipTrigger } from './ui/tooltip'
-import { Button } from './ui/button'
-import { Info } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import { ProgramLevelId } from '@/types/types'
-import { useEffect, useState } from 'react'
 import { apiService } from '@/lib/api'
+import { ProgramLevelId } from '@/types/types'
+import { Tooltip } from '@radix-ui/react-tooltip'
+import { Info, Loader2 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { FeaturedInstructorCard } from './featuredInstructorCard'
+import { Button } from './ui/button'
+import { TooltipContent, TooltipTrigger } from './ui/tooltip'
 
 // Defining the shape of instructor object
 interface Instructor {
@@ -48,7 +48,7 @@ export default function FeauturedInstructors() {
         console.log('instructors', instructors)
         setInstructors(instructors)
       } catch (error) {
-        console.error('Failed to Fetch Featured Instructors')
+        console.error('Failed to Fetch Featured Instructors', error)
         toast.error('Login Failed')
         return
       } finally {
@@ -90,22 +90,34 @@ export default function FeauturedInstructors() {
         </Button>
       </div>
 
-      {/* Here comes the featured instructors card */}
-      <div className="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-3 gap-4 mt-3">
-        {instructors.map(feature_instructor => (
-          <FeaturedInstructorCard
-            key={feature_instructor.id}
-            id={feature_instructor.id}
-            instructorId={feature_instructor.instructorId}
-            name={feature_instructor.user.username}
-            bio={feature_instructor.bio}
-            level={feature_instructor.level}
-            profileUrl={feature_instructor.user.profileUrl}
-            basePrice={feature_instructor.basePrice}
-            skills={feature_instructor.skills}
-          />
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="flex justify-center items-center h-40">
+          <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
+        </div>
+      ) : (
+        /* Here comes the featured instructors card */
+        <div className="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-3 gap-4 mt-3">
+          {instructors.length > 0 ? (
+            instructors.map(feature_instructor => (
+              <FeaturedInstructorCard
+                key={feature_instructor.id}
+                id={feature_instructor.id}
+                instructorId={feature_instructor.instructorId}
+                name={feature_instructor.user.username}
+                bio={feature_instructor.bio}
+                level={feature_instructor.level}
+                profileUrl={feature_instructor.user.profileUrl}
+                basePrice={feature_instructor.basePrice}
+                skills={feature_instructor.skills}
+              />
+            ))
+          ) : (
+            <div className="col-span-full text-center text-gray-500 py-10">
+              No featured instructors found.
+            </div>
+          )}
+        </div>
+      )}
     </div>
   )
 }

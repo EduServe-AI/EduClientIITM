@@ -7,9 +7,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { ProgramLevelId } from '@/types/types'
+import { OnboardingFormData, ProgramLevelId } from '@/types/types'
 import { ShieldCheckIcon } from 'lucide-react'
-import { getLevelProperties } from './levelSelector'
 
 interface VerificationProps {
   formData: {
@@ -17,7 +16,7 @@ interface VerificationProps {
     cgpa: number
     level: ProgramLevelId
   }
-  setFormData: React.Dispatch<React.SetStateAction<any>>
+  setFormData: React.Dispatch<React.SetStateAction<OnboardingFormData>>
 }
 
 export default function Verification({
@@ -45,7 +44,7 @@ export default function Verification({
             placeholder="https://ds.study.iitm.ac.in/student/2xFxxxxxxx"
             value={formData.iitmProfileUrl}
             onChange={e =>
-              setFormData({ ...formData, iitmProfileUrl: e.target.value })
+              setFormData(prev => ({ ...prev, iitmProfileUrl: e.target.value }))
             }
             required
             className="py-6 transition-all duration-200 focus:ring-2 focus:ring-blue-500"
@@ -66,7 +65,10 @@ export default function Verification({
             max={10}
             value={formData.cgpa}
             onChange={e =>
-              setFormData({ ...formData, cgpa: parseFloat(e.target.value) })
+              setFormData(prev => ({
+                ...prev,
+                cgpa: parseFloat(e.target.value),
+              }))
             }
             required
             className="py-6 transition-all duration-200 focus:ring-2 focus:ring-blue-500"
@@ -79,8 +81,10 @@ export default function Verification({
             Current Program Level
           </Label>
           <Select
-            value={formData.level}
-            onValueChange={value => setFormData({ ...formData, level: value })}
+            value={formData.level || ''}
+            onValueChange={value =>
+              setFormData(prev => ({ ...prev, level: value as ProgramLevelId }))
+            }
           >
             <SelectTrigger
               id="programLevel"

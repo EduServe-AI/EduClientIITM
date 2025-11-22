@@ -4,70 +4,58 @@ import { useInstructor } from '@/app/contexts/instructorContext'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { EditIcon } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
-import EditProfileField from '../../student/profile/components/editField'
-import { useImageUrl } from '@/lib/utils'
-import { toast } from 'sonner'
 import { getAccessToken } from '@/lib/auth'
+import { useImageUrl } from '@/lib/utils'
+import { EditIcon, Github, Linkedin, User } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { toast } from 'sonner'
+import EditProfileField from '../../student/profile/components/editField'
 
 export default function Profile() {
   const { instructor, isLoading } = useInstructor()
-
-  // for image
   const fileInputRef = useRef<HTMLInputElement>(null)
-
-  // This state is only for new profile image when updated or changed
   const [profileImage, setProfileImage] = useState('')
-
-  // This hook gets the saved image from the Azure
   const savedImageUrl = useImageUrl(instructor?.id, 'profile')
 
   useEffect(() => {
     console.log('instructor data from the context', instructor)
   }, [instructor])
 
-  // You can show a loading state while the context is initializing
-  if (isLoading) {
-    return <div>Loading Profile Data...</div>
-  }
-
-  // Once loading is false, you know if the student exists or not
-  if (!instructor) {
-    // This could happen if someone tries to access the URL directly without logging in
-    return <div>No Instructor data found. Please log in.</div>
-  }
+  if (isLoading)
+    return (
+      <div className="text-center py-10 text-lg font-medium">
+        Loading profile...
+      </div>
+    )
+  if (!instructor)
+    return (
+      <div className="text-center py-10 text-lg font-medium">
+        No Instructor data found. Please log in.
+      </div>
+    )
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0]
+    if (!file) return toast.error('No file selected')
 
-    if (!file) {
-      toast.error('No file selected')
-      return
-    }
-
-    // Validate file size
-    if (file.size > 2 * 1024 * 1024) {
-      toast.error('File size exceeds 2MB. Please upload a smaller image.')
-      return
-    }
+    if (file.size > 2 * 1024 * 1024)
+      return toast.error(
+        'File size exceeds 2MB. Please upload a smaller image.'
+      )
 
     try {
-      // Get the extension of the previous image if it exists
       const previousImageUrl = savedImageUrl
       const previousImageExtension = previousImageUrl
         ? '.' + previousImageUrl.split('.').pop()
         : null
 
-      // Create form data
       const formData = new FormData()
       formData.append('file', file)
       formData.append('userId', instructor.id)
-      if (previousImageExtension) {
+      if (previousImageExtension)
         formData.append('previousImageExtension', previousImageExtension)
-      }
 
       // Retreiving the accessToken
       const accessToken = getAccessToken()
@@ -81,12 +69,8 @@ export default function Profile() {
       })
 
       const data = await response.json()
+      if (!response.ok) throw new Error(data.error || 'Failed to upload image')
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to upload image')
-      }
-
-      // Update profile image with the returned URL
       setProfileImage(data.url)
       toast.success('Profile image updated successfully')
     } catch (error) {
@@ -95,103 +79,128 @@ export default function Profile() {
     }
   }
 
-  // If `profileImage` (the preview state) has something, use it.
-  // Otherwise, use `savedImageUrl` (the one from Azure).
   const displayImageUrl = profileImage || savedImageUrl
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
-      <h1 className="text-start text-2xl font-serif font-semibold">
-        Instructors Profile
-      </h1>
+    <div className="max-w-3xl mx-auto py-10 space-y-10">
+      {/* Heading */}
+      <div className="text-center space-y-1">
+        <h1 className="text-3xl font-semibold tracking-tight">
+          Instructor Profile
+        </h1>
+        <p className="text-neutral-500 text-sm">
+          Manage your personal information, skills, and social links.
+        </p>
+      </div>
 
-      {/* Card with border showing the profile attributes of student */}
+      {/* Profile Image Section */}
+      <div className="flex flex-col items-center space-y-3">
+        <Input
+          type="file"
+          className="hidden"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+        />
+        <div className="relative group">
+          <Avatar className="h-28 w-28 border-2 border-neutral-400 shadow-sm">
+            <AvatarImage src={displayImageUrl} alt="profile" />
+            <AvatarFallback className="text-lg font-medium bg-neutral-100">
+              {instructor.username.substring(0, 2).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <Button
+            variant="outline"
+            size="icon"
+            className="absolute bottom-0 right-0 h-9 w-9 border-neutral-400 bg-white hover:bg-neutral-100 transition"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <EditIcon className="h-4 w-4" />
+          </Button>
+        </div>
+        <p className="text-sm text-neutral-500">
+          Click the edit icon to update your profile picture.
+        </p>
+      </div>
 
-      <div className="rounded-2xl border-1 border-black min-h-screen p-5 space-y-7">
-        {/* Rounded image with edit button */}
-        <div className="flex items-center justify-center p-5">
-          {/* Image uploading */}
-          <Input
-            type="file"
-            className="hidden"
-            ref={fileInputRef}
-            onChange={handleFileChange}
-          ></Input>
-          {/* Relative container wrapping the avatar and the edit buttont  */}
-          <div className="relative">
-            <Avatar className="h-30 w-30 border-2 border-black">
-              <AvatarImage src={displayImageUrl} alt="profile" />
-              <AvatarFallback>
-                {instructor.username.substring(0, 2).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <Button
-              variant="outline"
-              size="icon"
-              className="absolute bottom-2 right-2 h-9 w-9 cursor-pointer"
-              onClick={() => fileInputRef.current?.click()}
+      {/* Profile Info */}
+      <div className="space-y-6">
+        {[
+          { label: 'Username', value: instructor.username },
+          { label: 'Email', value: instructor.email },
+          { label: 'Level', value: instructor.instructorProfile.level },
+          { label: 'Bio', value: instructor.instructorProfile.bio },
+        ].map((item, idx) => (
+          <div
+            key={idx}
+            className="flex items-center justify-between rounded-lg border border-neutral-300 px-5 py-3 hover:shadow-sm transition"
+          >
+            <div>
+              <p className="text-sm text-neutral-500">{item.label}</p>
+              <p className="text-md font-medium">{item.value || '—'}</p>
+            </div>
+            <EditProfileField label={item.label} currentValue={item.value} />
+          </div>
+        ))}
+      </div>
+
+      {/* Social URLs */}
+      <div className="space-y-4">
+        <h2 className="text-lg font-semibold tracking-tight flex items-center gap-2">
+          <User className="h-5 w-5" /> Social Links
+        </h2>
+
+        <div className="grid md:grid-cols-2 gap-4">
+          {[
+            {
+              label: 'GitHub',
+              icon: <Github className="h-5 w-5 text-neutral-600" />,
+              value: instructor.instructorProfile.githubUrl,
+            },
+            {
+              label: 'LinkedIn',
+              icon: <Linkedin className="h-5 w-5 text-blue-600" />,
+              value: instructor.instructorProfile.linkedinUrl,
+            },
+          ].map((link, idx) => (
+            <div
+              key={idx}
+              className="flex items-center justify-between border border-neutral-300 rounded-lg px-5 py-4 hover:shadow-sm transition"
             >
-              <EditIcon />
-            </Button>
-          </div>
+              <div className="flex items-center gap-3">
+                {link.icon}
+                <div>
+                  <p className="text-sm text-neutral-500">{link.label}</p>
+                  <p className="text-md break-all font-medium">
+                    {link.value || 'Not provided'}
+                  </p>
+                </div>
+              </div>
+              <EditProfileField label={link.label} currentValue={link.value} />
+            </div>
+          ))}
         </div>
+      </div>
 
-        {/* Attributes to edit - username , email , level etc., */}
+      {/* Skills */}
+      <div className="space-y-4">
+        <h2 className="text-lg font-semibold tracking-tight flex items-center gap-2">
+          ⚡ Skills
+        </h2>
 
-        {/* Username card */}
-        <div className="flex items-center justify-between rounded-md border-1">
-          <div className="px-6 py-3">
-            <p className="text-sm font-medium text-neutral-500">Username</p>
-            <p className="text-md font-normal">{instructor.username}</p>
-          </div>
-          <EditProfileField
-            label="Username"
-            currentValue={instructor.username}
-            // onSave={handleUpdateUsername}
-          />
+        <div className="flex flex-wrap gap-3">
+          {instructor.instructorProfile.skills?.length ? (
+            instructor.instructorProfile.skills.map(skill => (
+              <span
+                key={skill.id}
+                className="px-4 py-1.5 bg-neutral-100 rounded-full border border-neutral-300 text-sm font-medium hover:bg-neutral-200 transition"
+              >
+                {skill.name}
+              </span>
+            ))
+          ) : (
+            <p className="text-neutral-500 italic">No skills added yet</p>
+          )}
         </div>
-
-        {/* email  card */}
-        <div className="flex items-center justify-between rounded-md border-1">
-          <div className="px-6 py-3">
-            <p className="text-sm font-medium text-neutral-500">Email</p>
-            <p className="text-md font-normal">{instructor.email}</p>
-          </div>
-          <EditProfileField label="Email" currentValue={instructor.email} />
-        </div>
-
-        {/* Level  card */}
-        <div className="flex items-center justify-between rounded-md border-1">
-          <div className="px-6 py-3">
-            <p className="text-sm font-medium text-neutral-500">Level</p>
-            <p className="text-md font-normal">
-              {instructor.instructorProfile.level}
-            </p>
-          </div>
-          <EditProfileField
-            label="Level"
-            currentValue={instructor.instructorProfile.level}
-            // onSave={handleUpdateUsername}
-          />
-        </div>
-
-        {/* Bio */}
-        <div className="flex items-center justify-between rounded-md border-1">
-          <div className="px-6 py-3">
-            <p className="text-sm font-medium text-neutral-500">Bio</p>
-            <p className="text-md font-normal">
-              {instructor.instructorProfile.bio}
-            </p>
-          </div>
-          <EditProfileField
-            label="Level"
-            currentValue={instructor.instructorProfile.bio}
-            // onSave={handleUpdateUsername}
-          />
-        </div>
-
-        {/* Displaying list of enrolled courses */}
-        <div></div>
       </div>
     </div>
   )

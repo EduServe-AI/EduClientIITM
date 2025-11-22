@@ -1,7 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server'
 import { BlobServiceClient } from '@azure/storage-blob'
-import path from 'path'
-import { getAccessToken } from '@/lib/auth'
+import { NextRequest, NextResponse } from 'next/server'
+import sharp from 'sharp'
 
 // Get the connection string and container name from environment variables
 const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING
@@ -46,7 +45,7 @@ export async function POST(request: NextRequest) {
 
     // Delete previous image if it exists
     if (previousImageExtension) {
-      const previousFileName = `${userId}${previousImageExtension}`
+      const previousFileName = `${userId}.jpg`
       const previousBlob = containerClient.getBlockBlobClient(previousFileName)
       try {
         await previousBlob.delete()
@@ -73,17 +72,19 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create a unique filename with student ID
-    const fileExtension = path.extname(file.name)
-    const fileName = `${userId}${fileExtension}`
+    // Create a unique filename with student ID and JPG extension
+    const fileName = `${userId}.jpg`
 
-    // Convert file to buffer
-    const buffer = Buffer.from(await file.arrayBuffer())
+    // Convert file to buffer and convert to JPG using sharp
+    const fileBuffer = Buffer.from(await file.arrayBuffer())
+
+    // Convert to JPG format regardless of input format
+    const jpgBuffer = await sharp(fileBuffer).jpeg({ quality: 90 }).toBuffer()
 
     // Upload to Azure Blob Storage
     const blockBlobClient = containerClient.getBlockBlobClient(fileName)
-    await blockBlobClient.uploadData(buffer, {
-      blobHTTPHeaders: { blobContentType: file.type },
+    await blockBlobClient.uploadData(jpgBuffer, {
+      blobHTTPHeaders: { blobContentType: 'image/jpeg' },
     })
 
     // Get the URL of the uploaded file

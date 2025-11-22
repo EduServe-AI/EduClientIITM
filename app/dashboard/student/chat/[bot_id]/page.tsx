@@ -1,12 +1,8 @@
 'use client'
 
 import { Spinner } from '@/components/ui/spinner'
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 
 export default function NewChatPage() {
-  const router = useRouter()
-
   return (
     <div className="flex flex-row items-center justify-center gap-3">
       {/* Spinner with Loading Text */}

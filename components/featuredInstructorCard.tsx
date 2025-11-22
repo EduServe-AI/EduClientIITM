@@ -1,10 +1,10 @@
 import { Card } from '@/components/ui/card'
-import { ProgramLevelId } from '@/types/types'
-import Image from 'next/image'
-import { IndianRupee, MapPin, Star } from 'lucide-react'
-import { Badge } from './ui/badge'
-import { useRouter } from 'next/navigation'
 import { useImageUrl } from '@/lib/utils'
+import { ProgramLevelId } from '@/types/types'
+import { IndianRupee, Star } from 'lucide-react'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { Badge } from './ui/badge'
 
 // Defining the shape of the featured instructor object
 interface FeaturedInstructorProps {

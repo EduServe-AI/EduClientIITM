@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button'
-import { useState } from 'react'
 import {
   Card,
   CardContent,
@@ -7,15 +6,16 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Eye, EyeOff, Loader2 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { apiService } from '@/lib/api'
+import { saveAccessToken } from '@/lib/auth'
+import { Eye, EyeOff, Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { toast } from 'sonner'
-import { saveAccessToken } from '@/lib/auth'
 import { useRouter } from 'next/navigation'
-import { apiService } from '@/lib/api'
+import { useState } from 'react'
+import { toast } from 'sonner'
 
 interface LoginResponse {
   data: {
@@ -32,10 +32,7 @@ interface InstructorLoginProps {
   setIsSignin: (value: boolean) => void
 }
 
-export default function InstructorLogin({
-  isSignin,
-  setIsSignin,
-}: InstructorLoginProps) {
+export default function InstructorLogin({ setIsSignin }: InstructorLoginProps) {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [showPassword, setShowPassword] = useState<boolean>(false)
@@ -73,7 +70,7 @@ export default function InstructorLogin({
       } else {
         router.push('/onboarding/instructor')
       }
-    } catch (error) {
+    } catch {
       // console.error(`Login error : ${error}`)
       router.push('/instructor')
       toast.error('Login Failed')
@@ -84,11 +81,11 @@ export default function InstructorLogin({
   }
 
   return (
-    <div className="flex ml-15 mt-10 items-center gap-10">
+    <div className="flex flex-col lg:flex-row items-center justify-center min-h-screen gap-10 p-4 bg-white">
       {/* Left side : Heading and Image */}
-      <div className="p-10 space-y-4 bg-neutral-50 rounded-lg">
+      <div className="hidden lg:flex p-6 lg:p-10 space-y-4 bg-neutral-50 rounded-lg w-full lg:w-auto flex-col items-center lg:items-start">
         {/* Heading */}
-        <h1 className="text-5xl font-serif tracking-wide italic text-start">
+        <h1 className="text-4xl lg:text-5xl font-serif tracking-wide italic text-start">
           Eduserve AI
         </h1>
 
@@ -98,7 +95,7 @@ export default function InstructorLogin({
           alt="Instructor Illustration"
           width={550}
           height={800}
-          className="object-cover ml-1"
+          className="object-cover w-full h-auto max-w-[300px] lg:max-w-[550px]"
         />
 
         {/* Copyright */}
@@ -109,8 +106,13 @@ export default function InstructorLogin({
         </span>
       </div>
 
+      {/* Mobile Branding */}
+      <h1 className="text-4xl font-serif tracking-wide italic lg:hidden mb-2">
+        Eduserve AI
+      </h1>
+
       {/* Right side : Signin Card */}
-      <Card className="w-120 rounded-md justify-center mb-30">
+      <Card className="w-full max-w-md rounded-md justify-center">
         <CardHeader>
           <CardTitle className="text-2xl font-[360] mb-9 ml-1">
             Sign in
@@ -213,7 +215,7 @@ export default function InstructorLogin({
 
               <div className="flex gap-2 justify-center">
                 <span className="text-base font-light">
-                  Don't have an account ?
+                  Don&apos;t have an account ?
                 </span>
                 <button
                   onClick={() => setIsSignin(false)}

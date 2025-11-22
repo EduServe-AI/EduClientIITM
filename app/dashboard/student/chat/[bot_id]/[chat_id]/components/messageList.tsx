@@ -6,6 +6,10 @@ import Message from './message' // We'll create this next
 export default function MessageList() {
   const { messages, isLoading, chat } = useChat()
 
+  if (!chat) {
+    throw new Error('Chat not found')
+  }
+
   return (
     <div className="space-y-6">
       {messages.map(msg => (
@@ -20,7 +24,7 @@ export default function MessageList() {
             id: 'loading',
             sender: 'bot',
             content: '',
-            chatId: chat?.id!,
+            chatId: chat.id,
           }}
         />
       )}

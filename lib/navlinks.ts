@@ -1,16 +1,13 @@
 import { NavItem } from '@/types/types'
 import {
-  Home,
-  Bot,
-  Users,
-  CalendarClockIcon,
-  LayoutDashboard,
-  MessageSquare,
   BarChart3,
-  UserCircle,
+  Bot,
+  CalendarClockIcon,
+  Home,
   LogOut,
-  LucideIcon,
   Star,
+  UserCircle,
+  Users,
 } from 'lucide-react'
 
 // ----------- NAV Links for Student -----------

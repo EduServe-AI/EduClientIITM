@@ -1,17 +1,16 @@
 'use client'
 
 import { useStudent } from '@/app/contexts/studentContext'
-import { useEffect, useRef, useState } from 'react'
-import EditProfileField from './components/editField'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { Camera, EditIcon } from 'lucide-react'
 import { Input } from '@/components/ui/input'
-import { toast } from 'sonner'
-import { useImageUrl } from '@/lib/utils'
+import { Separator } from '@/components/ui/separator'
 import { getAccessToken } from '@/lib/auth'
+import { useImageUrl } from '@/lib/utils'
+import { EditIcon } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { toast } from 'sonner'
+import EditProfileField from './components/editField'
 
 export default function Profile() {
   const { student, isLoading } = useStudent()
@@ -38,10 +37,6 @@ export default function Profile() {
   if (!student) {
     // This could happen if someone tries to access the URL directly without logging in
     return <div>No student data found. Please log in.</div>
-  }
-
-  const handleUpdateUsername = async () => {
-    alert('clicked')
   }
 
   const handleFileChange = async (
@@ -106,81 +101,103 @@ export default function Profile() {
   const displayImageUrl = profileImage || savedImageUrl
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
-      <h1 className="text-start text-2xl font-serif font-semibold">
-        Students Profile
-      </h1>
+    <div className="w-full min-h-screen px-4 py-6 md:px-6 lg:px-8 overflow-y-auto">
+      <div className="max-w-2xl mx-auto space-y-8">
+        <h1 className="text-2xl md:text-3xl font-serif font-semibold text-start">
+          Student Profile
+        </h1>
 
-      {/* Card with border showing the profile attributes of student */}
+        {/* Main Profile Card */}
+        <div className="rounded-3xl border border-gray-200 bg-white p-6 md:p-8 space-y-8 shadow-sm">
+          {/* Profile Image Section */}
+          <div className="flex flex-col items-center py-4">
+            {/* Image uploading */}
+            <Input
+              type="file"
+              className="hidden"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              accept="jpg"
+            />
 
-      <div className="rounded-2xl border-1 border-black min-h-screen p-5 space-y-7">
-        {/* Rounded image with edit button */}
-        <div className="flex items-center justify-center p-5">
-          {/* Image uploading */}
-          <Input
-            type="file"
-            className="hidden"
-            ref={fileInputRef}
-            onChange={handleFileChange}
-          ></Input>
-          {/* Relative container wrapping the avatar and the edit buttont  */}
-          <div className="relative">
-            <Avatar className="h-30 w-30 border-2 border-black">
-              <AvatarImage src={displayImageUrl} alt="profile" />
-              <AvatarFallback>
-                {student.username.substring(0, 2).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <Button
-              variant="outline"
-              size="icon"
-              className="absolute bottom-2 right-2 h-9 w-9 cursor-pointer"
-              onClick={() => fileInputRef.current?.click()}
-            >
-              <EditIcon />
-            </Button>
+            {/* Avatar with edit button */}
+            <div className="relative">
+              <Avatar className="h-24 w-24 md:h-32 md:w-32 border-4 border-black">
+                <AvatarImage src={displayImageUrl} alt="profile" />
+                <AvatarFallback className="text-lg md:text-2xl">
+                  {student.username.substring(0, 2).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <Button
+                variant="outline"
+                size="icon"
+                className="absolute bottom-0 right-0 h-9 w-9 md:h-10 md:w-10 rounded-full cursor-pointer shadow-md hover:bg-gray-100"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <EditIcon size={20} />
+              </Button>
+            </div>
+          </div>
+
+          {/* Divider */}
+          <Separator className="my-4" />
+
+          {/* Profile Fields Container */}
+          <div className="space-y-4">
+            {/* Username Card */}
+            <div className="flex items-center justify-between gap-4 rounded-lg border border-gray-200 p-4 md:p-6 hover:bg-gray-50 transition-colors">
+              <div className="flex-1 min-w-0">
+                <p className="text-xs md:text-sm font-medium text-gray-500 uppercase tracking-wide">
+                  Username
+                </p>
+                <p className="text-base md:text-lg font-semibold text-gray-900 truncate">
+                  {student.username}
+                </p>
+              </div>
+              <div className="flex-shrink-0">
+                <EditProfileField
+                  label="Username"
+                  currentValue={student.username}
+                />
+              </div>
+            </div>
+
+            {/* Email Card */}
+            <div className="flex items-center justify-between gap-4 rounded-lg border border-gray-200 p-4 md:p-6 hover:bg-gray-50 transition-colors">
+              <div className="flex-1 min-w-0">
+                <p className="text-xs md:text-sm font-medium text-gray-500 uppercase tracking-wide">
+                  Email
+                </p>
+                <p className="text-base md:text-lg font-semibold text-gray-900 truncate">
+                  {student.email}
+                </p>
+              </div>
+              <div className="flex-shrink-0">
+                <EditProfileField label="Email" currentValue={student.email} />
+              </div>
+            </div>
+
+            {/* Level Card */}
+            <div className="flex items-center justify-between gap-4 rounded-lg border border-gray-200 p-4 md:p-6 hover:bg-gray-50 transition-colors">
+              <div className="flex-1 min-w-0">
+                <p className="text-xs md:text-sm font-medium text-gray-500 uppercase tracking-wide">
+                  Level
+                </p>
+                <p className="text-base md:text-lg font-semibold text-gray-900 truncate">
+                  {student.level}
+                </p>
+              </div>
+              <div className="flex-shrink-0">
+                <EditProfileField label="Level" currentValue={student.level} />
+              </div>
+            </div>
+          </div>
+
+          {/* Enrolled Courses Section */}
+          <div className="pt-4">
+            {/* Placeholder for enrolled courses - can be expanded later */}
           </div>
         </div>
-
-        {/* Attributes to edit - username , email , level etc., */}
-
-        {/* Username card */}
-        <div className="flex items-center justify-between rounded-md border-1">
-          <div className="px-6 py-3">
-            <p className="text-sm font-medium text-neutral-500">Username</p>
-            <p className="text-md font-normal">{student.username}</p>
-          </div>
-          <EditProfileField
-            label="Username"
-            currentValue={student.username}
-            // onSave={handleUpdateUsername}
-          />
-        </div>
-
-        {/* email  card */}
-        <div className="flex items-center justify-between rounded-md border-1">
-          <div className="px-6 py-3">
-            <p className="text-sm font-medium text-neutral-500">Email</p>
-            <p className="text-md font-normal">{student.email}</p>
-          </div>
-          <EditProfileField label="Email" currentValue={student.email} />
-        </div>
-
-        {/* Level  card */}
-        <div className="flex items-center justify-between rounded-md border-1">
-          <div className="px-6 py-3">
-            <p className="text-sm font-medium text-neutral-500">Level</p>
-            <p className="text-md font-normal">{student.level}</p>
-          </div>
-          <EditProfileField
-            label="Level"
-            currentValue={student.level}
-            // onSave={handleUpdateUsername}
-          />
-        </div>
-
-        {/* Displaying list of enrolled courses */}
-        <div></div>
       </div>
     </div>
   )

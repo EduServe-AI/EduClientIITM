@@ -1,5 +1,6 @@
 'use client'
 
+import { Card, CardContent } from '@/components/ui/card'
 import {
   Carousel,
   CarouselContent,
@@ -7,14 +8,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
 import { studentCarouselItems } from '@/lib/carousel'
 import Autoplay from 'embla-carousel-autoplay'
 import Image from 'next/image'

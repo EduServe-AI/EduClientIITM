@@ -1,19 +1,15 @@
-import { UploadCloud, User2, UserCog } from 'lucide-react'
-import { toast } from 'sonner'
-import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
+import type { OnboardingFormData } from '@/types/types'
+import { UploadCloud, User2, UserCog } from 'lucide-react'
 import Image from 'next/image'
-import React, { useState, useRef } from 'react'
+import React, { useRef, useState } from 'react'
+import { toast } from 'sonner'
 
 interface PersonalizationProps {
-  formData: {
-    profilePicture: string | null
-    bio: string
-    githubUrl: string
-    linkedinUrl: string
-  }
-  setFormData: React.Dispatch<React.SetStateAction<any>>
+  formData: OnboardingFormData
+  setFormData: React.Dispatch<React.SetStateAction<OnboardingFormData>>
 }
 
 export default function Personalization({
@@ -45,7 +41,7 @@ export default function Personalization({
       setPreviewUrl(result)
 
       // updating the parent state with the file object
-      setFormData((prev: any) => ({
+      setFormData(prev => ({
         ...prev,
         profilePicture: result,
       }))
@@ -109,7 +105,7 @@ export default function Personalization({
               placeholder="Tell us a little about yourself, your teaching style, and your expertise."
               value={formData.bio}
               onChange={e => {
-                setFormData((prev: any) => ({ ...prev, bio: e.target.value }))
+                setFormData(prev => ({ ...prev, bio: e.target.value }))
               }}
               className="min-h-[120px]"
               rows={3}
