@@ -1,8 +1,8 @@
 'use client'
 
+import { useState } from 'react'
 import StudentLogin from '../components/studentLogin'
 import StudentSignup from '../components/studentSignup'
-import { useState } from 'react'
 
 export default function Student() {
   const [isSignin, setIsSignin] = useState<boolean>(true)

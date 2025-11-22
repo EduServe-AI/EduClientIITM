@@ -70,7 +70,8 @@ export default function StudentLogin({ setIsSignin }: StudentLoginProps) {
       }
     } catch (error) {
       if (error instanceof Error) {
-        toast.error(error.message || 'Login failed. Please try again.')
+        console.error('Login failed:', error)
+        toast.error('Login failed. Please try again.')
       } else {
         toast.error('An unknown error occurred during login.')
       }
@@ -80,11 +81,11 @@ export default function StudentLogin({ setIsSignin }: StudentLoginProps) {
   }
 
   return (
-    <div className="flex ml-15 mt-10 items-center gap-10">
+    <div className="flex flex-col lg:flex-row items-center justify-center min-h-screen gap-10 p-4 bg-white">
       {/* Left side : Heading and Image */}
-      <div className="p-10 space-y-8 bg-neutral-50 rounded-lg">
+      <div className="hidden lg:flex p-6 lg:p-10 space-y-8 bg-neutral-50 rounded-lg w-full lg:w-auto flex-col items-center lg:items-start">
         {/* Heading */}
-        <h1 className="text-5xl font-serif tracking-wide italic">
+        <h1 className="text-4xl lg:text-5xl font-serif tracking-wide italic">
           Eduserve AI
         </h1>
 
@@ -94,7 +95,7 @@ export default function StudentLogin({ setIsSignin }: StudentLoginProps) {
           alt="Student Illustration"
           width={550}
           height={800}
-          className="object-cover ml-1"
+          className="object-cover w-full h-auto max-w-[300px] lg:max-w-[550px]"
         />
 
         {/* Copyright */}
@@ -105,8 +106,13 @@ export default function StudentLogin({ setIsSignin }: StudentLoginProps) {
         </span>
       </div>
 
+      {/* Mobile Branding */}
+      <h1 className="text-4xl font-serif tracking-wide italic lg:hidden mb-2">
+        Eduserve AI
+      </h1>
+
       {/* Right side : Signin Card */}
-      <Card className="w-120 rounded-md justify-center">
+      <Card className="w-full max-w-md rounded-md justify-center">
         <CardHeader>
           <CardTitle className="text-2xl font-[360] mb-9 ml-1">
             Sign in
