@@ -2,12 +2,13 @@
 
 import { useStudent } from '@/app/contexts/studentContext'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { getAccessToken } from '@/lib/auth'
 import { useImageUrl } from '@/lib/utils'
-import { EditIcon } from 'lucide-react'
+import { BookOpen, EditIcon } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import EditProfileField from './components/editField'
@@ -184,18 +185,54 @@ export default function Profile() {
                   Level
                 </p>
                 <p className="text-base md:text-lg font-semibold text-gray-900 truncate">
-                  {student.level}
+                  {student.level?.toLocaleUpperCase()}
                 </p>
               </div>
               <div className="flex-shrink-0">
                 <EditProfileField label="Level" currentValue={student.level} />
               </div>
             </div>
-          </div>
 
-          {/* Enrolled Courses Section */}
-          <div className="pt-4">
-            {/* Placeholder for enrolled courses - can be expanded later */}
+            <div className="flex items-start justify-between gap-4 rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition-all hover:shadow-md">
+              <div className="flex-1 min-w-0 space-y-3">
+                {/* Label Section with Icon */}
+                <div className="flex items-center gap-2">
+                  <BookOpen className="h-4 w-4 text-blue-600" />
+                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                    Enrolled Courses
+                  </p>
+                </div>
+
+                {/* Courses Display as Chips */}
+                <div className="flex flex-wrap gap-2">
+                  {student.courses.length > 0 ? (
+                    student.courses.map(course => (
+                      <Badge
+                        key={course.id}
+                        variant="secondary"
+                        className="px-3 py-1 text-sm font-medium text-black hover:bg-blue-100 border border-blue-100 transition-colors"
+                      >
+                        {course.name}
+                      </Badge>
+                    ))
+                  ) : (
+                    <span className="text-sm text-gray-400 italic">
+                      No active courses found.
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* Edit Action */}
+              <div className="flex-shrink-0 pt-1">
+                {/* Note: Ensure EditProfileField handles arrays, or swap this for a Manage button */}
+                <EditProfileField
+                  label="Courses"
+                  // You might need to adjust how you pass data here depending on your EditProfileField implementation
+                  currentValue={student.courses.map(c => c.name).join(', ')}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
