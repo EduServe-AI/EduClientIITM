@@ -3,6 +3,7 @@ import ChatBotCard from '@/components/chatBotCard'
 import FeaturedChatBotCard from '@/components/featuredChatBotCard'
 import { apiService } from '@/lib/api'
 import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 
 interface ChatBot {
   id: string
@@ -28,7 +29,6 @@ interface Chat {
 export default function StudentBotsPage() {
   const [bots, setBots] = useState<ChatBot[]>([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
 
   const [userChats, setUserChats] = useState<Chat[]>([])
 
@@ -45,11 +45,11 @@ export default function StudentBotsPage() {
         }
       } catch (err) {
         if (err instanceof Error && isMounted) {
-          setError(err.message)
+          toast.error(err.message)
         } else if (typeof err === 'string') {
-          setError(err)
+          toast.error(err)
         } else {
-          setError('An unexpected error occurred while fetching chatbots.')
+          toast.error('An unexpected error occurred while fetching chatbots.')
         }
       } finally {
         if (isMounted) {
@@ -68,11 +68,11 @@ export default function StudentBotsPage() {
         }
       } catch (err) {
         if (err instanceof Error && isMounted) {
-          setError(err.message)
+          toast.error(err.message)
         } else if (typeof err === 'string') {
-          setError(err)
+          toast.error(err)
         } else {
-          setError('An unexpected error occurred while fetching chatbots.')
+          toast.error('An unexpected error occurred while fetching chatbots.')
         }
       } finally {
         if (isMounted) {

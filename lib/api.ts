@@ -1,5 +1,3 @@
-import { toast } from 'sonner'
-
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL!
 
 interface ApiOptions extends Omit<RequestInit, 'body'> {
@@ -47,7 +45,7 @@ export async function apiService<T>(
     if (!response.ok) {
       const errorData = await response.json().catch(() => null)
       console.log('errorData', errorData)
-      toast.error(errorData.message)
+      // toast.error(errorData.message)
       const errorMessage =
         errorData?.error ||
         errorData?.message ||
