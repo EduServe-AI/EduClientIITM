@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/select'
 import { OnboardingFormData, ProgramLevelId } from '@/types/types'
 import { ShieldCheckIcon } from 'lucide-react'
+import { useState } from 'react'
 
 interface VerificationProps {
   formData: {
@@ -23,6 +24,12 @@ export default function Verification({
   formData,
   setFormData,
 }: VerificationProps) {
+  const [errors, setErrors] = useState<{ [key: string]: boolean }>({
+    iitmProfileUrl: false,
+    cgpa: false,
+    level: false,
+  })
+
   return (
     <section className="max-w-4xl mx-auto w-full">
       <header className="mb-8 text-center flex flex-row gap-3 items-center justify-center">
@@ -43,12 +50,27 @@ export default function Verification({
             type="url"
             placeholder="https://ds.study.iitm.ac.in/student/2xFxxxxxxx"
             value={formData.iitmProfileUrl}
-            onChange={e =>
-              setFormData(prev => ({ ...prev, iitmProfileUrl: e.target.value }))
-            }
+            onChange={e => {
+              const value = e.target.value
+              setFormData(prev => ({ ...prev, iitmProfileUrl: value }))
+              if (value.trim() === '') {
+                setErrors({ ...errors, iitmProfileUrl: true })
+              } else {
+                setErrors({ ...errors, iitmProfileUrl: false })
+              }
+            }}
             required
-            className="py-6 transition-all duration-200 focus:ring-2 focus:ring-blue-500"
+            className={`py-6 transition-all duration-200 focus:ring-2 focus:ring-blue-500 ${
+              errors.iitmProfileUrl
+                ? 'border-red-500 focus-visible:ring-red-500'
+                : ''
+            }`}
           />
+          {errors.iitmProfileUrl && (
+            <p className="text-red-500 text-sm">
+              Public Profile Url Cannot be empty
+            </p>
+          )}
         </div>
 
         {/* Overall CGPA Input */}
@@ -64,15 +86,29 @@ export default function Verification({
             min={0}
             max={10}
             value={formData.cgpa}
-            onChange={e =>
+            onChange={e => {
+              const value = e.target.value
+              const numValue = value === '' ? NaN : parseFloat(value)
               setFormData(prev => ({
                 ...prev,
-                cgpa: parseFloat(e.target.value),
+                cgpa: numValue,
               }))
-            }
+              if (isNaN(numValue) || numValue <= 0 || numValue > 10) {
+                setErrors(prev => ({ ...prev, cgpa: true }))
+              } else {
+                setErrors(prev => ({ ...prev, cgpa: false }))
+              }
+            }}
             required
-            className="py-6 transition-all duration-200 focus:ring-2 focus:ring-blue-500"
+            className={`py-6 transition-all duration-200 focus:ring-2 focus:ring-blue-500 ${
+              errors.cgpa ? 'border-red-500 focus-visible:ring-red-500' : ''
+            }`}
           />
+          {errors.cgpa && (
+            <p className="text-red-500 text-sm">
+              CGPA must be a valid number greater than 0 and at most 10.
+            </p>
+          )}
         </div>
 
         {/* Program Level Selection */}
@@ -82,13 +118,21 @@ export default function Verification({
           </Label>
           <Select
             value={formData.level || ''}
-            onValueChange={value =>
+            onValueChange={value => {
               setFormData(prev => ({ ...prev, level: value as ProgramLevelId }))
-            }
+              setErrors(prev => ({ ...prev, level: false }))
+            }}
           >
             <SelectTrigger
               id="programLevel"
-              className="py-6 w-full transition-all duration-200 focus:ring-2 focus:ring-blue-500"
+              className={`py-6 w-full transition-all duration-200 focus:ring-2 focus:ring-blue-500 ${
+                errors.level ? 'border-red-500 focus-visible:ring-red-500' : ''
+              }`}
+              onBlur={() => {
+                if (!formData.level) {
+                  setErrors(prev => ({ ...prev, level: true }))
+                }
+              }}
             >
               <SelectValue placeholder="Select your current level" />
             </SelectTrigger>
@@ -99,6 +143,11 @@ export default function Verification({
               <SelectItem value="bs">BS Degree Level</SelectItem>
             </SelectContent>
           </Select>
+          {errors.level && (
+            <p className="text-red-500 text-sm">
+              Please select your program level.
+            </p>
+          )}
         </div>
       </form>
     </section>

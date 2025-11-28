@@ -44,8 +44,6 @@ export async function apiService<T>(
     // validating the response
     if (!response.ok) {
       const errorData = await response.json().catch(() => null)
-      console.log('errorData', errorData)
-      // toast.error(errorData.message)
       const errorMessage =
         errorData?.error ||
         errorData?.message ||

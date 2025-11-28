@@ -12,6 +12,11 @@ interface PersonalizationProps {
   setFormData: React.Dispatch<React.SetStateAction<OnboardingFormData>>
 }
 
+interface PersonalizationErrors {
+  profilePicture?: boolean
+  bio?: boolean
+}
+
 export default function Personalization({
   formData,
   setFormData,
@@ -20,6 +25,7 @@ export default function Personalization({
   const [previewUrl, setPreviewUrl] = useState<string | null>(
     formData.profilePicture || null
   )
+  const [errors, setErrors] = useState<PersonalizationErrors>({})
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -45,6 +51,7 @@ export default function Personalization({
         ...prev,
         profilePicture: result,
       }))
+      setErrors(prev => ({ ...prev, profilePicture: false }))
     }
     reader.readAsDataURL(file)
   }
@@ -73,7 +80,15 @@ export default function Personalization({
           />
           <div
             onClick={() => fileInputRef.current?.click()}
-            className="relative w-40 h-40 rounded-full border-2 border-dashed flex items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors group"
+            onBlur={() => {
+              if (!formData.profilePicture) {
+                setErrors(prev => ({ ...prev, profilePicture: true }))
+              }
+            }}
+            tabIndex={0}
+            className={`relative w-40 h-40 rounded-full border-2 border-dashed flex items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors group ${
+              errors.profilePicture ? 'border-red-500' : ''
+            }`}
           >
             {previewUrl ? (
               <Image
@@ -89,6 +104,11 @@ export default function Personalization({
               <UploadCloud className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
           </div>
+          {errors.profilePicture && (
+            <p className="text-red-500 text-sm mt-2">
+              Profile picture is required.
+            </p>
+          )}
           <p className="text-xs text-gray-500 mt-3">
             Upload a professional photo. (Max 2MB)
           </p>
@@ -105,12 +125,31 @@ export default function Personalization({
               placeholder="Tell us a little about yourself, your teaching style, and your expertise."
               value={formData.bio}
               onChange={e => {
-                setFormData(prev => ({ ...prev, bio: e.target.value }))
+                const value = e.target.value
+                setFormData(prev => ({ ...prev, bio: value }))
+                if (value.trim().length < 50 || value.trim().length > 500) {
+                  setErrors(prev => ({ ...prev, bio: true }))
+                } else {
+                  setErrors(prev => ({ ...prev, bio: false }))
+                }
               }}
-              className="min-h-[120px]"
+              onBlur={e => {
+                const value = e.target.value.trim()
+                if (value.length < 50 || value.length > 500) {
+                  setErrors(prev => ({ ...prev, bio: true }))
+                }
+              }}
+              className={`min-h-[120px] transition-all duration-200 focus:ring-2 focus:ring-blue-500 ${
+                errors.bio ? 'border-red-500 focus-visible:ring-red-500' : ''
+              }`}
               rows={3}
-              maxLength={400}
+              maxLength={500}
             />
+            {errors.bio && (
+              <p className="text-red-500 text-sm">
+                Bio must be between 50 and 500 characters.
+              </p>
+            )}
           </div>
 
           {/* Github URL */}
