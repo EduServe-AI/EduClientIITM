@@ -34,26 +34,33 @@ export default function StudentBotsPage() {
   useEffect(() => {
     let isMounted = true
 
-    const fetchRecommendedBots = async () => {
+    const fetchAllData = async () => {
       try {
-        const response = await apiService<{
-          data: { recommendedBots: ChatBot[] }
-        }>('/bot/recommended')
+        const [botsResult, chatsResult] = await Promise.allSettled([
+          apiService<{ data: { recommendedBots: ChatBot[] } }>(
+            '/bot/recommended'
+          ),
+          apiService<{ data: { chats: Chat[] } }>('/chat/user-chats'),
+        ])
+
         if (isMounted) {
-          setBots(response?.data?.recommendedBots ?? [])
-        }
-      } catch (err) {
-        if (err instanceof Error && isMounted) {
-          console.error(err.message)
-          // toast.error(err.message)
-        } else if (typeof err === 'string') {
-          console.error(err)
-        } else {
-          console.error(
-            'An unexpected error occurred while fetching chatbots.',
-            err
-          )
-          // toast.error('An unexpected error occurred while fetching chatbots.')
+          if (botsResult.status === 'fulfilled') {
+            setBots(botsResult.value?.data?.recommendedBots ?? [])
+          } else {
+            console.error(
+              'Failed to fetch recommended bots:',
+              botsResult.reason
+            )
+            setBots([]) // Ensure bots is an array on failure
+          }
+
+          if (chatsResult.status === 'fulfilled') {
+            setUserChats(chatsResult.value?.data?.chats ?? [])
+          } else {
+            console.error('Failed to fetch user chats:', chatsResult.reason)
+            // If fetching chats fails (e.g., 404), we'll treat it as no chats.
+            setUserChats([])
+          }
         }
       } finally {
         if (isMounted) {
@@ -62,37 +69,7 @@ export default function StudentBotsPage() {
       }
     }
 
-    const fetchRecentChats = async () => {
-      try {
-        const response = await apiService<{
-          data: { chats: Chat[] }
-        }>('/chat/user-chats')
-        if (isMounted) {
-          setUserChats(response?.data?.chats ?? [])
-        }
-      } catch (err) {
-        if (err instanceof Error && isMounted) {
-          console.error(err.message)
-          // toast.error(err.message)
-        } else if (typeof err === 'string') {
-          console.error(err)
-          // toast.error(err)
-        } else {
-          console.error(
-            'An unexpected error occurred while fetching chatbots.',
-            err
-          )
-          // toast.error('An unexpected error occurred while fetching chatbots.')
-        }
-      } finally {
-        if (isMounted) {
-          setLoading(false)
-        }
-      }
-    }
-
-    fetchRecommendedBots()
-    fetchRecentChats()
+    fetchAllData()
 
     return () => {
       isMounted = false
@@ -130,7 +107,6 @@ export default function StudentBotsPage() {
       {userChats.length > 0 && (
         <div>
           <h1 className="text-2xl font-semibold mb-4 mt-4 ">Recent Chats</h1>
-
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {userChats.map(chat => (
               <ChatBotCard
