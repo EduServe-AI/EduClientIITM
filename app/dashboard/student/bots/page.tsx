@@ -1,4 +1,5 @@
 'use client'
+import ChatBotCard from '@/components/chatBotCard'
 import FeaturedChatBotCard from '@/components/featuredChatBotCard'
 import { apiService } from '@/lib/api'
 import { useEffect, useState } from 'react'
@@ -15,39 +16,51 @@ interface ChatBot {
   }
 }
 
-// interface Chat {
-//   id: string
-//   botId: string
-//   botName: string
-//   title?: string | undefined
-//   lastInteractionTime?: Date | undefined
-// }
+interface Chat {
+  id: string
+  botId: string
+  botName: string
+  title: string | null
+  lastInteractionTime: Date
+  createdAt: Date
+}
 
 export default function StudentBotsPage() {
   const [bots, setBots] = useState<ChatBot[]>([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
 
-  // const [userChats, setUserChats] = useState<Chat[]>([])
+  const [userChats, setUserChats] = useState<Chat[]>([])
 
   useEffect(() => {
     let isMounted = true
 
-    const fetchRecommendedBots = async () => {
+    const fetchAllData = async () => {
       try {
-        const response = await apiService<{
-          data: { recommendedBots: ChatBot[] }
-        }>('/bot/recommended')
+        const [botsResult, chatsResult] = await Promise.allSettled([
+          apiService<{ data: { recommendedBots: ChatBot[] } }>(
+            '/bot/recommended'
+          ),
+          apiService<{ data: { chats: Chat[] } }>('/chat/user-chats'),
+        ])
+
         if (isMounted) {
-          setBots(response?.data?.recommendedBots ?? [])
-        }
-      } catch (err) {
-        if (err instanceof Error && isMounted) {
-          setError(err.message)
-        } else if (typeof err === 'string') {
-          setError(err)
-        } else {
-          setError('An unexpected error occurred while fetching chatbots.')
+          if (botsResult.status === 'fulfilled') {
+            setBots(botsResult.value?.data?.recommendedBots ?? [])
+          } else {
+            console.error(
+              'Failed to fetch recommended bots:',
+              botsResult.reason
+            )
+            setBots([]) // Ensure bots is an array on failure
+          }
+
+          if (chatsResult.status === 'fulfilled') {
+            setUserChats(chatsResult.value?.data?.chats ?? [])
+          } else {
+            console.error('Failed to fetch user chats:', chatsResult.reason)
+            // If fetching chats fails (e.g., 404), we'll treat it as no chats.
+            setUserChats([])
+          }
         }
       } finally {
         if (isMounted) {
@@ -56,56 +69,18 @@ export default function StudentBotsPage() {
       }
     }
 
-    fetchRecommendedBots()
+    fetchAllData()
 
     return () => {
       isMounted = false
     }
   }, [])
 
-  // useEffect(() => {
-  //   let isMounted = true
-
-  //   const fetchSavedChats = async () => {
-  //     try {
-  //       const response = await apiService<{
-  //         data: { chats: Chat[] }
-  //       }>('/chat/user-chats')
-  //       if (isMounted) {
-  //         const userChats = response.data.chats
-  //         if (userChats && userChats.length > 0) {
-  //           setUserChats(userChats)
-  //         } else {
-  //           setUserChats([])
-  //         }
-  //       }
-  //     } catch (err) {
-  //       if (err instanceof Error && isMounted) {
-  //         setError(err.message)
-  //       } else if (typeof err === 'string') {
-  //         setError(err)
-  //       } else {
-  //         setError('An unexpected error occurred while fetching chatbots.')
-  //       }
-  //     } finally {
-  //       if (isMounted) {
-  //         setLoading(false)
-  //       }
-  //     }
-  //   }
-
-  //   fetchSavedChats()
-
-  //   return () => {
-  //     isMounted = false
-  //   }
-  // }, [])
-
   if (loading) return <p>Loading recommended chatbots...</p>
-  if (error) return <p className="text-red-600">Error: {error}</p>
+  // if (error) return <p className="text-red-600">Error: {error}</p>
 
   return (
-    <div className="p-6 flex flex-col">
+    <div className="p-6 flex flex-col overflow-y-auto">
       {/* Recommended chat bots */}
       <div className="">
         <h1 className="text-2xl font-semibold mb-4">Recommended ChatBots</h1>
@@ -128,27 +103,25 @@ export default function StudentBotsPage() {
         )}
       </div>
 
-      {/* Recent Chats
-      <div className="">
-        <h1 className="text-2xl font-semibold mb-4">Recent Chats</h1>
-
-        {userChats.length === 0 ? (
-          <p>No User Chats AVailable</p>
-        ) : (
+      {/* Recent Chats */}
+      {userChats.length > 0 && (
+        <div>
+          <h1 className="text-2xl font-semibold mb-4 mt-4 ">Recent Chats</h1>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {userChats.map(chat => (
-              <FeaturedChatBotCard
+              <ChatBotCard
                 key={chat.id}
-                id={chat.botId}
-                name={chat.botName}
-                description={chat.title || 'Subject specifi chatbot'}
-                level="foundation"
-                numInteractions={20}
+                id={chat.id}
+                botId={chat.botId}
+                botName={chat.botName}
+                lastInteractionTime={chat.lastInteractionTime}
+                title={chat.title}
+                createdAt={chat.createdAt}
               />
             ))}
           </div>
-        )}
-      </div> */}
+        </div>
+      )}
     </div>
   )
 }

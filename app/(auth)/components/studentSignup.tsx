@@ -71,8 +71,12 @@ export default function StudentSignup({ setIsSignin }: StudentSignupProps) {
       // Redirecting to onboarding
       router.push('/onboarding/student')
     } catch (error) {
-      console.error(`Signup error : ${error}`)
-      toast.error('Signup failed')
+      if (error instanceof Error) {
+        console.error('Signup failed:', error)
+        toast.error(error.message || 'Signup failed. Please try again.')
+      } else {
+        toast.error('An unknown error occurred during login.')
+      }
     } finally {
       setIsLoading(false)
     }
