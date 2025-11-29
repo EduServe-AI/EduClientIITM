@@ -70,11 +70,14 @@ export default function InstructorLogin({ setIsSignin }: InstructorLoginProps) {
       } else {
         router.push('/onboarding/instructor')
       }
-    } catch {
+    } catch (error) {
       // console.error(`Login error : ${error}`)
-      router.push('/instructor')
-      toast.error('Login Failed')
-      return
+      if (error instanceof Error) {
+        console.error('Login failed:', error)
+        toast.error(error.message || 'Login failed. Please try again.')
+      } else {
+        toast.error('An unknown error occurred during login.')
+      }
     } finally {
       setIsLoading(false)
     }

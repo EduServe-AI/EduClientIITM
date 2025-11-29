@@ -26,6 +26,9 @@ interface LoginResponse {
       onboarded: boolean
     }
   }
+  error?: {
+    errorMessage: string
+  }
 }
 
 interface StudentLoginProps {
@@ -71,7 +74,7 @@ export default function StudentLogin({ setIsSignin }: StudentLoginProps) {
     } catch (error) {
       if (error instanceof Error) {
         console.error('Login failed:', error)
-        toast.error('Login failed. Please try again.')
+        toast.error(error.message || 'Login failed. Please try again.')
       } else {
         toast.error('An unknown error occurred during login.')
       }

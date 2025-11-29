@@ -2,12 +2,13 @@
 
 import { useStudent } from '@/app/contexts/studentContext'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { getAccessToken } from '@/lib/auth'
 import { useImageUrl } from '@/lib/utils'
-import { EditIcon } from 'lucide-react'
+import { BookOpen, EditIcon, GraduationCap, Mail, User } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import EditProfileField from './components/editField'
@@ -145,14 +146,19 @@ export default function Profile() {
           {/* Profile Fields Container */}
           <div className="space-y-4">
             {/* Username Card */}
-            <div className="flex items-center justify-between gap-4 rounded-lg border border-gray-200 p-4 md:p-6 hover:bg-gray-50 transition-colors">
-              <div className="flex-1 min-w-0">
-                <p className="text-xs md:text-sm font-medium text-gray-500 uppercase tracking-wide">
-                  Username
-                </p>
-                <p className="text-base md:text-lg font-semibold text-gray-900 truncate">
-                  {student.username}
-                </p>
+            <div className="flex items-center justify-between gap-4 rounded-lg border border-gray-200 p-4 hover:bg-gray-50 transition-colors">
+              <div className="flex items-center gap-4 flex-1 min-w-0">
+                <div className="bg-white p-3 rounded-full border shadow-sm">
+                  <User className="h-5 w-5 text-black" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs md:text-sm font-medium text-gray-500 uppercase tracking-wide">
+                    Username
+                  </p>
+                  <p className="text-base md:text-lg font-semibold text-gray-900 truncate">
+                    {student.username}
+                  </p>
+                </div>
               </div>
               <div className="flex-shrink-0">
                 <EditProfileField
@@ -163,14 +169,19 @@ export default function Profile() {
             </div>
 
             {/* Email Card */}
-            <div className="flex items-center justify-between gap-4 rounded-lg border border-gray-200 p-4 md:p-6 hover:bg-gray-50 transition-colors">
-              <div className="flex-1 min-w-0">
-                <p className="text-xs md:text-sm font-medium text-gray-500 uppercase tracking-wide">
-                  Email
-                </p>
-                <p className="text-base md:text-lg font-semibold text-gray-900 truncate">
-                  {student.email}
-                </p>
+            <div className="flex items-center justify-between gap-4 rounded-lg border border-gray-200 p-4 hover:bg-gray-50 transition-colors">
+              <div className="flex items-center gap-4 flex-1 min-w-0">
+                <div className="bg-white p-3 rounded-full border shadow-sm">
+                  <Mail className="h-5 w-5 text-black" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs md:text-sm font-medium text-gray-500 uppercase tracking-wide">
+                    Email
+                  </p>
+                  <p className="text-base md:text-lg font-semibold text-gray-900 truncate">
+                    {student.email}
+                  </p>
+                </div>
               </div>
               <div className="flex-shrink-0">
                 <EditProfileField label="Email" currentValue={student.email} />
@@ -178,24 +189,65 @@ export default function Profile() {
             </div>
 
             {/* Level Card */}
-            <div className="flex items-center justify-between gap-4 rounded-lg border border-gray-200 p-4 md:p-6 hover:bg-gray-50 transition-colors">
-              <div className="flex-1 min-w-0">
-                <p className="text-xs md:text-sm font-medium text-gray-500 uppercase tracking-wide">
-                  Level
-                </p>
-                <p className="text-base md:text-lg font-semibold text-gray-900 truncate">
-                  {student.level}
-                </p>
+            <div className="flex items-center justify-between gap-4 rounded-lg border border-gray-200 p-4 hover:bg-gray-50 transition-colors">
+              <div className="flex items-center gap-4 flex-1 min-w-0">
+                <div className="bg-white p-3 rounded-full border shadow-sm">
+                  <GraduationCap className="h-5 w-5 text-black" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs md:text-sm font-medium text-gray-500 uppercase tracking-wide">
+                    Level
+                  </p>
+                  <p className="text-base md:text-lg font-semibold text-gray-900 truncate">
+                    {student.level?.toLocaleUpperCase()}
+                  </p>
+                </div>
               </div>
               <div className="flex-shrink-0">
                 <EditProfileField label="Level" currentValue={student.level} />
               </div>
             </div>
-          </div>
 
-          {/* Enrolled Courses Section */}
-          <div className="pt-4">
-            {/* Placeholder for enrolled courses - can be expanded later */}
+            {/* Enrolled Courses Card */}
+            <div className="rounded-lg border border-gray-200 p-4 hover:bg-gray-50 transition-colors space-y-4">
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-4 flex-1 min-w-0">
+                  <div className="bg-white p-3 rounded-full border shadow-sm">
+                    <BookOpen className="h-5 w-5 text-black" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs md:text-sm font-medium text-gray-500 uppercase tracking-wide">
+                      Enrolled Courses
+                    </p>
+                  </div>
+                </div>
+                <div className="flex-shrink-0">
+                  <EditProfileField
+                    label="Courses"
+                    currentValue={student.courses.map(c => c.name).join(', ')}
+                  />
+                </div>
+              </div>
+
+              {/* Courses Display as Chips */}
+              <div className="flex flex-wrap gap-2 md:pl-16">
+                {student.courses.length > 0 ? (
+                  student.courses.map(course => (
+                    <Badge
+                      key={course.id}
+                      variant="secondary"
+                      className="px-3 py-1 text-sm font-medium text-black hover:bg-blue-100 border border-blue-100 transition-colors"
+                    >
+                      {course.name}
+                    </Badge>
+                  ))
+                ) : (
+                  <span className="text-sm text-gray-400 italic">
+                    No active courses found.
+                  </span>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>
