@@ -80,7 +80,6 @@ export default function InstructorLogin({ setIsSignin }: InstructorLoginProps) {
       }
     } finally {
       setIsLoading(false)
-      router.push('/instructor')
     }
   }
 
