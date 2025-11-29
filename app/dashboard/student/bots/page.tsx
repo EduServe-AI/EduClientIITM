@@ -3,7 +3,6 @@ import ChatBotCard from '@/components/chatBotCard'
 import FeaturedChatBotCard from '@/components/featuredChatBotCard'
 import { apiService } from '@/lib/api'
 import { useEffect, useState } from 'react'
-import { toast } from 'sonner'
 
 interface ChatBot {
   id: string
@@ -45,11 +44,16 @@ export default function StudentBotsPage() {
         }
       } catch (err) {
         if (err instanceof Error && isMounted) {
-          toast.error(err.message)
+          console.error(err.message)
+          // toast.error(err.message)
         } else if (typeof err === 'string') {
-          toast.error(err)
+          console.error(err)
         } else {
-          toast.error('An unexpected error occurred while fetching chatbots.')
+          console.error(
+            'An unexpected error occurred while fetching chatbots.',
+            err
+          )
+          // toast.error('An unexpected error occurred while fetching chatbots.')
         }
       } finally {
         if (isMounted) {
@@ -68,11 +72,17 @@ export default function StudentBotsPage() {
         }
       } catch (err) {
         if (err instanceof Error && isMounted) {
-          toast.error(err.message)
+          console.error(err.message)
+          // toast.error(err.message)
         } else if (typeof err === 'string') {
-          toast.error(err)
+          console.error(err)
+          // toast.error(err)
         } else {
-          toast.error('An unexpected error occurred while fetching chatbots.')
+          console.error(
+            'An unexpected error occurred while fetching chatbots.',
+            err
+          )
+          // toast.error('An unexpected error occurred while fetching chatbots.')
         }
       } finally {
         if (isMounted) {
