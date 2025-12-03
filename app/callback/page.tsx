@@ -30,6 +30,8 @@ function AuthCallbackContent() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    let redirectTimer: NodeJS.Timeout
+
     const handleCallback = async () => {
       try {
         // Extract token and role from URL query parameters
@@ -39,16 +41,22 @@ function AuthCallbackContent() {
         if (!token || !role) {
           setError('Missing authentication credentials')
           toast.error('Authentication failed: Missing credentials')
-          setTimeout(() => router.push('/'), 3000)
+          redirectTimer = setTimeout(() => router.push('/'), 3000)
           return
         }
 
         // Save the access token to localStorage
         saveAccessToken(token)
 
-        // Fetch user data to determine routing based on role
-        const endpoint =
-          role === 'instructor' ? '/instructor/me' : '/student/me'
+        let endpoint: string
+        if (role === 'instructor') {
+          endpoint = '/instructor/me'
+        } else if (role === 'student') {
+          endpoint = '/student/me'
+        } else {
+          toast.error('Invalid role specified')
+          return
+        }
 
         const userData = await apiService<UserDataResponse>(endpoint, {
           method: 'GET',
@@ -99,11 +107,17 @@ function AuthCallbackContent() {
             : 'An unexpected error occurred'
         )
         toast.error('Authentication failed. Redirecting to login...')
-        setTimeout(() => router.push('/'), 3000)
+        redirectTimer = setTimeout(() => router.push('/'), 3000)
       }
     }
 
     handleCallback()
+
+    return () => {
+      if (redirectTimer) {
+        clearTimeout(redirectTimer)
+      }
+    }
   }, [searchParams, router])
 
   return (
