@@ -4,7 +4,7 @@ import { apiService } from '@/lib/api'
 import { saveAccessToken } from '@/lib/auth'
 import { Loader2 } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
 interface InstructorData {
@@ -23,7 +23,8 @@ interface UserDataResponse {
   }
 }
 
-export default function AuthCallback() {
+// This component contains the logic that uses the hook
+function AuthCallbackContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [error, setError] = useState<string | null>(null)
@@ -130,5 +131,30 @@ export default function AuthCallback() {
         )}
       </div>
     </div>
+  )
+}
+
+// The default export for the page, which wraps the client component in Suspense
+export default function AuthCallback() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-sky-50 to-blue-100">
+          <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full text-center">
+            <div className="space-y-4">
+              <Loader2 className="h-16 w-16 animate-spin text-sky-500 mx-auto" />
+              <h1 className="text-2xl font-semibold text-gray-800">
+                Authenticating...
+              </h1>
+              <p className="text-gray-600">
+                Please wait while we verify your credentials
+              </p>
+            </div>
+          </div>
+        </div>
+      }
+    >
+      <AuthCallbackContent />
+    </Suspense>
   )
 }
