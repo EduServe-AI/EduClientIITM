@@ -204,7 +204,15 @@ export default function InstructorLogin({ setIsSignin }: InstructorLoginProps) {
                 variant="outline"
                 size="lg"
                 className="hover:bg-white hover:cursor-pointer gap-2 items-center justify-center"
-                onClick={() => {}}
+                onClick={() => {
+                  const apiUrl = process.env.NEXT_PUBLIC_API_URL
+                  if (!apiUrl) {
+                    console.error('Error: Backend Url is not defined')
+                    toast.error('Authentication Failed')
+                    return
+                  }
+                  window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google/instructor`
+                }}
               >
                 <Image
                   src="/download.png"
