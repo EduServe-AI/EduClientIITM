@@ -1,9 +1,10 @@
-import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
-import './globals.css'
 import { Toaster } from '@/components/ui/sonner'
+
 import { BRAND_ASSETS } from '@/constants/brandAssets'
 import 'katex/dist/katex.min.css'
+import type { Metadata, Viewport } from 'next'
+import { Geist, Geist_Mono } from 'next/font/google'
+import './globals.css'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -18,9 +19,14 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'Eduserve AI',
   description: 'On Demand Human and AI Teaching Assistance',
+  manifest: '/manifest.json',
   icons: {
     icon: BRAND_ASSETS.FAVICON,
   },
+}
+
+export const viewport: Viewport = {
+  themeColor: '#ffffff',
 }
 
 export default function RootLayout({

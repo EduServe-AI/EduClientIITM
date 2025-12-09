@@ -116,15 +116,34 @@ export interface Skill {
   userId: string
 }
 
+// ✅ Language type
+export interface Language {
+  id: string
+  languageId: string
+  language: {
+    name: string
+  }
+}
+
+// ✅ Availability type
+export interface Availability {
+  id: string
+  isAvailable: boolean
+  dayOfWeek: { id: number; name: string }
+  timeSlots: { id: string; startTime: string; endTime: string }[]
+}
+
 // ✅ Instructor profile structure (matches your backend)
 export interface InstructorProfile {
   bio: string
   cgpa: string
+  iitmProfileUrl?: string
   githubUrl?: string
   linkedinUrl?: string
   level: ProgramLevelId
   basePrice: number
   skills?: Skill[]
+  availabilities: Availability[]
 }
 
 // ✅ Instructor main type
@@ -133,6 +152,7 @@ export interface Instructor {
   email: string
   username: string
   instructorProfile: InstructorProfile
+  userLanguages?: Language[]
 }
 
 // ✅ API response type
