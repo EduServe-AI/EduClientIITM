@@ -236,7 +236,6 @@ export default function InstructorOnboarding() {
       level: formData.level,
       subjects: formData.subjects,
       languages: formData.languages,
-      // profilePicture: formData.profilePicture,
       bio: formData.bio,
       githubUrl: formData.githubUrl,
       linkedinUrl: formData.linkedinUrl,
@@ -248,6 +247,8 @@ export default function InstructorOnboarding() {
         body: submission_data,
         method: 'POST',
       })
+
+      // We need to upload the
 
       setIsPending(false)
 

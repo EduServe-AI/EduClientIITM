@@ -44,6 +44,10 @@ export type Languages =
   | 'Telugu'
   | 'Kannada'
   | 'Malayalam'
+  | 'Gujarati'
+  | 'Punjabi'
+  | 'Bengali'
+  | 'Marathi'
 
 export type FoundationSubjects = {
   name: foundationSubjects

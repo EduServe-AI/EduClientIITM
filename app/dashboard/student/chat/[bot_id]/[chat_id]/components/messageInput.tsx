@@ -1,4 +1,3 @@
-import { useChat } from '@/app/contexts/chatContext'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,6 +12,7 @@ import {
   InputGroupTextarea,
 } from '@/components/ui/input-group'
 import { Separator } from '@/components/ui/separator'
+import { useChat } from '@/contexts/chatContext'
 import { ArrowUpIcon, CirclePlus } from 'lucide-react'
 import { useState } from 'react'
 

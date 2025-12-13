@@ -1,7 +1,15 @@
 'use client'
 import ChatBotCard from '@/components/chatBotCard'
 import FeaturedChatBotCard from '@/components/featuredChatBotCard'
+import { Button } from '@/components/ui/button'
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from '@/components/ui/carousel'
+import { Input } from '@/components/ui/input'
 import { apiService } from '@/lib/api'
+import { Search, SlidersHorizontal } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 interface ChatBot {
@@ -28,8 +36,8 @@ interface Chat {
 export default function StudentBotsPage() {
   const [bots, setBots] = useState<ChatBot[]>([])
   const [loading, setLoading] = useState(true)
-
   const [userChats, setUserChats] = useState<Chat[]>([])
+  const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
     let isMounted = true
@@ -77,49 +85,130 @@ export default function StudentBotsPage() {
   }, [])
 
   if (loading) return <p>Loading recommended chatbots...</p>
-  // if (error) return <p className="text-red-600">Error: {error}</p>
+
+  // Define level filter options
+  const levelFilters = [
+    'Foundation',
+    'Diploma in Data Science',
+    'Diploma in Programming',
+    'Bsc',
+    'Bs',
+  ]
 
   return (
-    <div className="p-6 flex flex-col overflow-y-auto">
-      {/* Recommended chat bots */}
-      <div className="">
-        <h1 className="text-2xl font-semibold mb-4">Recommended ChatBots</h1>
-
-        {bots.length === 0 ? (
-          <p>No chatbots available for your enrolled courses.</p>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {bots.map(bot => (
-              <FeaturedChatBotCard
-                key={bot.id}
-                id={bot.id}
-                name={bot.name}
-                description={bot.description}
-                level={bot.level}
-                numInteractions={bot.numInteractions}
-              />
-            ))}
-          </div>
-        )}
+    <div className="p-4 sm:p-6 flex flex-col overflow-y-auto">
+      {/* EXPLORE Heading with Search Bar */}
+      <div className="flex items-center justify-between gap-4 mb-4">
+        <h1 className="text-2xl sm:text-3xl font-semibold font-serif whitespace-nowrap">
+          EXPLORE
+        </h1>
+        <div className="relative flex-1 max-w-md">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-5 w-5" />
+          <Input
+            placeholder="Search for bots..."
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            className="w-full pl-10 rounded-md border-2 border-black focus:border-primary focus:outline-none h-10"
+          />
+        </div>
       </div>
+
+      {/* Level Filter Buttons (Visual Only) */}
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-6">
+        {/* Filter label with icon */}
+        <div className="flex items-center gap-2 mr-6">
+          <SlidersHorizontal className="h-5 w-5 text-foreground" />
+          <p className="text-base sm:text-lg font-medium text-foreground">
+            Filter &nbsp;:
+          </p>
+        </div>
+
+        {/* Filter buttons */}
+        <div className="flex flex-wrap gap-2">
+          <Button className="px-4 py-2 rounded-full text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
+            All Levels
+          </Button>
+          {levelFilters.map(level => (
+            <Button
+              key={level}
+              className="px-4 py-2 rounded-full text-sm font-medium bg-secondary hover:bg-secondary/80 text-secondary-foreground transition-colors"
+            >
+              {level}
+            </Button>
+          ))}
+        </div>
+      </div>
+
+      {/* Recommended chat bots */}
+      {bots.length > 0 && (
+        <div className="mb-8">
+          <h1 className="text-2xl font-serif font-semibold mb-4">For you</h1>
+          <Carousel
+            opts={{
+              align: 'start',
+              loop: false,
+            }}
+            className="w-full"
+          >
+            <CarouselContent className="-ml-2 md:-ml-4">
+              {bots.map(bot => (
+                <CarouselItem
+                  key={bot.id}
+                  className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3"
+                >
+                  <FeaturedChatBotCard
+                    id={bot.id}
+                    name={bot.name}
+                    description={bot.description}
+                    level={bot.level}
+                    numInteractions={bot.numInteractions}
+                  />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            {/* <CarouselPrevious className='ml-4 text-black hover:cursor-pointer'/>
+            <CarouselNext className='mr-4 text-black hover:cursor-pointer'/> */}
+          </Carousel>
+        </div>
+      )}
+
+      {bots.length === 0 && !loading && (
+        <div className="text-center py-10 text-muted-foreground">
+          <p>No chatbots found.</p>
+        </div>
+      )}
 
       {/* Recent Chats */}
       {userChats.length > 0 && (
         <div>
-          <h1 className="text-2xl font-semibold mb-4 mt-4 ">Recent Chats</h1>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {userChats.map(chat => (
-              <ChatBotCard
-                key={chat.id}
-                id={chat.id}
-                botId={chat.botId}
-                botName={chat.botName}
-                lastInteractionTime={chat.lastInteractionTime}
-                title={chat.title}
-                createdAt={chat.createdAt}
-              />
-            ))}
-          </div>
+          <h1 className="text-2xl font-serif font-semibold mb-4">
+            Recent Chats
+          </h1>
+          <Carousel
+            opts={{
+              align: 'start',
+              loop: false,
+            }}
+            className="w-full"
+          >
+            <CarouselContent className="-ml-2 md:-ml-4">
+              {userChats.map(chat => (
+                <CarouselItem
+                  key={chat.id}
+                  className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3"
+                >
+                  <ChatBotCard
+                    id={chat.id}
+                    botId={chat.botId}
+                    botName={chat.botName}
+                    lastInteractionTime={chat.lastInteractionTime}
+                    title={chat.title}
+                    createdAt={chat.createdAt}
+                  />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
         </div>
       )}
     </div>

@@ -9,8 +9,14 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { Button } from './ui/button'
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from './ui/carousel'
 import { TooltipContent, TooltipTrigger } from './ui/tooltip'
-
 // Defining the shape of instructor object
 interface ChatBot {
   id: string
@@ -90,24 +96,42 @@ export default function FeauturedChatBots() {
           <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
         </div>
       ) : (
-        /* Here comes the featured instructors card */
-        <div className="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-3 gap-4 mt-3">
-          {chatBots.length > 0 ? (
-            chatBots.map(feature_chatbot => (
-              <FeaturedChatBotCard
-                key={feature_chatbot.id}
-                id={feature_chatbot.id}
-                name={feature_chatbot.name}
-                level={feature_chatbot.level}
-                description={feature_chatbot.description}
-                numInteractions={feature_chatbot.numInteractions}
-              />
-            ))
-          ) : (
-            <div className="col-span-full text-center text-gray-500 py-10">
-              No featured instructors found.
-            </div>
-          )}
+        /* Here comes the featured chatbots carousel */
+        <div className="relative">
+          <Carousel
+            opts={{
+              align: 'start',
+              loop: true,
+              dragFree: true,
+              containScroll: 'trimSnaps',
+            }}
+            className="w-full"
+          >
+            <CarouselContent className="-ml-2 md:-ml-4">
+              {chatBots.length > 0 ? (
+                chatBots.map(feature_chatbot => (
+                  <CarouselItem
+                    key={feature_chatbot.id}
+                    className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3"
+                  >
+                    <FeaturedChatBotCard
+                      id={feature_chatbot.id}
+                      name={feature_chatbot.name}
+                      level={feature_chatbot.level}
+                      description={feature_chatbot.description}
+                      numInteractions={feature_chatbot.numInteractions}
+                    />
+                  </CarouselItem>
+                ))
+              ) : (
+                <div className="col-span-full text-center text-gray-500 py-10">
+                  No featured chatbots found.
+                </div>
+              )}
+            </CarouselContent>
+            <CarouselPrevious className="absolute -left-7 top-1/2 -translate-y-1/2 h-10 w-10" />
+            <CarouselNext className="absolute -right-7 top-1/2 -translate-y-1/2 h-10 w-10" />
+          </Carousel>
         </div>
       )}
     </div>

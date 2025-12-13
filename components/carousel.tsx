@@ -5,8 +5,6 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from '@/components/ui/carousel'
 import { studentCarouselItems } from '@/lib/carousel'
 import Autoplay from 'embla-carousel-autoplay'
@@ -61,8 +59,8 @@ export default function Slidercarousel() {
 
       {/* Arrow marks for the carousel left and right */}
       <div className="hover:cursor-pointer">
-        <CarouselPrevious className="ml-3 cursor-pointer" />
-        <CarouselNext className="mr-3 cursor-pointer" />
+        {/* <CarouselPrevious className="ml-3 cursor-pointer" />
+        <CarouselNext className="mr-3 cursor-pointer" /> */}
       </div>
     </Carousel>
   )

@@ -1,13 +1,13 @@
 'use client'
 
-import { useChat } from '@/app/contexts/chatContext'
-import { useStudent } from '@/app/contexts/studentContext'
 import { Button } from '@/components/ui/button'
+import { useChat } from '@/contexts/chatContext'
+import { useStudent } from '@/contexts/studentContext'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { useImageUrl } from '@/lib/utils'
 import { Heart, Settings } from 'lucide-react'
 import Image from 'next/image'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import MessageInput from './components/messageInput'
 import MessageList from './components/messageList'
 
