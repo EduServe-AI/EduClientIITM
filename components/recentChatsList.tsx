@@ -44,30 +44,6 @@ export function RecentChatsList() {
     fetchRecentChats()
   }, [])
 
-  const formatTime = (date: Date) => {
-    const now = new Date()
-    const chatDate = new Date(date)
-    const diff = now.getTime() - chatDate.getTime()
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-
-    if (days === 0) {
-      return chatDate.toLocaleTimeString('en-US', {
-        hour: 'numeric',
-        minute: '2-digit',
-        hour12: true,
-      })
-    } else if (days === 1) {
-      return 'Yesterday'
-    } else if (days < 7) {
-      return chatDate.toLocaleDateString('en-US', { weekday: 'short' })
-    } else {
-      return chatDate.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-      })
-    }
-  }
-
   if (isLoading) {
     return (
       <div className="flex flex-col gap-2 px-2 overflow-y-auto">
@@ -122,7 +98,6 @@ interface ChatItemProps {
 
 function ChatItem({ chat, onClick }: ChatItemProps) {
   const imageUrl = useImageUrl(chat.botName, 'bot')
-  const [isActive, setIsActive] = useState(false)
 
   const formatTime = (date: Date) => {
     const now = new Date()
@@ -153,13 +128,13 @@ function ChatItem({ chat, onClick }: ChatItemProps) {
         group relative flex items-center gap-3 p-2 rounded-lg cursor-pointer
         transition-all duration-200
         group-data-[state=closed]:justify-center
-        ${isActive ? 'bg-sidebar-accent' : ''}
+        
       `}
     >
       {/* Active indicator - Orange bar on the right */}
-      {isActive && (
+      {/* {isActive && (
         <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-3/4 bg-orange-500 rounded-l-full" />
-      )}
+      )} */}
 
       {/* Avatar */}
       <Avatar className="h-10 w-10 flex-shrink-0">
