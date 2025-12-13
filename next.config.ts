@@ -22,7 +22,7 @@ const nextConfig: NextConfig = {
     ],
   },
   reactStrictMode: true,
-  allowedDevOrigins: ['bebae462c59d.ngrok-free.app'],
+  allowedDevOrigins: [''],
   swcMinify: true,
   compiler: {
     removeConsole: process.env.NODE_ENV !== 'development', // Remove console.log in production

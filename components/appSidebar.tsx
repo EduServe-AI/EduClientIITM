@@ -1,6 +1,7 @@
 'use client'
 
 import { LogoutConfirmation } from '@/components/logoutConfirmation'
+import { RecentChatsList } from '@/components/recentChatsList'
 import {
   Sidebar,
   SidebarContent,
@@ -25,6 +26,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { Button } from './ui/button'
+import { Separator } from './ui/separator'
 
 // Defining the props the sidebar should accept
 interface SidebarProps {
@@ -42,6 +44,7 @@ export function AppSidebar({ mainNavItems }: SidebarProps) {
     ? 'student'
     : 'instructor'
   const profileLink = `/dashboard/${userType}/profile`
+  const isStudent = userType === 'student'
 
   const handleLogout = async () => {
     try {
@@ -146,6 +149,21 @@ export function AppSidebar({ mainNavItems }: SidebarProps) {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        {/* Recent Chats Section - Only for Students */}
+        {isStudent && (
+          <>
+            <Separator className="my-2 border-neutral-900" color="cyan-900" />
+
+            <p className="text-sm font-semibold px-4 py-3 group-data-[state=closed]:hidden">
+              Chats
+            </p>
+
+            <div className="flex-1 min-h-0 overflow-auto">
+              <RecentChatsList />
+            </div>
+          </>
+        )}
       </SidebarContent>
 
       {/* Sidebar Footer */}

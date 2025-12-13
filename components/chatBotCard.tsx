@@ -1,3 +1,5 @@
+'use client'
+
 import { Card } from '@/components/ui/card'
 import { useImageUrl } from '@/lib/utils'
 import Image from 'next/image'
@@ -15,10 +17,7 @@ export interface ChatBotProps {
 
 export default function ChatBotCard(chatBot: ChatBotProps) {
   const savedImageUrl = useImageUrl(chatBot.botName, 'bot')
-
   const router = useRouter()
-
-  // Retreiving the date
 
   return (
     <div
@@ -26,7 +25,13 @@ export default function ChatBotCard(chatBot: ChatBotProps) {
       role="button"
       tabIndex={0}
       onClick={() => {
+        // Navigate directly to the existing chat
         router.push(`/dashboard/student/chat/${chatBot.botId}/${chatBot.id}`)
+      }}
+      onKeyDown={e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          router.push(`/dashboard/student/chat/${chatBot.botId}/${chatBot.id}`)
+        }
       }}
     >
       {/* Card with Image , Name , Level and NumInteractions */}
