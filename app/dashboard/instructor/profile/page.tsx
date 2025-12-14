@@ -85,9 +85,33 @@ export default function Profile() {
     }
   }, [instructor])
 
-  // Detect if there are any changes
-  const hasChanges = instructor
-    ? formData.username !== instructor.username ||
+  const hasChanges = () => {
+    if (!instructor) return false
+
+    // Helper function to sort and stringify arrays of objects for reliable comparison
+    const sortAndStringifySkills = (arr: Skill[] | undefined) =>
+      JSON.stringify(
+        (arr || [])
+          .slice()
+          .sort((a, b) => (a.name || '').localeCompare(b.name || ''))
+      )
+
+    const sortAndStringifyLanguages = (arr: Language[] | undefined) =>
+      JSON.stringify(
+        arr
+          ?.slice()
+          .sort((a, b) => (a.language.name > b.language.name ? 1 : -1)) || []
+      )
+
+    const sortAndStringifyAvailabilities = (arr: Availability[]) =>
+      JSON.stringify(
+        arr
+          ?.slice()
+          .sort((a, b) => (a.dayOfWeek.name > b.dayOfWeek.name ? 1 : -1)) || []
+      )
+
+    return (
+      formData.username !== instructor.username ||
       formData.email !== instructor.email ||
       formData.bio !== (instructor.instructorProfile?.bio || '') ||
       formData.level !== instructor.instructorProfile?.level ||
@@ -96,13 +120,16 @@ export default function Profile() {
       formData.githubUrl !== (instructor.instructorProfile?.githubUrl || '') ||
       formData.linkedinUrl !==
         (instructor.instructorProfile?.linkedinUrl || '') ||
-      JSON.stringify(formData.skills) !==
-        JSON.stringify(instructor.instructorProfile?.skills || []) ||
-      JSON.stringify(formData.languages) !==
-        JSON.stringify(instructor.userLanguages || []) ||
-      JSON.stringify(formData.availabilities) !==
-        JSON.stringify(instructor.instructorProfile?.availabilities || [])
-    : false
+      sortAndStringifySkills(formData.skills) !==
+        sortAndStringifySkills(instructor.instructorProfile?.skills) ||
+      sortAndStringifyLanguages(formData.languages) !==
+        sortAndStringifyLanguages(instructor.userLanguages) ||
+      sortAndStringifyAvailabilities(formData.availabilities) !==
+        sortAndStringifyAvailabilities(
+          instructor.instructorProfile?.availabilities
+        )
+    )
+  }
 
   if (isLoading)
     return (
@@ -118,12 +145,7 @@ export default function Profile() {
     )
 
   const handleInputChange =
-    (field: string | undefined) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      console.log('field', field)
-      if (field === undefined) {
-        console.log('No field provided')
-        throw new Error()
-      }
+    (field: keyof ProfileData) => (e: React.ChangeEvent<HTMLInputElement>) => {
       setFormData(prev => ({
         ...prev,
         [field]: e.target.value,
@@ -305,18 +327,8 @@ export default function Profile() {
 
   return (
     <div
-      className={`max-w-3xl mx-auto py-10 space-y-10 ${hasChanges ? 'pb-32' : ''}`}
+      className={`max-w-3xl mx-auto py-10 space-y-10 ${hasChanges() ? 'pb-32' : ''}`}
     >
-      {/* Heading */}
-      {/* <div className="text-center space-y-1">
-        <h1 className="text-3xl font-semibold tracking-tight">
-          Instructor Profile
-        </h1>
-        <p className="text-neutral-500 text-sm">
-          Manage your personal information, skills, and social links.
-        </p>
-      </div> */}
-
       {/* Profile and Banner Image Section */}
 
       <div className="relative w-full ">
@@ -562,7 +574,7 @@ export default function Profile() {
       </div>
 
       {/* Sticky footer with Save and Reset buttons - Only show when changes are made */}
-      {hasChanges && (
+      {hasChanges() && (
         <div className="fixed bottom-0 left-0 md:left-64 right-0 bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] py-4 z-50">
           <div className="max-w-3xl mx-auto flex justify-end gap-4 px-4">
             <Button

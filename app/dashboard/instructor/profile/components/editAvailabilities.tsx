@@ -152,7 +152,6 @@ export function EditAvailabilities({
 
   // Reset to current availability when dialog closes without saving
   const handleCancel = () => {
-    setLocalAvailability(JSON.parse(JSON.stringify(Availabilities)))
     setIsOpen(false)
   }
 
