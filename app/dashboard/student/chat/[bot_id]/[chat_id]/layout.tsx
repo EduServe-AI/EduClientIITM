@@ -1,6 +1,6 @@
 'use client'
 
-import { ChatProvider } from '@/app/contexts/chatContext'
+import { ChatProvider } from '@/contexts/chatContext'
 import { useParams } from 'next/navigation'
 import React from 'react'
 

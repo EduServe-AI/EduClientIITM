@@ -1,11 +1,11 @@
 'use client'
 
-import { chatMessage, useChat } from '@/app/contexts/chatContext' // Import your type
-import { cn, useImageUrl } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { useStudent } from '@/app/contexts/studentContext' // To show user avatar
-import ReactMarkdown from 'react-markdown'
+import { chatMessage, useChat } from '@/contexts/chatContext' // Import your type
+import { useStudent } from '@/contexts/studentContext' // To show user avatar
+import { cn, useImageUrl } from '@/lib/utils'
 import { Loader2 } from 'lucide-react'
+import ReactMarkdown from 'react-markdown'
 
 export default function Message({ message }: { message: chatMessage }) {
   const { student } = useStudent()
