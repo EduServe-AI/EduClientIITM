@@ -12,7 +12,7 @@ import type { OnboardingFormData } from '@/types/types'
 import { DayType } from '@/types/types'
 import { CalendarDays, MinusCircle, PlusCircle } from 'lucide-react'
 
-const weekdays: DayType[] = [
+export const weekdays: DayType[] = [
   'Monday',
   'Tuesday',
   'Wednesday',
@@ -23,7 +23,7 @@ const weekdays: DayType[] = [
 ]
 
 // --- Helper to generate time options ---
-const generateTimeOptions = () => {
+export const generateTimeOptions = () => {
   const options = []
   for (let h = 0; h < 24; h++) {
     for (let m = 0; m < 60; m += 30) {
@@ -36,9 +36,9 @@ const generateTimeOptions = () => {
   }
   return options
 }
-const timeOptions = generateTimeOptions()
+export const timeOptions = generateTimeOptions()
 
-interface AvailabilityProps {
+export interface AvailabilityProps {
   // formData: {
   //   availability: {
   //     [key in DayType]: { isEnabled: boolean; slots: TimeSlot[] }

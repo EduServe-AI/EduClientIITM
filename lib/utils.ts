@@ -38,11 +38,15 @@ export const subjectNames = (level: ProgramLevelId): Subjects[] => {
   return subjects
 }
 
-export const getImageUrl = (name: string, type: 'bot' | 'profile') => {
+export const getImageUrl = (
+  name: string,
+  type: 'bot' | 'profile' | 'banner'
+) => {
   const baseUrl = process.env.NEXT_PUBLIC_STORGAE_URL
 
   const paths = {
-    profile: `/profileimages/${name}.jpg`,
+    profile: `/userassets/${name}/profile.jpg`,
+    banner: `/userassets/${name}/banner.jpg`,
     bot: `/botimages/${name}.jpg`,
   }
 
@@ -51,7 +55,7 @@ export const getImageUrl = (name: string, type: 'bot' | 'profile') => {
 
 export const useImageUrl = (
   name: string | undefined,
-  type: 'bot' | 'profile'
+  type: 'bot' | 'profile' | 'banner'
 ) => {
   return useMemo(() => {
     // If there's no file name , return an empty string or a default placeholder

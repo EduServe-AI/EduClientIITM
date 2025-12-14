@@ -1,11 +1,11 @@
 'use client'
 
-import { useStudent } from '@/app/contexts/studentContext'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
+import { useStudent } from '@/contexts/studentContext'
 import { getAccessToken } from '@/lib/auth'
 import { useImageUrl } from '@/lib/utils'
 import { BookOpen, EditIcon, GraduationCap, Mail, User } from 'lucide-react'
@@ -67,6 +67,7 @@ export default function Profile() {
       const formData = new FormData()
       formData.append('file', file)
       formData.append('userId', student.id)
+      formData.append('imageType', 'profile')
       if (previousImageExtension) {
         formData.append('previousImageExtension', previousImageExtension)
       }
@@ -118,7 +119,7 @@ export default function Profile() {
               className="hidden"
               ref={fileInputRef}
               onChange={handleFileChange}
-              accept="jpg"
+              accept="image/jpeg,image/png,image/webp"
             />
 
             {/* Avatar with edit button */}

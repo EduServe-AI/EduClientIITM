@@ -1,6 +1,6 @@
 'use client'
 
-import { useChat } from '@/app/contexts/chatContext'
+import { useChat } from '@/contexts/chatContext'
 import Message from './message' // We'll create this next
 
 export default function MessageList() {
