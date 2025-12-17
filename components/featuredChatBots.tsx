@@ -4,18 +4,13 @@ import FeaturedChatBotCard from '@/components/featuredChatBotCard'
 import { apiService } from '@/lib/api'
 import { ProgramLevelId } from '@/types/types'
 import { Tooltip } from '@radix-ui/react-tooltip'
+import WheelGesturesPlugin from 'embla-carousel-wheel-gestures'
 import { Info, Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { Button } from './ui/button'
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from './ui/carousel'
+import { Carousel, CarouselContent, CarouselItem } from './ui/carousel'
 import { TooltipContent, TooltipTrigger } from './ui/tooltip'
 // Defining the shape of instructor object
 interface ChatBot {
@@ -105,6 +100,7 @@ export default function FeauturedChatBots() {
               dragFree: true,
               containScroll: 'trimSnaps',
             }}
+            plugins={[WheelGesturesPlugin()]}
             className="w-full"
           >
             <CarouselContent className="-ml-2 md:-ml-4">
@@ -129,8 +125,6 @@ export default function FeauturedChatBots() {
                 </div>
               )}
             </CarouselContent>
-            <CarouselPrevious className="absolute -left-7 top-1/2 -translate-y-1/2 h-10 w-10" />
-            <CarouselNext className="absolute -right-7 top-1/2 -translate-y-1/2 h-10 w-10" />
           </Carousel>
         </div>
       )}
