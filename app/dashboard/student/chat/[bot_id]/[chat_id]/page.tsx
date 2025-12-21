@@ -5,8 +5,9 @@ import { useChat } from '@/contexts/chatContext'
 import { useStudent } from '@/contexts/studentContext'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { useImageUrl } from '@/lib/utils'
-import { Heart, Settings } from 'lucide-react'
+import { ChevronLeft, Heart, Settings } from 'lucide-react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import MessageInput from './components/messageInput'
 import MessageList from './components/messageList'
@@ -16,9 +17,14 @@ export default function BotChat() {
   const [isFavourite, setIsFavourite] = useState<boolean>(false)
   const { student, isLoading: studenLoading } = useStudent()
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const router = useRouter()
 
   const handleFavClick = () => {
     setIsFavourite(!isFavourite)
+  }
+
+  const handleBack = () => {
+    router.back()
   }
 
   const BotImageUrl = useImageUrl(chat?.botName, 'bot')
@@ -53,18 +59,29 @@ export default function BotChat() {
   const hasMessages = messages && messages.length > 0
 
   return (
-    <div className="h-full  flex flex-col bg-background ">
+    <div className="h-screen w-full flex flex-col bg-background overflow-hidden">
       {/* Fixed Header */}
-      <header className="flex-shrink-0 w-full bg-background px-4 z-10">
+      <header className="flex-shrink-0 w-full bg-background px-4 z-10 border-b">
         <div className="w-full justify-between py-1 flex items-center h-14">
-          {/* Left side - Bot Name , Level */}
-          <div className="flex gap-2 md:gap-3 items-center min-w-0">
+          {/* Left side - Back Button (Mobile), Bot Name */}
+          <div className="flex gap-1 md:gap-3 items-center min-w-0">
+            {/* Back Button - Mobile Only */}
+            <Button
+              size="icon"
+              variant="ghost"
+              className="md:hidden hover:bg-accent"
+              onClick={handleBack}
+            >
+              <ChevronLeft size={28} className="text-black" />
+            </Button>
+
+            {/* Bot Image - Fully Rounded */}
             <Image
               src={BotImageUrl || '/Chat-Bot.jpg'}
               alt="Bot-Image"
               width={40}
               height={40}
-              className="shrink-0 rounded-lg object-cover"
+              className="shrink-0 rounded-full object-cover"
             />
 
             <div className="min-w-0">
@@ -124,8 +141,10 @@ export default function BotChat() {
       </main>
 
       {/* Fixed Input Area */}
-      <footer className="flex-shrink-0 w-full bg-background border-t p-3 md:p-4">
-        <MessageInput />
+      <footer className="flex-shrink-0 w-full bg-background border-t px-2 md:px-4 py-3 md:py-4 safe-area-bottom">
+        <div className="px-2 md:px-0">
+          <MessageInput />
+        </div>
       </footer>
     </div>
   )
