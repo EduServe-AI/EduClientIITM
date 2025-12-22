@@ -1,12 +1,5 @@
 'use client'
-import ChatBotCard from '@/components/chatBotCard'
-import FeaturedChatBotCard from '@/components/featuredChatBotCard'
 import { Button } from '@/components/ui/button'
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from '@/components/ui/carousel'
 import { Input } from '@/components/ui/input'
 import { apiService } from '@/lib/api'
 import { Search, SlidersHorizontal } from 'lucide-react'
@@ -138,79 +131,6 @@ export default function StudentBotsPage() {
           ))}
         </div>
       </div>
-
-      {/* Recommended chat bots */}
-      {bots.length > 0 && (
-        <div className="mb-8">
-          <h1 className="text-2xl font-serif font-semibold mb-4">For you</h1>
-          <Carousel
-            opts={{
-              align: 'start',
-              loop: false,
-            }}
-            className="w-full"
-          >
-            <CarouselContent className="-ml-2 md:-ml-4">
-              {bots.map(bot => (
-                <CarouselItem
-                  key={bot.id}
-                  className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3"
-                >
-                  <FeaturedChatBotCard
-                    id={bot.id}
-                    name={bot.name}
-                    description={bot.description}
-                    level={bot.level}
-                    numInteractions={bot.numInteractions}
-                  />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            {/* <CarouselPrevious className='ml-4 text-black hover:cursor-pointer'/>
-            <CarouselNext className='mr-4 text-black hover:cursor-pointer'/> */}
-          </Carousel>
-        </div>
-      )}
-
-      {bots.length === 0 && !loading && (
-        <div className="text-center py-10 text-muted-foreground">
-          <p>No chatbots found.</p>
-        </div>
-      )}
-
-      {/* Recent Chats */}
-      {userChats.length > 0 && (
-        <div>
-          <h1 className="text-2xl font-serif font-semibold mb-4">
-            Recent Chats
-          </h1>
-          <Carousel
-            opts={{
-              align: 'start',
-              loop: false,
-            }}
-            className="w-full"
-          >
-            <CarouselContent className="-ml-2 md:-ml-4">
-              {userChats.map(chat => (
-                <CarouselItem
-                  key={chat.id}
-                  className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3"
-                >
-                  <ChatBotCard
-                    id={chat.id}
-                    botId={chat.botId}
-                    botName={chat.botName}
-                    lastInteractionTime={chat.lastInteractionTime}
-                    title={chat.title}
-                    createdAt={chat.createdAt}
-                  />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-          </Carousel>
-        </div>
-      )}
     </div>
   )
 }
