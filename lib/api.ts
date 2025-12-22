@@ -1,3 +1,6 @@
+import { searchResponseType } from '@/types/api'
+import api from './axios'
+
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL!
 
 interface ApiOptions extends Omit<RequestInit, 'body'> {
@@ -60,4 +63,14 @@ export async function apiService<T>(
   } catch (error) {
     throw error
   }
+}
+
+export const getBotsQueryFn = async (search: string, level: string) => {
+  const response = await api.get<searchResponseType>('/bot', {
+    params: { search, level },
+  })
+
+  console.log('response', response.data)
+  // Return the bots array from the nested data structure
+  return response.data.data.bots
 }

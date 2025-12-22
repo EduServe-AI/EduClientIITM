@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { ScrollArea } from './ui/scroll-area'
 import { Skeleton } from './ui/skeleton'
 
-interface Chat {
+export interface Chat {
   id: string
   botId: string
   botName: string
@@ -18,7 +18,7 @@ interface Chat {
   createdAt: Date
 }
 
-interface UserChatsResponse {
+export interface UserChatsResponse {
   data: {
     chats: Chat[]
   }
