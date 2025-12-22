@@ -39,10 +39,14 @@ api.interceptors.response.use(
   response => response,
   error => {
     // Extract error message similar to your apiService logic
-    const customError =
+    let customError =
       error.response?.data?.error ||
       error.response?.data?.message ||
       error.message
+
+    if (typeof customError === 'object' && customError !== null) {
+      customError = JSON.stringify(customError)
+    }
     console.error('API Error:', customError)
     return Promise.reject(new Error(customError))
   }
