@@ -9,7 +9,6 @@ import { Search, SlidersHorizontal } from 'lucide-react'
 import { useState } from 'react'
 
 export default function StudentBotsPage() {
-  const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
   const [level, setLevel] = useState('all')
 
