@@ -1,92 +1,30 @@
 'use client'
+import FeaturedChatBotCard from '@/components/featuredChatBotCard'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { apiService } from '@/lib/api'
+import { Spinner } from '@/components/ui/spinner'
+import { getBotsQueryFn } from '@/lib/api'
+import { useQuery } from '@tanstack/react-query'
 import { Search, SlidersHorizontal } from 'lucide-react'
-import { useEffect, useState } from 'react'
-
-interface ChatBot {
-  id: string
-  name: string
-  description: string
-  level: string
-  numInteractions: number
-  course?: {
-    id: string
-    name: string
-  }
-}
-
-interface Chat {
-  id: string
-  botId: string
-  botName: string
-  title: string | null
-  lastInteractionTime: Date
-  createdAt: Date
-}
+import { useState } from 'react'
 
 export default function StudentBotsPage() {
-  const [bots, setBots] = useState<ChatBot[]>([])
   const [loading, setLoading] = useState(true)
-  const [userChats, setUserChats] = useState<Chat[]>([])
   const [searchQuery, setSearchQuery] = useState('')
-
-  useEffect(() => {
-    let isMounted = true
-
-    const fetchAllData = async () => {
-      try {
-        const [botsResult, chatsResult] = await Promise.allSettled([
-          apiService<{ data: { recommendedBots: ChatBot[] } }>(
-            '/bot/recommended'
-          ),
-          apiService<{ data: { chats: Chat[] } }>('/chat/user-chats'),
-        ])
-
-        if (isMounted) {
-          if (botsResult.status === 'fulfilled') {
-            setBots(botsResult.value?.data?.recommendedBots ?? [])
-          } else {
-            console.error(
-              'Failed to fetch recommended bots:',
-              botsResult.reason
-            )
-            setBots([]) // Ensure bots is an array on failure
-          }
-
-          if (chatsResult.status === 'fulfilled') {
-            setUserChats(chatsResult.value?.data?.chats ?? [])
-          } else {
-            console.error('Failed to fetch user chats:', chatsResult.reason)
-            // If fetching chats fails (e.g., 404), we'll treat it as no chats.
-            setUserChats([])
-          }
-        }
-      } finally {
-        if (isMounted) {
-          setLoading(false)
-        }
-      }
-    }
-
-    fetchAllData()
-
-    return () => {
-      isMounted = false
-    }
-  }, [])
-
-  if (loading) return <p>Loading recommended chatbots...</p>
+  const [level, setLevel] = useState('all')
 
   // Define level filter options
-  const levelFilters = [
-    'Foundation',
-    'Diploma in Data Science',
-    'Diploma in Programming',
-    'Bsc',
-    'Bs',
-  ]
+  const levelFilters = ['foundation', 'diploma', 'bsc']
+
+  const {
+    data: bots = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ['bots', searchQuery, level],
+    queryFn: () => getBotsQueryFn(searchQuery, level),
+  })
 
   return (
     <div className="p-4 sm:p-6 flex flex-col overflow-y-auto">
@@ -115,21 +53,72 @@ export default function StudentBotsPage() {
             Filter &nbsp;:
           </p>
         </div>
-
         {/* Filter buttons */}
         <div className="flex flex-wrap gap-2">
-          <Button className="px-4 py-2 rounded-full text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors">
+          <Button
+            onClick={() => setLevel('all')}
+            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+              level === 'all'
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-secondary hover:bg-neutral-200 text-secondary-foreground'
+            }`}
+          >
             All Levels
           </Button>
-          {levelFilters.map(level => (
+          {levelFilters.map(filterLevel => (
             <Button
-              key={level}
-              className="px-4 py-2 rounded-full text-sm font-medium bg-secondary hover:bg-secondary/80 text-secondary-foreground transition-colors"
+              key={filterLevel}
+              onClick={() => setLevel(filterLevel)}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                level === filterLevel
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-secondary hover:bg-neutral-200 text-secondary-foreground'
+              }`}
             >
-              {level}
+              {filterLevel.charAt(0).toUpperCase() + filterLevel.slice(1)}
             </Button>
           ))}
         </div>
+      </div>
+
+      {/* List of chatbots */}
+      <div className="">
+        {isLoading ? (
+          <div className="max-h-svh flex justify-center items-center">
+            <Spinner className="w-16 h-16" />
+          </div>
+        ) : isError ? (
+          <div className="flex justify-center items-center max-h-svh">
+            <div className="text-center">
+              <p className="text-red-500 font-semibold mb-2">
+                Failed to load bots
+              </p>
+              <p className="text-gray-600 text-sm">
+                {error instanceof Error ? error.message : 'An error occurred'}
+              </p>
+            </div>
+          </div>
+        ) : bots && bots.length > 0 ? (
+          <div className="grid md:grid-cols-3 sm:grid-cols-1 gap-4">
+            {bots.map(bot => (
+              <div key={bot.id}>
+                <FeaturedChatBotCard
+                  id={bot.id}
+                  name={bot.name}
+                  description={bot.description}
+                  numInteractions={bot.numInteractions}
+                  level={bot.level}
+                />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="flex justify-center items-center max-h-svh">
+            <p className="text-gray-600">
+              No bots found. Try adjusting your filters or search.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   )

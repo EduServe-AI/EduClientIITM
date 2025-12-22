@@ -2,6 +2,7 @@ import { Toaster } from '@/components/ui/sonner'
 
 import TopLoader from '@/components/topLoader'
 import { BRAND_ASSETS } from '@/constants/brandAssets'
+import QueryProvider from '@/contexts/queryProvider'
 import 'katex/dist/katex.min.css'
 import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
@@ -45,9 +46,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen w-screen`}
       >
-        <TopLoader />
-        {children}
-        <Toaster richColors position="top-center" />
+        <QueryProvider>
+          <TopLoader />
+          {children}
+          <Toaster richColors position="top-center" />
+        </QueryProvider>
       </body>
     </html>
   )
