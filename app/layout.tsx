@@ -1,5 +1,6 @@
 import { Toaster } from '@/components/ui/sonner'
 
+import TopLoader from '@/components/topLoader'
 import { BRAND_ASSETS } from '@/constants/brandAssets'
 import 'katex/dist/katex.min.css'
 import type { Metadata, Viewport } from 'next'
@@ -27,6 +28,11 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: '#ffffff',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  viewportFit: 'cover',
 }
 
 export default function RootLayout({
@@ -35,10 +41,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="h-screen">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen w-screen`}
       >
+        <TopLoader />
         {children}
         <Toaster richColors position="top-center" />
       </body>
