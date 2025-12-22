@@ -59,7 +59,7 @@ export default function BotChat() {
   const hasMessages = messages && messages.length > 0
 
   return (
-    <div className="h-screen w-full flex flex-col bg-background overflow-hidden">
+    <div className="h-svh w-full flex flex-col bg-background overflow-hidden">
       {/* Fixed Header */}
       <header className="flex-shrink-0 w-full bg-background px-4 z-10 border-b">
         <div className="w-full justify-between py-1 flex items-center h-14">
