@@ -28,7 +28,6 @@ const nextConfig: NextConfig = {
     ],
   },
   reactStrictMode: true,
-  allowedDevOrigins: ['https://24e0a17870f6.ngrok-free.app'],
   swcMinify: true,
   compiler: {
     removeConsole: process.env.NODE_ENV !== 'development', // Remove console.log in production
