@@ -4,12 +4,13 @@ import { apiService } from '@/lib/api'
 import { ProgramLevelId } from '@/types/types'
 import { Tooltip } from '@radix-ui/react-tooltip'
 import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
-import { Info, Loader2 } from 'lucide-react'
+import { Info } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { FeaturedInstructorCard } from './featuredInstructorCard'
 import { Button } from './ui/button'
 import { Carousel, CarouselContent, CarouselItem } from './ui/carousel'
+import { Skeleton } from './ui/skeleton'
 import { TooltipContent, TooltipTrigger } from './ui/tooltip'
 
 // Defining the shape of instructor object
@@ -91,8 +92,35 @@ export default function FeauturedInstructors() {
       </div>
 
       {isLoading ? (
-        <div className="flex justify-center items-center h-40">
-          <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[1, 2, 3].map(i => (
+            <div key={i} className="space-y-3">
+              {/* Image Skeleton */}
+              <Skeleton className="aspect-[16/9] w-full rounded-2xl" />
+
+              {/* Contents below the card */}
+              <div className="mt-3 space-y-2">
+                {/* Rating and price skeleton */}
+                <div className="flex items-center justify-between">
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-4 w-28" />
+                </div>
+
+                {/* Skills skeleton */}
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <Skeleton className="h-5 w-16" />
+                  <Skeleton className="h-6 w-14 rounded-full" />
+                  <Skeleton className="h-6 w-20 rounded-full" />
+                </div>
+
+                {/* Bio skeleton - 2 lines */}
+                <div className="space-y-1.5 pt-1">
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-5/6" />
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       ) : (
         /* Here comes the featured instructors card */
@@ -108,29 +136,23 @@ export default function FeauturedInstructors() {
             className="w-full"
           >
             <CarouselContent className="-ml-2 md:-ml-4">
-              {instructors.length > 0 ? (
-                instructors.map(feature_instructor => (
-                  <CarouselItem
-                    key={feature_instructor.id}
-                    className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3"
-                  >
-                    <FeaturedInstructorCard
-                      id={feature_instructor.id}
-                      instructorId={feature_instructor.instructorId}
-                      name={feature_instructor.user.username}
-                      bio={feature_instructor.bio}
-                      level={feature_instructor.level}
-                      profileUrl={feature_instructor.user.profileUrl}
-                      basePrice={feature_instructor.basePrice}
-                      skills={feature_instructor.skills}
-                    />
-                  </CarouselItem>
-                ))
-              ) : (
-                <div className="col-span-full text-center text-gray-500 py-10">
-                  No featured instructors found.
-                </div>
-              )}
+              {instructors.map(feature_instructor => (
+                <CarouselItem
+                  key={feature_instructor.id}
+                  className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3"
+                >
+                  <FeaturedInstructorCard
+                    id={feature_instructor.id}
+                    instructorId={feature_instructor.instructorId}
+                    name={feature_instructor.user.username}
+                    bio={feature_instructor.bio}
+                    level={feature_instructor.level}
+                    profileUrl={feature_instructor.user.profileUrl}
+                    basePrice={feature_instructor.basePrice}
+                    skills={feature_instructor.skills}
+                  />
+                </CarouselItem>
+              ))}
             </CarouselContent>
           </Carousel>
         </div>
