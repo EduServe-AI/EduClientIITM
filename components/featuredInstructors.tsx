@@ -3,12 +3,13 @@
 import { apiService } from '@/lib/api'
 import { ProgramLevelId } from '@/types/types'
 import { Tooltip } from '@radix-ui/react-tooltip'
+import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
 import { Info, Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { toast } from 'sonner'
 import { FeaturedInstructorCard } from './featuredInstructorCard'
 import { Button } from './ui/button'
+import { Carousel, CarouselContent, CarouselItem } from './ui/carousel'
 import { TooltipContent, TooltipTrigger } from './ui/tooltip'
 
 // Defining the shape of instructor object
@@ -49,7 +50,6 @@ export default function FeauturedInstructors() {
         setInstructors(instructors)
       } catch (error) {
         console.error('Failed to Fetch Featured Instructors', error)
-        toast.error('Login Failed')
         return
       } finally {
         setIsLoading(false)
@@ -96,26 +96,43 @@ export default function FeauturedInstructors() {
         </div>
       ) : (
         /* Here comes the featured instructors card */
-        <div className="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-3 gap-4 mt-3">
-          {instructors.length > 0 ? (
-            instructors.map(feature_instructor => (
-              <FeaturedInstructorCard
-                key={feature_instructor.id}
-                id={feature_instructor.id}
-                instructorId={feature_instructor.instructorId}
-                name={feature_instructor.user.username}
-                bio={feature_instructor.bio}
-                level={feature_instructor.level}
-                profileUrl={feature_instructor.user.profileUrl}
-                basePrice={feature_instructor.basePrice}
-                skills={feature_instructor.skills}
-              />
-            ))
-          ) : (
-            <div className="col-span-full text-center text-gray-500 py-10">
-              No featured instructors found.
-            </div>
-          )}
+        <div className="relative">
+          <Carousel
+            opts={{
+              align: 'start',
+              loop: true,
+              dragFree: true,
+              containScroll: 'trimSnaps',
+            }}
+            plugins={[WheelGesturesPlugin()]}
+            className="w-full"
+          >
+            <CarouselContent className="-ml-2 md:-ml-4">
+              {instructors.length > 0 ? (
+                instructors.map(feature_instructor => (
+                  <CarouselItem
+                    key={feature_instructor.id}
+                    className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3"
+                  >
+                    <FeaturedInstructorCard
+                      id={feature_instructor.id}
+                      instructorId={feature_instructor.instructorId}
+                      name={feature_instructor.user.username}
+                      bio={feature_instructor.bio}
+                      level={feature_instructor.level}
+                      profileUrl={feature_instructor.user.profileUrl}
+                      basePrice={feature_instructor.basePrice}
+                      skills={feature_instructor.skills}
+                    />
+                  </CarouselItem>
+                ))
+              ) : (
+                <div className="col-span-full text-center text-gray-500 py-10">
+                  No featured instructors found.
+                </div>
+              )}
+            </CarouselContent>
+          </Carousel>
         </div>
       )}
     </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { StudentProvider } from '@/app/contexts/studentContext'
+import { StudentProvider } from '@/contexts/studentContext'
 
 export default function MeetingLayout({
   children,

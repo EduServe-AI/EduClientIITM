@@ -1,7 +1,7 @@
 'use client'
 
-import { useStudent } from '@/app/contexts/studentContext'
 import SessionRoom from '@/components/session/sessionRoom'
+import { useStudent } from '@/contexts/studentContext'
 import { apiService } from '@/lib/api'
 import { useParams } from 'next/navigation'
 import { useEffect, useState } from 'react'

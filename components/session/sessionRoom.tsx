@@ -85,7 +85,7 @@ export const MyUILayout = () => {
   return (
     <StreamTheme>
       <MyParticipantList participants={remoteParticipants} />
-      <MyFloatingLocalParticipant participant={localParticipant} />
+      {/* <MyFloatingLocalParticipant participant={localParticipant} /> */}
       <CallControls />
     </StreamTheme>
   )
@@ -95,6 +95,8 @@ export const MyParticipantList = (props: {
   participants: StreamVideoParticipant[]
 }) => {
   const { participants } = props
+
+  console.log(participants)
   return (
     <div style={{ display: 'flex', flexDirection: 'row', gap: '8px' }}>
       {participants.map(participant => (
