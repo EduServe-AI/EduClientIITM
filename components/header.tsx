@@ -12,7 +12,6 @@ export default function Header() {
   const { student, isLoading } = useStudent()
   const imageUrl = useImageUrl(student?.id, 'profile')
   const router = useRouter()
-
   if (isLoading) {
     return (
       <div className="flex items-center justify-center p-6">
@@ -34,12 +33,12 @@ export default function Header() {
           onClick={() => router.push('/dashboard/student/profile')}
           className="justify-start gap-2 sm:gap-3 px-0 hover:bg-transparent group"
         >
-          <Avatar className="w-7 h-7 sm:w-8 sm:h-8 ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all">
+          <Avatar className="w-7 h-7 sm:w-8 sm:h-8 ring-2 ring-black transition-all">
             <AvatarImage
               src={imageUrl || '/default-avatar.png'}
               alt="profile"
             />
-            <AvatarFallback className="text-xs sm:text-sm">
+            <AvatarFallback className="text-xs sm:text-sm text-center p-2">
               {student?.username?.substring(0, 2).toUpperCase() || 'U'}
             </AvatarFallback>
           </Avatar>
