@@ -41,6 +41,6 @@ export const getCurrentUserId = () => {
     return decoded
   } catch (error) {
     console.error('Failed to decode token:', error)
-    throw Error('Failed to decode token')
+    return null
   }
 }
