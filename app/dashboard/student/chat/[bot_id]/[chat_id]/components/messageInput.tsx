@@ -31,7 +31,7 @@ export default function MessageInput() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="w-full max-w-5xl mx-auto px-0 md:px-0 flex flex-col items-center justify-center gap-2">
       {/* Input component will go here */}
       <InputGroup className="border-2 border-black">
         <InputGroupTextarea
@@ -91,6 +91,11 @@ export default function MessageInput() {
           </InputGroupButton>
         </InputGroupAddon>
       </InputGroup>
+
+      {/* Disclaimer text */}
+      <span className="text-xs text-center text-neutral-600">
+        AI-generated, for reference only
+      </span>
     </div>
   )
 }

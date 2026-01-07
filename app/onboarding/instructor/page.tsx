@@ -230,25 +230,26 @@ export default function InstructorOnboarding() {
   const handleSubmit = async () => {
     setIsPending(true)
 
-    const submission_data = {
-      iitmProfileUrl: formData.iitmProfileUrl,
-      cgpa: formData.cgpa,
-      level: formData.level,
-      subjects: formData.subjects,
-      languages: formData.languages,
-      bio: formData.bio,
-      githubUrl: formData.githubUrl,
-      linkedinUrl: formData.linkedinUrl,
-      availability: formData.availability,
-    }
+    console.log('profile picture', formData.profilePicture)
 
     try {
+      // Step 3: Submit the onboarding data
+      const submission_data = {
+        iitmProfileUrl: formData.iitmProfileUrl,
+        cgpa: formData.cgpa,
+        level: formData.level,
+        subjects: formData.subjects,
+        languages: formData.languages,
+        bio: formData.bio,
+        githubUrl: formData.githubUrl,
+        linkedinUrl: formData.linkedinUrl,
+        availability: formData.availability,
+      }
+
       await apiService('/instructor/onboarding', {
         body: submission_data,
         method: 'POST',
       })
-
-      // We need to upload the
 
       setIsPending(false)
 
@@ -257,9 +258,10 @@ export default function InstructorOnboarding() {
       router.push('/verification')
       //here we redirect to verification
     } catch (error) {
+      setIsPending(false)
       if (error instanceof Error) {
         console.error('Error has been occurred', error)
-        toast.error(error.message || 'Failed to update level')
+        toast.error(error.message || 'Failed to complete onboarding')
       } else {
         toast.error('An unknown error occurred.')
       }

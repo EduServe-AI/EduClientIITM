@@ -5,12 +5,13 @@ import { apiService } from '@/lib/api'
 import { ProgramLevelId } from '@/types/types'
 import { Tooltip } from '@radix-ui/react-tooltip'
 import WheelGesturesPlugin from 'embla-carousel-wheel-gestures'
-import { Info, Loader2 } from 'lucide-react'
+import { Info } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { Button } from './ui/button'
 import { Carousel, CarouselContent, CarouselItem } from './ui/carousel'
+import { Skeleton } from './ui/skeleton'
 import { TooltipContent, TooltipTrigger } from './ui/tooltip'
 // Defining the shape of instructor object
 interface ChatBot {
@@ -87,8 +88,31 @@ export default function FeauturedChatBots() {
       </div>
 
       {isLoading ? (
-        <div className="flex justify-center items-center h-40">
-          <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[1, 2, 3].map(i => (
+            <div key={i} className="space-y-3">
+              {/* Image Skeleton - aspect-[4/3] for chatbots */}
+              <Skeleton className="aspect-[4/3] w-full rounded-xl" />
+
+              {/* Contents below the card */}
+              <div className="mt-3 space-y-2">
+                {/* Name and level skeleton */}
+                <div className="space-y-1">
+                  <Skeleton className="h-5 w-32" />
+                  <Skeleton className="h-4 w-24" />
+                </div>
+
+                {/* Description skeleton - 2 lines */}
+                <div className="space-y-1.5">
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-4/5" />
+                </div>
+
+                {/* Interactions skeleton */}
+                <Skeleton className="h-4 w-28 mt-2" />
+              </div>
+            </div>
+          ))}
         </div>
       ) : (
         /* Here comes the featured chatbots carousel */

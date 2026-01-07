@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { apiService } from '@/lib/api'
 import { saveAccessToken } from '@/lib/auth'
-import { Eye, EyeOff, Loader2 } from 'lucide-react'
+import { EyeClosed, EyeOff, Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -156,7 +156,7 @@ export default function InstructorSignup({
                   {showPassword ? (
                     <EyeOff className="h-5 w-5" />
                   ) : (
-                    <Eye className="h-5 w-5" />
+                    <EyeClosed className="h-5 w-5" />
                   )}
                 </button>
               </div>

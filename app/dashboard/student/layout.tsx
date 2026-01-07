@@ -4,8 +4,14 @@ import { AppSidebar } from '@/components/appSidebar'
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
 import { StudentProvider } from '@/contexts/studentContext'
 import { footerNavItems, studentNavItems } from '@/lib/navlinks'
+import { usePathname } from 'next/navigation'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname()
+
+  // Hide sidebar trigger on chat interface
+  const isChatRoute = pathname.includes('/chat/')
+
   return (
     <StudentProvider>
       <SidebarProvider className="">
@@ -15,9 +21,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             footerNavItems={footerNavItems}
           />
           <main className="flex-1 flex flex-col overflow-hidden">
-            <div className="p-4 md:hidden">
-              <SidebarTrigger />
-            </div>
+            {!isChatRoute && (
+              <div className="p-4 md:hidden">
+                <SidebarTrigger />
+              </div>
+            )}
             {children}
           </main>
         </div>
