@@ -64,7 +64,7 @@ export default function SideCard({ instructor, profileUrl }: SideCardProps) {
                   </span>
                   <span className="flex items-center text-base sm:text-lg font-bold text-black">
                     <IndianRupee className="h-4 w-4" />
-                    {instructor.basePrice || '600'}/session
+                    {instructor.basePrice ?? '600'}/session
                   </span>
                 </div>
                 <div className="flex items-center justify-between border-b border-gray-200 pb-3">

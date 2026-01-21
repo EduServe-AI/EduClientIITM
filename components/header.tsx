@@ -39,7 +39,7 @@ export default function Header() {
               alt="profile"
             />
             <AvatarFallback className="text-lg sm:text-sm text-center m-2">
-              {student?.username.charAt(0).toUpperCase() || 'U'}
+              {student?.username?.charAt(0)?.toUpperCase() || 'U'}
             </AvatarFallback>
           </Avatar>
           <span className="text-base sm:text-lg md:text-xl font-serif text-foreground group-hover:text-primary transition-colors">
