@@ -3,7 +3,7 @@
 import { getRecentChats } from '@/lib/api'
 import { useImageUrl } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
-import { MessageCircle } from 'lucide-react'
+import { AlertCircle, MessageCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { ScrollArea } from './ui/scroll-area'
@@ -49,6 +49,23 @@ export function RecentChatsList() {
             </div>
           </div>
         ))}
+      </div>
+    )
+  }
+
+  if (isError) {
+    const errorMessage =
+      error instanceof Error ? error.message : 'Failed to load recent chats'
+
+    return (
+      <div className="flex flex-col items-center justify-center py-8 px-4 text-center">
+        <div className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-red-100 mb-3">
+          <AlertCircle className="h-5 w-5 text-red-600" />
+        </div>
+        <p className="text-xs text-red-600 font-medium">{errorMessage}</p>
+        <p className="text-xs text-muted-foreground mt-1">
+          Please try again later
+        </p>
       </div>
     )
   }

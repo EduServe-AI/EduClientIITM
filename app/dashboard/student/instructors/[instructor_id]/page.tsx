@@ -33,7 +33,6 @@ export default function InstructorProfile() {
     data: instructor,
     isLoading,
     isError,
-    error,
   } = useQuery({
     queryKey: ['instructorProfile', instructorId],
     queryFn: () => getInstructorQueryFn(instructorId),
@@ -42,8 +41,6 @@ export default function InstructorProfile() {
 
   // Use instructorId from params for profile image
   const profileUrl = useImageUrl(instructor?.instructorId, 'profile')
-
-  console.log('instructor profile', instructor)
 
   if (isLoading) {
     return (
@@ -73,19 +70,6 @@ export default function InstructorProfile() {
 
   return (
     <div className="min-h-screen bg-white overflow-y-auto">
-      {/* Header with breadcrumb */}
-      {/* <div className="border-b border-gray-200 bg-white px-6 py-4">
-        <div className="mx-auto max-w-7xl">
-          <Link
-            href="/dashboard/student/instructors"
-            className="group inline-flex items-center gap-2 text-sm font-medium text-gray-600 transition-colors hover:text-black"
-          >
-            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-2" />
-            <span>Back to Instructors</span>
-          </Link>
-        </div>
-      </div> */}
-
       {/* Main content */}
       <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-8">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-8">
