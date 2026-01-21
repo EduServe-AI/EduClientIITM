@@ -27,7 +27,7 @@ export function FeaturedInstructorCard(instructor: FeaturedInstructorProps) {
     <div
       className="group cursor-pointer"
       onClick={() => {
-        router.push(`/dashboard/instructors/${instructor.id}`)
+        router.push(`/dashboard/student/instructors/${instructor.id}`)
       }}
     >
       {/* Card with Image and name */}
@@ -73,7 +73,7 @@ export function FeaturedInstructorCard(instructor: FeaturedInstructorProps) {
         </div>
 
         {/* Skills */}
-        <div className="flex items-center gap-1.5 flex-wrap">
+        <div className="flex items-center gap-1 flex-wrap">
           <span className="text-sm font-semibold">Teaches:</span>
           {instructor.skills.slice(0, 4).map(skill => (
             <Badge key={skill.name} variant="secondary" className="font-normal">

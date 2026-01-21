@@ -1,4 +1,9 @@
-import { searchResponseType } from '@/types/api'
+import {
+  InstructorProfileType,
+  searchInstructorResponseType,
+  searchResponseType,
+  UserChatsResponse,
+} from '@/types/api'
 import api from './axios'
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL!
@@ -65,12 +70,36 @@ export async function apiService<T>(
   }
 }
 
+export const getRecentChats = async () => {
+  const response = await api.get<UserChatsResponse>('/chat/user-chats')
+
+  // Returning the chats array
+  return response.data.data.chats
+}
+
 export const getBotsQueryFn = async (search: string, level: string) => {
   const response = await api.get<searchResponseType>('/bot', {
     params: { search, level },
   })
 
-  console.log('response', response.data)
   // Return the bots array from the nested data structure
   return response.data.data.bots
+}
+
+export const getInstructorsQueryFn = async (search: string, level: string) => {
+  const response = await api.get<searchInstructorResponseType>('/instructor', {
+    params: { search, level },
+  })
+
+  // Return the instructors array from the nested data structure
+  return response.data.data.instructors
+}
+
+export const getInstructorQueryFn = async (instructorId: string) => {
+  const response = await api.get<InstructorProfileType>(
+    `/instructor/${instructorId}`
+  )
+
+  // Returning the data from the response
+  return response.data.data
 }

@@ -1,10 +1,10 @@
 'use client'
 
-import { apiService } from '@/lib/api'
+import { getRecentChats } from '@/lib/api'
 import { useImageUrl } from '@/lib/utils'
+import { useQuery } from '@tanstack/react-query'
 import { MessageCircle } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { ScrollArea } from './ui/scroll-area'
 import { Skeleton } from './ui/skeleton'
@@ -25,24 +25,17 @@ export interface UserChatsResponse {
 }
 
 export function RecentChatsList() {
-  const [chats, setChats] = useState<Chat[]>([])
-  const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
 
-  useEffect(() => {
-    async function fetchRecentChats() {
-      try {
-        const response = await apiService<UserChatsResponse>('/chat/user-chats')
-        setChats(response.data.chats.slice(0, 10)) // Limit to 10 most recent
-      } catch (error) {
-        console.error('Failed to fetch recent chats:', error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchRecentChats()
-  }, [])
+  const {
+    data: chats = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ['recentChats'],
+    queryFn: getRecentChats,
+  })
 
   if (isLoading) {
     return (
@@ -64,7 +57,6 @@ export function RecentChatsList() {
     return (
       <div className="flex flex-col items-center justify-center py-8 px-4 text-center">
         <MessageCircle className="h-12 w-12 text-muted-foreground mb-3 opacity-50" />
-        <p className="text-sm text-muted-foreground">No recent chats</p>
         <p className="text-xs text-muted-foreground mt-1">
           Start a conversation with a bot
         </p>
