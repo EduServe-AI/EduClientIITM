@@ -327,11 +327,11 @@ export default function Profile() {
 
   return (
     <div
-      className={`max-w-3xl mx-auto py-10 space-y-10 ${hasChanges() ? 'pb-32' : ''}`}
+      className={`max-w-3xl mx-auto py-10 px-4 md:px-6 lg:px-8 space-y-10 ${hasChanges() ? 'pb-32' : ''}`}
     >
       {/* Profile and Banner Image Section */}
 
-      <div className="relative w-full ">
+      <div className="relative w-full max-w-full">
         {/* Banner image section */}
         <div className="relative w-full h-48 md:h-56 overflow-hidden rounded-lg border border-black">
           <img
@@ -494,8 +494,8 @@ export default function Profile() {
             level={formData.level}
           />
         </div>
-        <div className="rounded-md border border-black p-2 h-24">
-          <div className="flex gap-4 m-4">
+        <div className="rounded-md border border-black p-2 min-h-24">
+          <div className="flex flex-wrap gap-4 m-4 overflow-x-auto">
             {formData.skills?.map(skill => (
               <div key={skill.id}>
                 <Button variant="outline" color="black">
@@ -516,8 +516,8 @@ export default function Profile() {
             setLanguages={handleLanguagesChange}
           />
         </div>
-        <div className="rounded-md border border-black p-2 h-24">
-          <div className="flex gap-4 m-4">
+        <div className="rounded-md border border-black p-2 min-h-24">
+          <div className="flex flex-wrap gap-4 m-4 overflow-x-auto">
             {formData.languages?.map(language => (
               <div key={language.languageId}>
                 <Button variant="outline" color="black">
@@ -538,7 +538,7 @@ export default function Profile() {
             setAvailabilities={handleAvailabilityChange}
           />
         </div>
-        <div className="rounded-md border border-black p-2 min-h-24">
+        <div className="rounded-md border border-black p-2 min-h-24 overflow-x-auto">
           <div className="flex flex-col gap-4 m-4">
             {formData.availabilities?.map(availability => (
               <div key={availability.id}>
@@ -576,7 +576,7 @@ export default function Profile() {
       {/* Sticky footer with Save and Reset buttons - Only show when changes are made */}
       {hasChanges() && (
         <div className="fixed bottom-0 left-0 md:left-64 right-0 bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] py-4 z-50">
-          <div className="max-w-3xl mx-auto flex justify-end gap-4 px-4">
+          <div className="max-w-3xl mx-auto flex justify-end gap-4 px-4 md:px-6 lg:px-8">
             <Button
               variant="outline"
               onClick={handleReset}
