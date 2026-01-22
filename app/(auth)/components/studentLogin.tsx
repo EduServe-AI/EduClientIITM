@@ -84,22 +84,26 @@ export default function StudentLogin({ setIsSignin }: StudentLoginProps) {
   }
 
   return (
-    <div className="flex flex-col lg:flex-row items-center justify-center min-h-screen gap-10 p-4 bg-white">
-      {/* Left side : Heading and Image */}
-      <div className="hidden lg:flex p-6 lg:p-10 space-y-8 bg-neutral-50 rounded-lg w-full lg:w-auto flex-col items-center lg:items-start">
+    // UPDATED CONTAINER: w-full and split logic
+    <div className="flex flex-col lg:flex-row items-center justify-center min-h-screen bg-white p-4 gap-6 lg:gap-10 lg:p-10">
+      {/* SECTION 1: BRANDING / IMAGE (Left on Desktop) */}
+      <div className="hidden lg:flex flex-col justify-center items-center bg-neutral-50 rounded-lg w-full lg:w-1/2 h-full min-h-[500px] lg:h-auto p-10 space-y-8">
         {/* Heading */}
-        <h1 className="text-4xl lg:text-5xl font-serif tracking-wide italic">
+        <h1 className="text-4xl lg:text-6xl font-serif tracking-wide italic text-center lg:text-left">
           Eduserve AI
         </h1>
 
-        {/* Image */}
-        <Image
-          src="/online-tutorials-concept_52683-37480.avif"
-          alt="Student Illustration"
-          width={550}
-          height={800}
-          className="object-cover w-full h-auto max-w-[300px] lg:max-w-[550px]"
-        />
+        {/* Image - Responsive Width */}
+        <div className="relative w-full max-w-[550px] lg:max-w-none lg:w-[80%] h-auto">
+          <Image
+            src="/online-tutorials-concept_52683-37480.avif"
+            alt="Student Illustration"
+            width={0}
+            height={0}
+            sizes="100vw"
+            className="w-full h-auto object-contain"
+          />
+        </div>
 
         {/* Copyright */}
         <span>
@@ -114,128 +118,133 @@ export default function StudentLogin({ setIsSignin }: StudentLoginProps) {
         Eduserve AI
       </h1>
 
-      {/* Right side : Signin Card */}
-      <Card className="w-full max-w-md rounded-md justify-center">
-        <CardHeader>
-          <CardTitle className="text-2xl font-[360] mb-9 ml-1">
-            Sign in
-          </CardTitle>
+      {/* SECTION 2: SIGNIN FORM (Right on Desktop) */}
+      <div className="w-full lg:w-1/2 flex justify-center">
+        {/* Added lg:max-w-xl to match signup style */}
+        <Card className="w-full max-w-md lg:max-w-xl rounded-md justify-center shadow-none border-0 lg:border lg:shadow-sm">
+          <CardHeader>
+            <CardTitle className="text-2xl font-[360] mb-9 ml-1">
+              Sign in
+            </CardTitle>
 
-          {/* Tab Content */}
-          <div className="flex justify-between w-full border-b-2">
-            <div className="relative w-1/2 text-center pb-2">
-              <span className="text-md font-light text-gray-900">Students</span>
-              <div className="absolute bottom-0 left-0 w-full h-[2px] bg-black" />
-            </div>
-            <div className="w-1/2 text-center pb-2">
-              <Link
-                href="/instructor"
-                className="text-md font-[365] hover:text-sky-600"
-              >
-                Instructors
-              </Link>
-            </div>
-          </div>
-        </CardHeader>
-
-        <CardContent>
-          <div className="flex flex-col gap-5 justify-center">
-            <div className="flex flex-col ">
-              <Label htmlFor="email" className="text-md font-[360] ml-1 mb-1">
-                Email
-              </Label>
-              <Input
-                type="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-              />
-            </div>
-
-            <div className="flex flex-col">
-              <Label
-                htmlFor="password"
-                className="text-md font-[360] ml-1 mb-1"
-              >
-                Password
-              </Label>
-
-              <div className="relative">
-                <Input
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-5 w-5" />
-                  ) : (
-                    <EyeClosed className="h-5 w-5" />
-                  )}
-                </button>
-              </div>
-            </div>
-
-            <Link className="text-md text-neutral-500 ml-1" href="#">
-              Forgot Password ?
-            </Link>
-
-            <div className="flex flex-col gap-8">
-              <Button
-                variant="outline"
-                size="lg"
-                className="bg-sky-400 hover:cursor-pointer hover:bg-sky-500 hover:text-white text-white "
-                onClick={handleLogin}
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Loading..
-                  </>
-                ) : (
-                  'Sign in'
-                )}
-              </Button>
-
-              <Button
-                variant="outline"
-                size="lg"
-                className="hover:bg-white hover:cursor-pointer gap-2 items-center justify-center"
-                onClick={() => {
-                  window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google/student`
-                }}
-              >
-                <Image
-                  src="/download.png"
-                  alt="google"
-                  width="30"
-                  height="30"
-                  className=""
-                />
-                <span>Sign in with Google</span>
-              </Button>
-
-              <div className="flex gap-2 justify-center">
-                <span className="text-base font-light">
-                  Don&apos;t have an account ?
+            {/* Tab Content */}
+            <div className="flex justify-between w-full border-b-2">
+              <div className="relative w-1/2 text-center pb-2">
+                <span className="text-md font-light text-gray-900">
+                  Students
                 </span>
-                <button
-                  onClick={() => setIsSignin(false)}
-                  className="text-sky-800 hover:cursor-pointer"
+                <div className="absolute bottom-0 left-0 w-full h-[2px] bg-black" />
+              </div>
+              <div className="w-1/2 text-center pb-2">
+                <Link
+                  href="/instructor"
+                  className="text-md font-[365] hover:text-sky-600"
                 >
-                  Sign up here
-                </button>
+                  Instructors
+                </Link>
               </div>
             </div>
-          </div>
-        </CardContent>
+          </CardHeader>
 
-        <CardFooter></CardFooter>
-      </Card>
+          <CardContent>
+            <div className="flex flex-col gap-5 justify-center">
+              <div className="flex flex-col ">
+                <Label htmlFor="email" className="text-md font-[360] ml-1 mb-1">
+                  Email
+                </Label>
+                <Input
+                  type="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                />
+              </div>
+
+              <div className="flex flex-col">
+                <Label
+                  htmlFor="password"
+                  className="text-md font-[360] ml-1 mb-1"
+                >
+                  Password
+                </Label>
+
+                <div className="relative">
+                  <Input
+                    type={showPassword ? 'text' : 'password'}
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-5 w-5" />
+                    ) : (
+                      <EyeClosed className="h-5 w-5" />
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              <Link className="text-md text-neutral-500 ml-1" href="#">
+                Forgot Password ?
+              </Link>
+
+              <div className="flex flex-col gap-8">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="bg-sky-400 hover:cursor-pointer hover:bg-sky-500 hover:text-white text-white "
+                  onClick={handleLogin}
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Loading..
+                    </>
+                  ) : (
+                    'Sign in'
+                  )}
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="hover:bg-white hover:cursor-pointer gap-2 items-center justify-center"
+                  onClick={() => {
+                    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google/student`
+                  }}
+                >
+                  <Image
+                    src="/download.png"
+                    alt="google"
+                    width="30"
+                    height="30"
+                    className=""
+                  />
+                  <span>Sign in with Google</span>
+                </Button>
+
+                <div className="flex gap-2 justify-center">
+                  <span className="text-base font-light">
+                    Don&apos;t have an account ?
+                  </span>
+                  <button
+                    onClick={() => setIsSignin(false)}
+                    className="text-sky-800 hover:cursor-pointer"
+                  >
+                    Sign up here
+                  </button>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+
+          <CardFooter></CardFooter>
+        </Card>
+      </div>
     </div>
   )
 }

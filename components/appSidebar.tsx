@@ -155,7 +155,7 @@ export function AppSidebar({ mainNavItems }: SidebarProps) {
           <>
             <Separator className="my-2 border-neutral-900" color="cyan-900" />
 
-            <p className="text-sm font-semibold px-4 py-3 group-data-[state=closed]:hidden">
+            <p className="text-lg font-semibold px-4 py-3 group-data-[state=closed]:hidden">
               Chats
             </p>
 
