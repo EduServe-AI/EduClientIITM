@@ -13,20 +13,6 @@ import { Carousel, CarouselContent, CarouselItem } from './ui/carousel'
 import { Skeleton } from './ui/skeleton'
 import { TooltipContent, TooltipTrigger } from './ui/tooltip'
 
-// Defining the shape of instructor object
-interface Instructor {
-  id: string
-  level: ProgramLevelId
-  bio: string
-  basePrice: string
-  instructorId: string
-  user: {
-    username: string
-    profileUrl: string | null
-  }
-  skills: { name: string }[]
-}
-
 export default function FeauturedInstructors() {
   const router = useRouter()
 
@@ -39,6 +25,7 @@ export default function FeauturedInstructors() {
   } = useQuery({
     queryKey: ['featured-instructors'],
     queryFn: getFeaturedInstructorsQueryFn,
+    staleTime: 300_000, // cache for 5 minutes
   })
 
   return (

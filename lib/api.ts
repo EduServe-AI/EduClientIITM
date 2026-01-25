@@ -82,8 +82,6 @@ export const getFeaturedInstructorsQueryFn = async () => {
   const response = await apiService<FeaturedInstructorsResponseType>(
     '/instructor/featured'
   )
-
-  console.log('featured instructors', response.data.featuredInstructors)
   // Return the instructors array from the nested data structure
   return response.data.featuredInstructors
 }
