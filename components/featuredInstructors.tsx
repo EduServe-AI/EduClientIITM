@@ -1,7 +1,6 @@
 'use client'
 
 import { getFeaturedInstructorsQueryFn } from '@/lib/api'
-import { ProgramLevelId } from '@/types/types'
 import { Tooltip } from '@radix-ui/react-tooltip'
 import { useQuery } from '@tanstack/react-query'
 import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
