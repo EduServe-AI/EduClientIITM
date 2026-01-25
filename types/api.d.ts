@@ -16,3 +16,22 @@ export type searchResponseType = {
     bots: BotType[]
   }
 }
+
+export type FeaturedInstructorType = {
+  id: string
+  level: ProgramLevelId
+  bio: string
+  basePrice: string
+  instructorId: string
+  user: {
+    username: string
+    profileUrl: string | null
+  }
+  skills: { name: string }[]
+}
+
+export type FeaturedInstructorsResponseType = {
+  data: {
+    featuredInstructors: FeaturedInstructorType[]
+  }
+}

@@ -1,4 +1,7 @@
-import { searchResponseType } from '@/types/api'
+import {
+  FeaturedInstructorsResponseType,
+  searchResponseType,
+} from '@/types/api'
 import api from './axios'
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL!
@@ -73,4 +76,14 @@ export const getBotsQueryFn = async (search: string, level: string) => {
   console.log('response', response.data)
   // Return the bots array from the nested data structure
   return response.data.data.bots
+}
+
+export const getFeaturedInstructorsQueryFn = async () => {
+  const response = await apiService<FeaturedInstructorsResponseType>(
+    '/instructor/featured'
+  )
+
+  console.log('featured instructors', response.data.featuredInstructors)
+  // Return the instructors array from the nested data structure
+  return response.data.featuredInstructors
 }
