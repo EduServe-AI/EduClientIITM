@@ -1,4 +1,4 @@
-import { ProgramLevelId } from './types'
+import { MeetStatus, ProgramLevelId } from './types'
 
 export type BotType = {
   id: string
@@ -66,5 +66,59 @@ export interface InstructorProfileType {
     skills: string[]
     languages: string[]
     availabilities: Record<string, string[]>
+  }
+}
+
+export interface CreateSessionRequest {
+  instructorId: string
+  startTime: string
+  title: string
+  description: string
+  durationMinutes: number
+}
+
+export interface CreateSessionResponse {
+  message: string
+  httpCode: number
+  data: {
+    savedSession: {
+      id: string
+      title: string
+      description: string
+      studentId: string
+      instructorId: string
+      start_time: string
+      duration_minutes: number
+      end_time: string
+      stream_call_id: string
+      status: MeetStatus
+    }
+  }
+}
+
+export interface member {
+  username: string
+  email: string
+  profileImageUrl?: string
+}
+
+export interface UserSessionsResponse {
+  message: string
+  httpCode: number
+  data: {
+    userSessions: {
+      id: string
+      studentId: string
+      instructorId: string
+      title: string
+      description: string
+      start_time: Date
+      duration_minutes: number
+      end_time: Date
+      stream_call_id: string
+      status: MeetStatus
+      student: member
+      instructor: member
+    }[]
   }
 }

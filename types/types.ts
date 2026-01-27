@@ -138,3 +138,5 @@ export type CarouselItem = {
   subtitle: string
   image: string
 }
+
+export type MeetStatus = 'scheduled' | 'cancelled' | 'completed'
