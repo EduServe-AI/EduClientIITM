@@ -28,11 +28,14 @@ export interface MeetProps {
 }
 
 export default function MeetCard(meet: MeetProps) {
+  // Call hooks unconditionally at the top level
+  const studentImageUrlGenerated = useImageUrl(meet.studentId || '', 'profile')
+  const instructorImageUrl = useImageUrl(meet.instructorId, 'profile')
+
   // Use student image if showing student info, otherwise use instructor image
-  const imageKey = meet.showStudentInfo ? meet.studentId : meet.instructorId
   const savedImageUrl = meet.showStudentInfo
-    ? meet.studentImageUrl || useImageUrl(meet.studentId, 'profile')
-    : useImageUrl(meet.instructorId, 'profile')
+    ? meet.studentImageUrl || studentImageUrlGenerated
+    : instructorImageUrl
   const displayName = meet.showStudentInfo
     ? meet.studentName
     : meet.instructorName
