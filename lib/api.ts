@@ -1,6 +1,7 @@
 import {
   CreateSessionRequest,
   CreateSessionResponse,
+  FeaturedInstructorsResponseType,
   InstructorProfileType,
   searchInstructorResponseType,
   searchResponseType,
@@ -92,6 +93,14 @@ export const getBotsQueryFn = async (search: string, level: string) => {
 }
 
 // Searching the instructors
+export const getFeaturedInstructorsQueryFn = async () => {
+  const response = await api.get<FeaturedInstructorsResponseType>(
+    '/instructor/featured'
+  )
+  // Return the instructors array from the nested data structure
+  return response.data.data.featuredInstructors
+}
+
 export const getInstructorsQueryFn = async (search: string, level: string) => {
   const response = await api.get<searchInstructorResponseType>('/instructor', {
     params: { search, level },
