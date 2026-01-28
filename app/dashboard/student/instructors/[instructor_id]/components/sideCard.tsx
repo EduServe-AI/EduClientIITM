@@ -10,16 +10,22 @@ import {
   Users,
 } from 'lucide-react'
 import Image from 'next/image'
+import { useState } from 'react'
+import SessionCard from './sessionCard'
 
 interface SideCardProps {
   instructor: {
     name: string
+    instructorId: string
     basePrice: number
+    skills?: string[]
   }
   profileUrl: string
 }
 
 export default function SideCard({ instructor, profileUrl }: SideCardProps) {
+  const [bookingDialogOpen, setBookDialogOpen] = useState(false)
+
   return (
     <div className="lg:col-span-1">
       {/* Sticky only on large screens */}
@@ -93,6 +99,7 @@ export default function SideCard({ instructor, profileUrl }: SideCardProps) {
               <Button
                 size="lg"
                 className="w-full bg-black text-sm sm:text-base font-semibold text-white transition-all hover:bg-gray-800 hover:shadow-lg"
+                onClick={() => setBookDialogOpen(true)}
               >
                 <Calendar className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                 Book a Session
@@ -107,6 +114,14 @@ export default function SideCard({ instructor, profileUrl }: SideCardProps) {
           </CardContent>
         </Card>
       </div>
+
+      <SessionCard
+        isOpen={bookingDialogOpen}
+        onOpen={setBookDialogOpen}
+        instructorName={instructor.name}
+        instructorId={instructor.instructorId}
+        subjects={instructor.skills}
+      />
     </div>
   )
 }
