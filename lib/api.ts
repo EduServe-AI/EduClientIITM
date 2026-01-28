@@ -1,4 +1,5 @@
 import {
+  FeaturedInstructorsResponseType,
   InstructorProfileType,
   searchInstructorResponseType,
   searchResponseType,
@@ -84,6 +85,14 @@ export const getBotsQueryFn = async (search: string, level: string) => {
 
   // Return the bots array from the nested data structure
   return response.data.data.bots
+}
+
+export const getFeaturedInstructorsQueryFn = async () => {
+  const response = await api.get<FeaturedInstructorsResponseType>(
+    '/instructor/featured'
+  )
+  // Return the instructors array from the nested data structure
+  return response.data.data.featuredInstructors
 }
 
 export const getInstructorsQueryFn = async (search: string, level: string) => {
