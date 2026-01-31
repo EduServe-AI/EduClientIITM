@@ -71,7 +71,7 @@ export function AppSidebar({ mainNavItems }: SidebarProps) {
   return (
     <Sidebar
       collapsible={isMobile ? 'offcanvas' : 'icon'}
-      className="border-r border-neutral-900 bg-sky-900"
+      className="border-r border-neutral-900"
       color=""
     >
       {/* Sidebar Header */}
@@ -79,11 +79,11 @@ export function AppSidebar({ mainNavItems }: SidebarProps) {
         <div className="flex justify-between items-center">
           <Link
             href="/home"
-            className="flex items-center gap-2 group-data-[state=closed]:hidden"
+            className="flex items-center gap-2 group-data-[state=closed]:hidden bg-sidebar"
           >
             <Image
-              src={BRAND_ASSETS.LOGOS.NEW_WORD_MARK}
-              width={150}
+              src={BRAND_ASSETS.LOGOS.EDU_WORD_MARK}
+              width={300}
               height={70}
               alt="EduserveAI"
               className="hover:opacity-80 transition-all duration-300"
@@ -155,7 +155,7 @@ export function AppSidebar({ mainNavItems }: SidebarProps) {
           <>
             <Separator className="my-2 border-neutral-900" color="cyan-900" />
 
-            <p className="text-sm font-semibold px-4 py-3 group-data-[state=closed]:hidden">
+            <p className="text-lg font-semibold px-4 py-3 group-data-[state=closed]:hidden">
               Chats
             </p>
 

@@ -9,8 +9,10 @@ import { usePathname } from 'next/navigation'
 export default function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
 
-  // Hide sidebar trigger on chat interface
+  // Hide sidebar trigger on chat interface and session video
   const isChatRoute = pathname.includes('/chat/')
+  const isSessionRoute =
+    pathname.includes('/sessions/') && pathname.split('/').length > 4
 
   return (
     <StudentProvider>
@@ -21,7 +23,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             footerNavItems={footerNavItems}
           />
           <main className="flex-1 flex flex-col overflow-hidden">
-            {!isChatRoute && (
+            {!isChatRoute && !isSessionRoute && (
               <div className="p-4 md:hidden">
                 <SidebarTrigger />
               </div>

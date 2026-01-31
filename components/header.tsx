@@ -35,11 +35,11 @@ export default function Header() {
         >
           <Avatar className="w-7 h-7 sm:w-8 sm:h-8 ring-2 ring-black transition-all">
             <AvatarImage
-              src={imageUrl || '/default-avatar.png'}
+              src={imageUrl || '/student_fallback.jpg'}
               alt="profile"
             />
-            <AvatarFallback className="text-xs sm:text-sm text-center p-2">
-              {student?.username?.substring(0, 2).toUpperCase() || 'U'}
+            <AvatarFallback className="text-lg sm:text-sm text-center m-2">
+              {student?.username?.charAt(0)?.toUpperCase() || 'U'}
             </AvatarFallback>
           </Avatar>
           <span className="text-base sm:text-lg md:text-xl font-serif text-foreground group-hover:text-primary transition-colors">

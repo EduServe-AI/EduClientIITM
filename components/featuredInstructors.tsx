@@ -1,64 +1,31 @@
 'use client'
 
-import { apiService } from '@/lib/api'
-import { ProgramLevelId } from '@/types/types'
+import { getFeaturedInstructorsQueryFn } from '@/lib/api'
 import { Tooltip } from '@radix-ui/react-tooltip'
+import { useQuery } from '@tanstack/react-query'
 import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
 import { Info } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
 import { FeaturedInstructorCard } from './featuredInstructorCard'
 import { Button } from './ui/button'
 import { Carousel, CarouselContent, CarouselItem } from './ui/carousel'
 import { Skeleton } from './ui/skeleton'
 import { TooltipContent, TooltipTrigger } from './ui/tooltip'
 
-// Defining the shape of instructor object
-interface Instructor {
-  id: string
-  level: ProgramLevelId
-  bio: string
-  basePrice: string
-  instructorId: string
-  user: {
-    username: string
-    profileUrl: string | null
-  }
-  skills: { name: string }[]
-}
-
-// Defining the shape of the api response
-interface ResponseType {
-  data: {
-    featuredInstructors: Instructor[]
-  }
-}
-
 export default function FeauturedInstructors() {
-  const [instructors, setInstructors] = useState<Instructor[]>([])
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-
   const router = useRouter()
 
-  // useEffect to get the featured instructors
-  useEffect(() => {
-    setIsLoading(true)
-    async function fetchInstructors() {
-      try {
-        const data = await apiService<ResponseType>('/instructor/featured')
-        const instructors = data.data.featuredInstructors
-        console.log('instructors', instructors)
-        setInstructors(instructors)
-      } catch (error) {
-        console.error('Failed to Fetch Featured Instructors', error)
-        return
-      } finally {
-        setIsLoading(false)
-      }
-    }
+  // Using Tanstack Query for better caching and state management
+  const {
+    data: instructors = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ['featured-instructors'],
+    queryFn: getFeaturedInstructorsQueryFn,
+  })
 
-    fetchInstructors()
-  }, [])
   return (
     <div className="w-full mb-8 mt-8">
       <div className="flex items-center justify-between mb-2">
@@ -122,7 +89,18 @@ export default function FeauturedInstructors() {
             </div>
           ))}
         </div>
-      ) : (
+      ) : isError ? (
+        <div className="flex justify-center items-center py-12">
+          <div className="text-center">
+            <p className="text-red-500 font-semibold mb-2">
+              Failed to load featured instructors
+            </p>
+            <p className="text-gray-600 text-sm">
+              {error instanceof Error ? error.message : 'An error occurred'}
+            </p>
+          </div>
+        </div>
+      ) : instructors && instructors.length > 0 ? (
         /* Here comes the featured instructors card */
         <div className="relative">
           <Carousel
@@ -155,6 +133,10 @@ export default function FeauturedInstructors() {
               ))}
             </CarouselContent>
           </Carousel>
+        </div>
+      ) : (
+        <div className="flex justify-center items-center py-12">
+          <p className="text-gray-600">No featured instructors available.</p>
         </div>
       )}
     </div>

@@ -3,6 +3,7 @@ export const BRAND_ASSETS = {
     WORD_MARK: '/final_wordmark.png',
     NEW_WORD_MARK: '/New_WordMark.png',
     LOGO: '/Brand_Logo.png',
+    EDU_WORD_MARK: '/EDU_WM2.png',
   },
   FAVICON: '/Brand_Logo.png',
   SOCIAL: {
