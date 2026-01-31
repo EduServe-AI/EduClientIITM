@@ -24,7 +24,6 @@ export default function FeauturedInstructors() {
   } = useQuery({
     queryKey: ['featured-instructors'],
     queryFn: getFeaturedInstructorsQueryFn,
-    staleTime: 300_000, // cache for 5 minutes
   })
 
   return (
