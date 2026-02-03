@@ -58,6 +58,7 @@ export default function InstructorOnboarding() {
     languages: [],
     profilePicture: null,
     bio: '',
+    about: '',
     githubUrl: '',
     linkedinUrl: '',
     availability: initialAvailability(),
@@ -104,7 +105,7 @@ export default function InstructorOnboarding() {
       }
     }
     if (currentStep === 2) {
-      if (!formData.profilePicture || !formData.bio) {
+      if (!formData.profilePicture || !formData.bio || !formData.about) {
         return false
       }
     }
@@ -174,6 +175,9 @@ export default function InstructorOnboarding() {
       if (!formData.bio || formData.bio.trim() == '') {
         messages.push('Valid Bio should be provided')
       }
+      if (!formData.about || formData.about.trim() == '') {
+        messages.push('Valid About Me should be provided')
+      }
       if (!formData.profilePicture) {
         messages.push('Profile picture required')
       }
@@ -241,6 +245,7 @@ export default function InstructorOnboarding() {
         subjects: formData.subjects,
         languages: formData.languages,
         bio: formData.bio,
+        about: formData.about,
         githubUrl: formData.githubUrl,
         linkedinUrl: formData.linkedinUrl,
         availability: formData.availability,
@@ -319,7 +324,7 @@ export default function InstructorOnboarding() {
         </div>
 
         {/* Here comes the main container */}
-        <div className="max-w-2xl w-full flex flex-col items-center mb-1">
+        <div className="max-w-2xl w-full flex flex-col items-center mb-32">
           {/* Conditionally rendering the step component */}
           {currentStep === 0 && (
             <Verification formData={formData} setFormData={setFormData} />

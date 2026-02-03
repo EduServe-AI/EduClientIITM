@@ -136,6 +136,7 @@ export interface Availability {
 // ✅ Instructor profile structure (matches your backend)
 export interface InstructorProfile {
   bio: string
+  about?: string
   cgpa: string
   iitmProfileUrl?: string
   githubUrl?: string

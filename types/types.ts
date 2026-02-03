@@ -121,6 +121,7 @@ export type OnboardingFormData = {
   languages: Languages[]
   profilePicture: string | null
   bio: string
+  about: string
   githubUrl: string
   linkedinUrl: string
   availability: AvailabilityType

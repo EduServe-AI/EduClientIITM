@@ -15,6 +15,7 @@ interface PersonalizationProps {
 interface PersonalizationErrors {
   profilePicture?: boolean
   bio?: boolean
+  about?: boolean
 }
 
 export default function Personalization({
@@ -56,7 +57,7 @@ export default function Personalization({
     reader.readAsDataURL(file)
   }
   return (
-    <section className="max-w-4xl mx-auto w-full">
+    <section className="max-w-4xl mx-auto w-full pb-8">
       <header className="mb-8 text-center flex flex-row gap-3 items-center justify-center">
         <UserCog size={30} />
         <h3 className="text-3xl font-semibold text-gray-800">
@@ -148,6 +149,43 @@ export default function Personalization({
             {errors.bio && (
               <p className="text-red-500 text-sm">
                 Bio must be between 50 and 500 characters.
+              </p>
+            )}
+          </div>
+
+          {/* About Me Textarea */}
+          <div className="space-y-2">
+            <Label htmlFor="about" className="text-md font-medium">
+              About Me
+            </Label>
+            <Textarea
+              id="about"
+              placeholder="Share more about your background, experience, and what makes you passionate about teaching."
+              value={formData.about}
+              onChange={e => {
+                const value = e.target.value
+                setFormData(prev => ({ ...prev, about: value }))
+                if (value.trim().length < 50 || value.trim().length > 500) {
+                  setErrors(prev => ({ ...prev, about: true }))
+                } else {
+                  setErrors(prev => ({ ...prev, about: false }))
+                }
+              }}
+              onBlur={e => {
+                const value = e.target.value.trim()
+                if (value.length < 50 || value.length > 500) {
+                  setErrors(prev => ({ ...prev, about: true }))
+                }
+              }}
+              className={`min-h-[120px] transition-all duration-200 focus:ring-2 focus:ring-blue-500 ${
+                errors.about ? 'border-red-500 focus-visible:ring-red-500' : ''
+              }`}
+              rows={3}
+              maxLength={500}
+            />
+            {errors.about && (
+              <p className="text-red-500 text-sm">
+                About Me must be between 50 and 500 characters.
               </p>
             )}
           </div>

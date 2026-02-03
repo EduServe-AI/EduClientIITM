@@ -34,6 +34,7 @@ interface ProfileData {
   email: string
   level: ProgramLevelId
   bio: string
+  about: string
   iitmProfileUrl?: string
   githubUrl?: string
   linkedinUrl?: string
@@ -57,6 +58,7 @@ export default function Profile() {
     email: '',
     level: undefined,
     bio: '',
+    about: '',
     basePrice: 0,
     skills: [],
     languages: [],
@@ -73,6 +75,7 @@ export default function Profile() {
         email: instructor.email,
         level: instructor.instructorProfile?.level,
         bio: instructor.instructorProfile?.bio || '',
+        about: instructor.instructorProfile?.about || '',
         basePrice: instructor.instructorProfile.basePrice,
         iitmProfileUrl: instructor.instructorProfile.iitmProfileUrl || '',
         githubUrl: instructor.instructorProfile.githubUrl || '',
@@ -114,6 +117,7 @@ export default function Profile() {
       formData.username !== instructor.username ||
       formData.email !== instructor.email ||
       formData.bio !== (instructor.instructorProfile?.bio || '') ||
+      formData.about !== (instructor.instructorProfile?.about || '') ||
       formData.level !== instructor.instructorProfile?.level ||
       formData.iitmProfileUrl !==
         (instructor.instructorProfile?.iitmProfileUrl || '') ||
@@ -281,6 +285,7 @@ export default function Profile() {
         instructorProfile: {
           ...instructor.instructorProfile,
           bio: formData.bio,
+          about: formData.about,
           level: formData.level,
           githubUrl: formData.githubUrl,
           linkedinUrl: formData.linkedinUrl,
@@ -311,6 +316,7 @@ export default function Profile() {
         email: instructor.email,
         level: instructor.instructorProfile?.level,
         bio: instructor.instructorProfile?.bio || '',
+        about: instructor.instructorProfile?.about || '',
         basePrice: instructor.instructorProfile.basePrice,
         githubUrl: instructor.instructorProfile.githubUrl || '',
         linkedinUrl: instructor.instructorProfile.linkedinUrl || '',
@@ -423,6 +429,17 @@ export default function Profile() {
             value={formData.bio}
             onChange={e =>
               setFormData(prev => ({ ...prev, bio: e.target.value }))
+            }
+          />
+        </div>
+
+        {/* About Me */}
+        <div className="space-y-3">
+          <Label className="font-serif text-lg ml-1">About Me</Label>
+          <Textarea
+            value={formData.about}
+            onChange={e =>
+              setFormData(prev => ({ ...prev, about: e.target.value }))
             }
           />
         </div>
