@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import { Check, Copy } from 'lucide-react'
+import { useState, type ComponentPropsWithoutRef } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { oneDark } from 'react-syntax-highlighter/dist/cjs/styles/prism'
-import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import remarkGfm from 'remark-gfm'
-import { Check, Copy } from 'lucide-react'
+import remarkMath from 'remark-math'
 
 interface MarkdownRendererProps {
   content: string
@@ -53,7 +53,12 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
       // 2. Custom Components (The Magic happens here)
       components={{
         // Handle Code Blocks
-        code({ inline, className, children, ...props }: any) {
+        code({
+          inline,
+          className,
+          children,
+          ...props
+        }: ComponentPropsWithoutRef<'code'> & { inline?: boolean }) {
           const match = /language-(\w+)/.exec(className || '')
           const language = match ? match[1] : ''
           const codeString = String(children).replace(/\n$/, '')

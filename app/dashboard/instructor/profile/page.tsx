@@ -32,7 +32,7 @@ import { EditSkills } from './components/editSkills'
 interface ProfileData {
   username: string
   email: string
-  level: ProgramLevelId
+  level: ProgramLevelId | undefined
   bio: string
   iitmProfileUrl?: string
   githubUrl?: string
@@ -55,7 +55,7 @@ export default function Profile() {
   const [formData, setFormData] = useState<ProfileData>({
     username: '',
     email: '',
-    level: '' as any,
+    level: undefined,
     bio: '',
     basePrice: 0,
     skills: [],
@@ -71,7 +71,7 @@ export default function Profile() {
       setFormData({
         username: instructor?.username,
         email: instructor.email,
-        level: instructor.instructorProfile?.level || ('' as any),
+        level: instructor.instructorProfile?.level || undefined,
         bio: instructor.instructorProfile?.bio || '',
         basePrice: instructor.instructorProfile.basePrice,
         iitmProfileUrl: instructor.instructorProfile.iitmProfileUrl || '',
@@ -309,7 +309,7 @@ export default function Profile() {
       setFormData({
         username: instructor.username,
         email: instructor.email,
-        level: instructor.instructorProfile?.level || ('' as any),
+        level: instructor.instructorProfile?.level || undefined,
         bio: instructor.instructorProfile?.bio || '',
         basePrice: instructor.instructorProfile.basePrice,
         githubUrl: instructor.instructorProfile.githubUrl || '',
