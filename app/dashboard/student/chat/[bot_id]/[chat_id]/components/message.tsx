@@ -5,7 +5,7 @@ import { chatMessage, useChat } from '@/contexts/chatContext' // Import your typ
 import { useStudent } from '@/contexts/studentContext' // To show user avatar
 import { cn, useImageUrl } from '@/lib/utils'
 import { Loader2 } from 'lucide-react'
-import ReactMarkdown from 'react-markdown'
+import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
 
 export default function Message({ message }: { message: chatMessage }) {
   const { student } = useStudent()
@@ -49,9 +49,7 @@ export default function Message({ message }: { message: chatMessage }) {
             <span className="font-medium">AI assistant is thinking...</span>
           </div>
         ) : (
-          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
-            <ReactMarkdown>{message.content}</ReactMarkdown>
-          </div>
+          <MarkdownRenderer content={message.content} />
         )}
       </div>
 
