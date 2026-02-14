@@ -1,11 +1,11 @@
 'use client'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
 import { chatMessage, useChat } from '@/contexts/chatContext' // Import your type
 import { useStudent } from '@/contexts/studentContext' // To show user avatar
 import { cn, useImageUrl } from '@/lib/utils'
 import { Loader2 } from 'lucide-react'
-import ReactMarkdown from 'react-markdown'
 
 export default function Message({ message }: { message: chatMessage }) {
   const { student } = useStudent()
@@ -22,7 +22,7 @@ export default function Message({ message }: { message: chatMessage }) {
   return (
     <div
       className={cn(
-        'flex items-start gap-2 md:gap-3 w-full',
+        'flex items-start gap-2 md:gap-3 w-full overflow-hidden',
         isUser ? 'justify-end' : 'justify-start'
       )}
     >
@@ -37,7 +37,7 @@ export default function Message({ message }: { message: chatMessage }) {
       {/* Message Content */}
       <div
         className={cn(
-          'rounded-lg p-2.5 md:p-3 break-words',
+          'rounded-lg p-2.5 md:p-3 break-words overflow-hidden min-w-0',
           isUser
             ? 'bg-black text-white ml-auto max-w-[85%] md:max-w-[75%]'
             : 'text-gray-900 max-w-[85%] md:max-w-[90%]'
@@ -49,8 +49,8 @@ export default function Message({ message }: { message: chatMessage }) {
             <span className="font-medium">AI assistant is thinking...</span>
           </div>
         ) : (
-          <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
-            <ReactMarkdown>{message.content}</ReactMarkdown>
+          <div className="prose prose-sm md:prose-base dark:prose-invert w-full max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+            <MarkdownRenderer content={message.content} />
           </div>
         )}
       </div>

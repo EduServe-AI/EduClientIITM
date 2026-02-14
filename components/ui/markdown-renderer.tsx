@@ -25,25 +25,21 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
   }
 
   // Preprocess content to handle different LaTeX formats
+  // AI models typically send math in \(...\) and \[...\] delimiters.
+  // remark-math expects $...$ and $$...$$ delimiters.
   const preprocessMath = (text: string): string => {
     let result = text
 
-    // First, handle display math with square brackets: [ ... ]
-    // Replace [ ... ] with $$ ... $$
-    result = result.replace(/\[\s*([^[\]]+)\s*\]/g, (match, formula) => {
-      // Only if it contains LaTeX commands
-      if (formula.includes('\\')) {
-        return `$$${formula}$$`
-      }
-      return match
+    // Convert display math: \[...\] → $$...$$
+    // Uses [\s\S] to match across newlines within the delimiters
+    result = result.replace(/\\\[([\s\S]*?)\\\]/g, (_match, formula) => {
+      return `$$${formula}$$`
     })
 
-    // Handle inline LaTeX: wrap lone LaTeX commands in $...$
-    // Match LaTeX commands that aren't already in $ or $$
-    const latexPattern =
-      /(?<!\$)(?<!\$\$)(\\(?:mathbf\{[^}]+\}|theta|cdot|cos|sin|tan|ge|le|circ|quad|qquad|sqrt\{[^}]+\}|frac\{[^}]+\}\{[^}]+\}|[a-zA-Z]+))(?!\$)/g
-
-    result = result.replace(latexPattern, '$$$1$')
+    // Convert inline math: \(...\) → $...$
+    result = result.replace(/\\\(([\s\S]*?)\\\)/g, (_match, formula) => {
+      return `$${formula}$`
+    })
 
     return result
   }
@@ -69,7 +65,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
 
           return !inline && match ? (
             // BLOCK CODE (e.g. ```python print("hi") ```)
-            <div className="rounded-md overflow-hidden my-2">
+            <div className="rounded-md overflow-hidden my-2 max-w-full">
               <div className="bg-gray-800 px-4 py-1 flex justify-between items-center">
                 <span className="text-xs text-gray-400 font-mono">
                   {language}
@@ -92,15 +88,17 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                   )}
                 </button>
               </div>
-              <SyntaxHighlighter
-                {...props}
-                style={oneDark}
-                language={language}
-                PreTag="div"
-                customStyle={{ margin: 0, borderRadius: '0 0 4px 4px' }}
-              >
-                {codeString}
-              </SyntaxHighlighter>
+              <div className="overflow-x-auto">
+                <SyntaxHighlighter
+                  {...props}
+                  style={oneDark}
+                  language={language}
+                  PreTag="div"
+                  customStyle={{ margin: 0, borderRadius: '0 0 4px 4px' }}
+                >
+                  {codeString}
+                </SyntaxHighlighter>
+              </div>
             </div>
           ) : (
             // INLINE CODE (e.g. `const x = 1`)
@@ -129,7 +127,13 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           <ol className="list-decimal list-outside ml-6 mb-4" {...props} />
         ),
         li: ({ ...props }) => <li className="mb-1" {...props} />,
-        p: ({ ...props }) => <p className="mb-4 leading-relaxed" {...props} />,
+        p: ({ ...props }) => (
+          <p
+            className="mb-4 leading-relaxed break-words"
+            style={{ overflowWrap: 'anywhere' }}
+            {...props}
+          />
+        ),
         a: ({ ...props }) => (
           <a
             className="text-blue-600 underline hover:text-blue-800"
@@ -145,19 +149,24 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           />
         ),
         table: ({ ...props }) => (
-          <table
-            className="border-collapse border border-gray-300 my-4 w-full"
-            {...props}
-          />
+          <div className="overflow-x-auto my-4 -mx-1 px-1">
+            <table
+              className="border-collapse border border-gray-300 min-w-full w-max"
+              {...props}
+            />
+          </div>
         ),
         th: ({ ...props }) => (
           <th
-            className="border border-gray-300 px-4 py-2 bg-gray-100 font-semibold text-left"
+            className="border border-gray-300 px-4 py-2 bg-gray-100 font-semibold text-left whitespace-nowrap"
             {...props}
           />
         ),
         td: ({ ...props }) => (
-          <td className="border border-gray-300 px-4 py-2" {...props} />
+          <td
+            className="border border-gray-300 px-4 py-2 whitespace-nowrap"
+            {...props}
+          />
         ),
       }}
     >

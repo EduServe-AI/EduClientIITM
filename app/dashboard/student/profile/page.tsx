@@ -103,7 +103,7 @@ export default function Profile() {
   const displayImageUrl = profileImage || savedImageUrl
 
   return (
-    <div className="w-full min-h-screen px-4 py-6 md:px-6 lg:px-8 overflow-y-auto">
+    <div className="w-full h-full px-4 py-6 md:px-6 lg:px-8 overflow-y-auto overflow-x-hidden">
       <div className="max-w-2xl mx-auto space-y-8">
         <h1 className="text-2xl md:text-3xl font-serif font-semibold text-start">
           Student Profile

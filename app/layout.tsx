@@ -37,9 +37,9 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en">
       <body
-        className={`${outfit.variable} font-sans antialiased min-h-screen bg-white text-black`}
+        className={`${outfit.variable} font-sans antialiased h-screen overflow-hidden bg-white text-black`}
       >
         <QueryProvider>
           <TopLoader />

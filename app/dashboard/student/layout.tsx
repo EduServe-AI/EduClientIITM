@@ -16,7 +16,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <StudentProvider>
-      <SidebarProvider className="">
+      <SidebarProvider className="!min-h-0 h-full">
         <div className="flex h-screen w-full overflow-hidden bg-white">
           <AppSidebar
             mainNavItems={studentNavItems}

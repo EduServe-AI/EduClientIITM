@@ -8,7 +8,7 @@ import { useImageUrl } from '@/lib/utils'
 import { ChevronLeft, Heart, Settings } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import MessageInput from './components/messageInput'
 import MessageList from './components/messageList'
 
@@ -16,7 +16,7 @@ export default function BotChat() {
   const { chat, messages, isLoading } = useChat()
   const [isFavourite, setIsFavourite] = useState<boolean>(false)
   const { student, isLoading: studenLoading } = useStudent()
-  const messagesEndRef = useRef<HTMLDivElement>(null)
+  const scrollContainerRef = useRef<HTMLElement>(null)
   const router = useRouter()
 
   const handleFavClick = () => {
@@ -31,10 +31,21 @@ export default function BotChat() {
 
   const isMobile = useIsMobile()
 
+  // Scroll to bottom of the message container only (not parent ancestors)
+  const scrollToBottom = useCallback((smooth = true) => {
+    const container = scrollContainerRef.current
+    if (container) {
+      container.scrollTo({
+        top: container.scrollHeight,
+        behavior: smooth ? 'smooth' : 'instant',
+      })
+    }
+  }, [])
+
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+    scrollToBottom()
+  }, [messages, scrollToBottom])
 
   useEffect(() => {
     // Only update the title if the chat details are loaded and have a botName
@@ -59,7 +70,7 @@ export default function BotChat() {
   const hasMessages = messages && messages.length > 0
 
   return (
-    <div className="h-svh w-full flex flex-col bg-background overflow-hidden">
+    <div className="h-full w-full flex flex-col bg-background overflow-hidden">
       {/* Fixed Header */}
       <header className="flex-shrink-0 w-full bg-background px-4 z-10 border-b">
         <div className="w-full justify-between py-1 flex items-center h-14">
@@ -117,16 +128,19 @@ export default function BotChat() {
       </header>
 
       {/* Scrollable Message Area */}
-      <main className="flex-1 overflow-y-auto overflow-x-hidden min-h-0">
-        <div className="px-4 py-4 md:py-6 max-w-5xl mx-auto w-full h-full">
+      <main
+        ref={scrollContainerRef}
+        className="flex-1 overflow-y-auto overflow-x-hidden min-h-0 scroll-smooth"
+      >
+        <div className="px-4 py-4 md:py-6 max-w-5xl mx-auto w-full">
           {hasMessages ? (
-            <div className="flex flex-col min-h-full">
+            <div className="flex flex-col">
               <MessageList />
               {/* Spacer to ensure last message is visible above input */}
-              <div ref={messagesEndRef} className="h-4" />
+              <div className="h-4" />
             </div>
           ) : (
-            <div className="flex items-center justify-center h-full">
+            <div className="flex items-center justify-center min-h-[60vh]">
               <div className="text-center text-black px-4">
                 <h2 className="text-2xl md:text-4xl font-semibold">
                   Hello, {student?.username}
