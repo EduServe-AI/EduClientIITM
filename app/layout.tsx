@@ -39,7 +39,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${outfit.variable} font-sans antialiased h-screen overflow-hidden bg-white text-black`}
+        className={`${outfit.variable} font-sans antialiased bg-white text-black`}
       >
         <QueryProvider>
           <TopLoader />
