@@ -26,7 +26,7 @@ export default function StudentBotsPage() {
   })
 
   return (
-    <div className="p-4 sm:p-6 flex flex-col overflow-y-auto">
+    <div className="h-full p-4 sm:p-6 flex flex-col overflow-y-auto overflow-x-hidden">
       {/* EXPLORE Heading with Search Bar */}
       <div className="flex items-center justify-between gap-4 mb-4">
         <h1 className="text-2xl sm:text-3xl font-semibold font-serif whitespace-nowrap">

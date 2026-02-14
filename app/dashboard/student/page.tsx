@@ -7,7 +7,7 @@ import { RecommendedBots } from '@/components/recommendedBots'
 
 export default function StudentDashboard() {
   return (
-    <div className="p-4 overflow-y-auto overflow-x-hidden">
+    <div className="h-full p-4 overflow-y-auto overflow-x-hidden">
       {/* Header */}
       <Header />
 

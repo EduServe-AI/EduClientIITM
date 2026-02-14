@@ -39,14 +39,14 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
-@media (prefers-color-scheme: light) {
+/* @media (prefers-color-scheme: light) {
   :root {
     /* --background: rgb(250, 246, 250);
     --foreground: #0a0a0a; */
-    --background: #0a0a0a;
-    --foreground: rgb(250, 246, 250);
-  }
-}
+/* --background: #0a0a0a; */
+/* --foreground: rgb(250, 246, 250); */
+/* } */
+/* }  */
 
 body {
   transition:
@@ -153,6 +153,11 @@ body {
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
+  html,
+  body {
+    height: 100%;
+  }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -174,6 +179,41 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: skyblue; /* --- Color of the handle on hover --- */
+}
+
+/* Contain KaTeX and code blocks within chat messages */
+.prose .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+}
+
+.prose .katex-display > .katex {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.prose .katex {
+  font-size: 1em;
+}
+
+.prose pre {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+/* Prevent any prose content from causing horizontal overflow */
+.prose {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Tables handled by React component wrapper - don't constrain here */
+
+.prose img {
+  max-width: 100%;
+  height: auto;
 }
 
 /* Safe area support for mobile devices with notches */

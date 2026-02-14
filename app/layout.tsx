@@ -1,21 +1,16 @@
-import { Toaster } from '@/components/ui/sonner'
-
 import TopLoader from '@/components/topLoader'
+import { Toaster } from '@/components/ui/sonner'
 import { BRAND_ASSETS } from '@/constants/brandAssets'
 import QueryProvider from '@/contexts/queryProvider'
 import 'katex/dist/katex.min.css'
 import type { Metadata, Viewport } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Outfit } from 'next/font/google'
 import './globals.css'
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const outfit = Outfit({
   subsets: ['latin'],
-})
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
+  variable: '--font-outfit',
+  display: 'swap',
 })
 
 export const metadata: Metadata = {
@@ -42,9 +37,9 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="h-screen">
+    <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen w-screen`}
+        className={`${outfit.variable} font-sans antialiased bg-white text-black`}
       >
         <QueryProvider>
           <TopLoader />

@@ -138,7 +138,7 @@ export default function InstructorLogin({ setIsSignin }: InstructorLoginProps) {
               </div>
               <div className="w-1/2 text-center pb-2">
                 <Link
-                  href="/"
+                  href="/student"
                   className="text-md font-[365] hover:text-sky-600"
                 >
                   Students

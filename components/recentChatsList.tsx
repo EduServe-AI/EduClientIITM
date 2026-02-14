@@ -4,7 +4,7 @@ import { getRecentChats } from '@/lib/api'
 import { useImageUrl } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
 import { AlertCircle, MessageCircle } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { ScrollArea } from './ui/scroll-area'
 import { Skeleton } from './ui/skeleton'
@@ -25,8 +25,6 @@ export interface UserChatsResponse {
 }
 
 export function RecentChatsList() {
-  const router = useRouter()
-
   const {
     data: chats = [],
     isLoading,
@@ -89,9 +87,7 @@ export function RecentChatsList() {
             <ChatItem
               key={chat.id}
               chat={chat}
-              onClick={() =>
-                router.push(`/dashboard/student/chat/${chat.botId}/${chat.id}`)
-              }
+              href={`/dashboard/student/chat/${chat.botId}/${chat.id}`}
             />
           ))}
         </div>
@@ -102,10 +98,10 @@ export function RecentChatsList() {
 
 interface ChatItemProps {
   chat: Chat
-  onClick: () => void
+  href: string
 }
 
-function ChatItem({ chat, onClick }: ChatItemProps) {
+function ChatItem({ chat, href }: ChatItemProps) {
   const imageUrl = useImageUrl(chat.botName, 'bot')
 
   const formatTime = (date: Date) => {
@@ -131,8 +127,8 @@ function ChatItem({ chat, onClick }: ChatItemProps) {
   }
 
   return (
-    <div
-      onClick={onClick}
+    <Link
+      href={href}
       className={`
         group relative flex items-center gap-3 p-2 rounded-lg cursor-pointer
         transition-all duration-200
@@ -167,6 +163,6 @@ function ChatItem({ chat, onClick }: ChatItemProps) {
           {chat.title || 'Conversation with ' + chat.botName}
         </p>
       </div>
-    </div>
+    </Link>
   )
 }
