@@ -15,9 +15,13 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
   const [copiedCode, setCopiedCode] = useState<string | null>(null)
 
   const handleCopyCode = async (code: string) => {
-    await navigator.clipboard.writeText(code)
-    setCopiedCode(code)
-    setTimeout(() => setCopiedCode(null), 2000)
+    try {
+      await navigator.clipboard.writeText(code)
+      setCopiedCode(code)
+      setTimeout(() => setCopiedCode(null), 2000)
+    } catch (err) {
+      console.error('Copy to clipboard failed:', err)
+    }
   }
 
   // Preprocess content to handle different LaTeX formats
@@ -39,7 +43,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
     const latexPattern =
       /(?<!\$)(?<!\$\$)(\\(?:mathbf\{[^}]+\}|theta|cdot|cos|sin|tan|ge|le|circ|quad|qquad|sqrt\{[^}]+\}|frac\{[^}]+\}\{[^}]+\}|[a-zA-Z]+))(?!\$)/g
 
-    result = result.replace(latexPattern, '$$1$')
+    result = result.replace(latexPattern, '$$$1$')
 
     return result
   }

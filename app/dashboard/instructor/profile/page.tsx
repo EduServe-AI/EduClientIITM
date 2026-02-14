@@ -445,11 +445,11 @@ export default function Profile() {
                 Current Level
               </Label>
               <Select
-                value={formData.level || ''}
+                value={formData.level ?? ''}
                 onValueChange={value => {
                   setFormData(prev => ({
                     ...prev,
-                    level: value as ProgramLevelId,
+                    level: value ? (value as ProgramLevelId) : undefined,
                   }))
                 }}
               >
