@@ -76,7 +76,7 @@ export default function Home() {
                 For Instructors
               </button>
               <Link
-                href="/login"
+                href="/student"
                 className="bg-black text-white px-6 py-2 rounded-full font-medium hover:bg-gray-800 transition-all cursor-pointer text-sm"
               >
                 Get Started
@@ -117,7 +117,7 @@ export default function Home() {
               For Instructors
             </button>
             <Link
-              href="/login"
+              href="/student"
               className="block w-full text-center px-4 py-3 bg-black text-white rounded-lg font-medium hover:bg-gray-800 transition-colors cursor-pointer mt-4"
             >
               Get Started
@@ -270,14 +270,14 @@ export default function Home() {
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {[
-                'Statistics I & II',
+                'Statistics',
                 'Python Programming',
                 'Machine Learning',
                 'Deep Learning',
                 'DBMS & SQL',
                 'Mathematics',
                 'Business Analytics',
-                'System Commands',
+                'App Development',
               ].map((subject, idx) => (
                 <div
                   key={idx}
@@ -340,7 +340,8 @@ export default function Home() {
               <div className="order-2 relative">
                 <div className="relative overflow-hidden rounded-2xl aspect-[4/3] shadow-2xl group">
                   <Image
-                    src="/Instructor.jpeg"
+                    // src="/Instructor.jpeg"
+                    src="/online-tutorials-concept_52683-37480.avif"
                     alt="Instructor Teaching"
                     fill
                     className="object-cover transition-transform duration-700 ease-in-out scale-105 group-hover:scale-100"
@@ -373,7 +374,7 @@ export default function Home() {
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Link
-                href="/login"
+                href="/student"
                 className="px-10 py-4 bg-black text-white rounded-full font-bold text-lg hover:bg-gray-900 transition-all cursor-pointer shadow-2xl hover:shadow-black/20"
               >
                 Get Started Now

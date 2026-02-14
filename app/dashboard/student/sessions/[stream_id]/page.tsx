@@ -142,7 +142,7 @@ export default function SessionCall() {
         })
         .catch(error => {
           console.error('Error joining call:', error)
-          toast.error('Failed to join the session')
+          toast.warning('Still there is time ')
         })
     }
 
