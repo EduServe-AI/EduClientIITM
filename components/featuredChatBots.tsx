@@ -1,14 +1,13 @@
 'use client'
 
 import FeaturedChatBotCard from '@/components/featuredChatBotCard'
-import { apiService } from '@/lib/api'
+import { getFeatureChatBotsQueryFn } from '@/lib/api'
 import { ProgramLevelId } from '@/types/types'
 import { Tooltip } from '@radix-ui/react-tooltip'
+import { useQuery } from '@tanstack/react-query'
 import WheelGesturesPlugin from 'embla-carousel-wheel-gestures'
 import { Info } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
-import { toast } from 'sonner'
 import { Button } from './ui/button'
 import { Carousel, CarouselContent, CarouselItem } from './ui/carousel'
 import { Skeleton } from './ui/skeleton'
@@ -30,31 +29,42 @@ interface ResponseType {
 }
 
 export default function FeauturedChatBots() {
-  const [chatBots, setChatBots] = useState<ChatBot[]>([])
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  // const [chatBots, setChatBots] = useState<ChatBot[]>([])
+  // const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const router = useRouter()
 
-  // useEffect to get the featured instructors
-  useEffect(() => {
-    setIsLoading(true)
-    async function fetchChatBots() {
-      try {
-        const data = await apiService<ResponseType>('/bot/featured')
-        const chatbots = data.data.featuredChatBots
-        console.log('ChatBots', chatbots)
-        setChatBots(chatbots)
-      } catch {
-        console.error('Failed to Fetch Featured ChatBots')
-        toast.error('Failed to Fetch Featured ChatBOts')
-        return
-      } finally {
-        setIsLoading(false)
-      }
-    }
+  const {
+    data: chatBots = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ['getFeatureChatBots'],
+    queryFn: getFeatureChatBotsQueryFn,
+  })
 
-    fetchChatBots()
-  }, [])
+  // useEffect to get the featured instructors
+  // useEffect(() => {
+  //   setIsLoading(true)
+  //   async function fetchChatBots() {
+  //     try {
+  //       const data = await apiService<ResponseType>('/bot/featured')
+  //       const chatbots = data.data.featuredChatBots
+  //       console.log('ChatBots', chatbots)
+  //       setChatBots(chatbots)
+  //     } catch {
+  //       console.error('Failed to Fetch Featured ChatBots')
+  //       toast.error('Failed to Fetch Featured ChatBOts')
+  //       return
+  //     } finally {
+  //       setIsLoading(false)
+  //     }
+  //   }
+
+  //   fetchChatBots()
+  // }, [])
+
   return (
     <div className="w-full mb-8 mt-8">
       <div className="flex items-center justify-between mb-2">

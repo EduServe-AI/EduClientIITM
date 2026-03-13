@@ -38,11 +38,28 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   response => response,
   error => {
+    console.log(error, 'test axios', error.response?.status, 'status')
+    const status = error.response?.status
     // Extract error message similar to your apiService logic
     let customError =
       error.response?.data?.error ||
       error.response?.data?.message ||
       error.message
+
+    // Handle "no data" scenarios globally
+    const isNoData =
+      status === 404 ||
+      status === 204 ||
+      (typeof customError === 'string' &&
+        /no data|not found|empty/i.test(customError))
+
+    if (isNoData) {
+      return Promise.resolve({
+        data: {
+          data: [],
+        },
+      })
+    }
 
     if (typeof customError === 'object' && customError !== null) {
       customError = JSON.stringify(customError)

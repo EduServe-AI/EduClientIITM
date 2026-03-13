@@ -1,8 +1,8 @@
 'use client'
 
-import { apiService } from '@/lib/api'
+import { getFeatureChatBotsQueryFn } from '@/lib/api'
+import { useQuery } from '@tanstack/react-query'
 import WheelGesturesPlugin from 'embla-carousel-wheel-gestures'
-import { useEffect, useState } from 'react'
 import FeaturedChatBotCard from './featuredChatBotCard'
 import { Carousel, CarouselContent, CarouselItem } from './ui/carousel'
 
@@ -19,25 +19,35 @@ interface ChatBot {
 }
 
 export function RecommendedBots() {
-  const [bots, setBots] = useState<ChatBot[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  // const [bots, setBots] = useState<ChatBot[]>([])
+  // const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(() => {
-    async function fetchRecentBots() {
-      try {
-        const response = await apiService<{
-          data: { recommendedBots: ChatBot[] }
-        }>('/bot/recommended')
-        setBots(response.data.recommendedBots)
-      } catch (error) {
-        console.error('Failed to fetch recent chats:', error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
+  const {
+    data: bots = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ['recommendedBots'],
+    queryFn: getFeatureChatBotsQueryFn,
+  })
 
-    fetchRecentBots()
-  }, [])
+  // useEffect(() => {
+  //   async function fetchRecentBots() {
+  //     try {
+  //       const response = await apiService<{
+  //         data: { recommendedBots: ChatBot[] }
+  //       }>('/bot/recommended')
+  //       setBots(response.data.recommendedBots)
+  //     } catch (error) {
+  //       console.error('Failed to fetch recent chats:', error)
+  //     } finally {
+  //       setIsLoading(false)
+  //     }
+  //   }
+
+  //   fetchRecentBots()
+  // }, [])
 
   if (isLoading) {
   }

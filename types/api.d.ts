@@ -17,6 +17,22 @@ export type searchResponseType = {
   }
 }
 
+export type featureChatBotsResponseType = {
+  message: string
+  httpCode: number
+  data: {
+    featuredChatBots: BotType[]
+  }
+}
+
+export type recommendedBotsResponseType = {
+  message: string
+  httpCode: number
+  data: {
+    recommendedBots: BotType[]
+  }
+}
+
 export type FeaturedInstructorType = {
   id: string
   level: ProgramLevelId
