@@ -95,7 +95,8 @@ function getSubjectIcon(
 
 export default function SubjectSelector({
   selectedLevel,
-  onBack,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onBack: _onBack,
 }: SubjectSelectorProps) {
   if (!selectedLevel) {
     toast.error('No selected Programme Level')

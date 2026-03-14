@@ -2,12 +2,10 @@
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { apiService } from '@/lib/api'
 import { saveAccessToken } from '@/lib/auth'
 import { EyeClosed, EyeOff, Loader2 } from 'lucide-react'
 import Image from 'next/image'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'sonner'
@@ -161,9 +159,6 @@ export default function StudentSignup({ setIsSignin }: StudentSignupProps) {
 
       {/* Footer links */}
       <div className="flex flex-wrap justify-center gap-x-3 gap-y-1 text-[11px] text-[#0a66c2]/70 pt-8 mt-auto">
-        {/* <Link href="#" className="hover:text-[#0a66c2] transition-colors">Copyright Policy</Link>
-        <Link href="#" className="hover:text-[#0a66c2] transition-colors">Privacy Policy</Link>
-        <Link href="#" className="hover:text-[#0a66c2] transition-colors">User Agreement</Link> */}
         <span className="text-gray-400">EduServe © 2026</span>
       </div>
     </>

@@ -1,12 +1,12 @@
 'use client'
 import { Button } from '@/components/ui/button'
-import { useIsMobile } from '@/hooks/use-mobile'
+// import { useIsMobile } from '@/hooks/use-mobile'
 import { apiService } from '@/lib/api'
 import { AvailabilityType, OnboardingFormData } from '@/types/types'
 import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
 import Verification from '../components/verification'
@@ -146,6 +146,7 @@ function CompletionBurst() {
 //        'celebrating' = jumps up with arms raised when step completes
 type StudentMood = 'peeking' | 'hiding' | 'celebrating'
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function PeekingStudent({ mood }: { mood: StudentMood }) {
   return (
     <motion.div
@@ -411,9 +412,10 @@ const initialAvailability = (): AvailabilityType => {
 // ─── Main component ─────────────────────────────────────────────────────────
 export default function InstructorOnboarding() {
   const [currentStep, setCurrentStep] = useState(1)
-  const isMobile = useIsMobile()
+  // const isMobile = useIsMobile()
   const router = useRouter()
   const [isPending, setIsPending] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [studentMood, setStudentMood] = useState<StudentMood>('peeking')
 
   const [formData, setFormData] = useState<OnboardingFormData>({

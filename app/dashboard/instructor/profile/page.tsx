@@ -32,7 +32,7 @@ import { EditSkills } from './components/editSkills'
 interface ProfileData {
   username: string
   email: string
-  level: ProgramLevelId
+  level?: ProgramLevelId
   bio: string
   iitmProfileUrl?: string
   githubUrl?: string
@@ -281,7 +281,7 @@ export default function Profile() {
         instructorProfile: {
           ...instructor.instructorProfile,
           bio: formData.bio,
-          level: formData.level,
+          level: formData.level as ProgramLevelId,
           githubUrl: formData.githubUrl,
           linkedinUrl: formData.linkedinUrl,
           skills: formData.skills,

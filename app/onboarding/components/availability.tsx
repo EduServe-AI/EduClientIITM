@@ -1,6 +1,5 @@
 'use client'
 
-import { Card, CardContent } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import {
   Select,
@@ -12,8 +11,7 @@ import {
 import { Switch } from '@/components/ui/switch'
 import type { OnboardingFormData } from '@/types/types'
 import { DayType } from '@/types/types'
-import { CalendarDays, MinusCircle, PlusCircle } from 'lucide-react'
-import { toast } from 'sonner'
+import { MinusCircle, PlusCircle } from 'lucide-react'
 
 export const weekdays: DayType[] = [
   'Monday',
