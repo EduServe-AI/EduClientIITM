@@ -8,12 +8,7 @@ import { Carousel, CarouselContent, CarouselItem } from './ui/carousel'
 import { Skeleton } from './ui/skeleton'
 
 export function RecentChats() {
-  const {
-    data: chats = [],
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
+  const { data: chats = [], isLoading } = useQuery({
     queryKey: ['recent-chats'],
     queryFn: getRecentChats,
   })

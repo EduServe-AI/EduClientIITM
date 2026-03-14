@@ -6,48 +6,23 @@ import WheelGesturesPlugin from 'embla-carousel-wheel-gestures'
 import FeaturedChatBotCard from './featuredChatBotCard'
 import { Carousel, CarouselContent, CarouselItem } from './ui/carousel'
 
-interface ChatBot {
-  id: string
-  name: string
-  description: string
-  level: string
-  numInteractions: number
-  course?: {
-    id: string
-    name: string
-  }
-}
+// interface ChatBot {
+//   id: string
+//   name: string
+//   description: string
+//   level: string
+//   numInteractions: number
+//   course?: {
+//     id: string
+//     name: string
+//   }
+// }
 
 export function RecommendedBots() {
-  // const [bots, setBots] = useState<ChatBot[]>([])
-  // const [isLoading, setIsLoading] = useState(true)
-
-  const {
-    data: bots = [],
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
+  const { data: bots = [], isLoading } = useQuery({
     queryKey: ['recommendedBots'],
     queryFn: getFeatureChatBotsQueryFn,
   })
-
-  // useEffect(() => {
-  //   async function fetchRecentBots() {
-  //     try {
-  //       const response = await apiService<{
-  //         data: { recommendedBots: ChatBot[] }
-  //       }>('/bot/recommended')
-  //       setBots(response.data.recommendedBots)
-  //     } catch (error) {
-  //       console.error('Failed to fetch recent chats:', error)
-  //     } finally {
-  //       setIsLoading(false)
-  //     }
-  //   }
-
-  //   fetchRecentBots()
-  // }, [])
 
   if (isLoading) {
   }

@@ -2,7 +2,6 @@
 
 import FeaturedChatBotCard from '@/components/featuredChatBotCard'
 import { getFeatureChatBotsQueryFn } from '@/lib/api'
-import { ProgramLevelId } from '@/types/types'
 import { Tooltip } from '@radix-ui/react-tooltip'
 import { useQuery } from '@tanstack/react-query'
 import WheelGesturesPlugin from 'embla-carousel-wheel-gestures'
@@ -12,58 +11,14 @@ import { Button } from './ui/button'
 import { Carousel, CarouselContent, CarouselItem } from './ui/carousel'
 import { Skeleton } from './ui/skeleton'
 import { TooltipContent, TooltipTrigger } from './ui/tooltip'
-// Defining the shape of instructor object
-interface ChatBot {
-  id: string
-  name: string
-  description: string
-  level: ProgramLevelId
-  numInteractions: number
-}
-
-// Defining the shape of the api response
-interface ResponseType {
-  data: {
-    featuredChatBots: ChatBot[]
-  }
-}
 
 export default function FeauturedChatBots() {
-  // const [chatBots, setChatBots] = useState<ChatBot[]>([])
-  // const [isLoading, setIsLoading] = useState<boolean>(false)
-
   const router = useRouter()
 
-  const {
-    data: chatBots = [],
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
+  const { data: chatBots = [], isLoading } = useQuery({
     queryKey: ['getFeatureChatBots'],
     queryFn: getFeatureChatBotsQueryFn,
   })
-
-  // useEffect to get the featured instructors
-  // useEffect(() => {
-  //   setIsLoading(true)
-  //   async function fetchChatBots() {
-  //     try {
-  //       const data = await apiService<ResponseType>('/bot/featured')
-  //       const chatbots = data.data.featuredChatBots
-  //       console.log('ChatBots', chatbots)
-  //       setChatBots(chatbots)
-  //     } catch {
-  //       console.error('Failed to Fetch Featured ChatBots')
-  //       toast.error('Failed to Fetch Featured ChatBOts')
-  //       return
-  //     } finally {
-  //       setIsLoading(false)
-  //     }
-  //   }
-
-  //   fetchChatBots()
-  // }, [])
 
   return (
     <div className="w-full mb-8 mt-8">
