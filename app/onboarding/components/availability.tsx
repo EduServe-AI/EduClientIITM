@@ -1,3 +1,5 @@
+'use client'
+
 import { Card, CardContent } from '@/components/ui/card'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import {
@@ -11,6 +13,7 @@ import { Switch } from '@/components/ui/switch'
 import type { OnboardingFormData } from '@/types/types'
 import { DayType } from '@/types/types'
 import { CalendarDays, MinusCircle, PlusCircle } from 'lucide-react'
+import { toast } from 'sonner'
 
 export const weekdays: DayType[] = [
   'Monday',
@@ -22,7 +25,6 @@ export const weekdays: DayType[] = [
   'Sunday',
 ]
 
-// --- Helper to generate time options ---
 export const generateTimeOptions = () => {
   const options = []
   for (let h = 0; h < 24; h++) {
@@ -36,14 +38,10 @@ export const generateTimeOptions = () => {
   }
   return options
 }
+
 export const timeOptions = generateTimeOptions()
 
-export interface AvailabilityProps {
-  // formData: {
-  //   availability: {
-  //     [key in DayType]: { isEnabled: boolean; slots: TimeSlot[] }
-  //   }
-  // }
+interface AvailabilityProps {
   formData: OnboardingFormData
   setFormData: React.Dispatch<React.SetStateAction<OnboardingFormData>>
 }
@@ -52,7 +50,6 @@ export default function Availability({
   formData,
   setFormData,
 }: AvailabilityProps) {
-  // --- Handlers for Availability Changes ---
   const handleDayToggle = (day: DayType, checked: boolean) => {
     setFormData(prev => ({
       ...prev,
@@ -87,7 +84,7 @@ export default function Availability({
       const newSlots = [
         ...prev.availability[day].slots,
         { from: '19:00', to: '20:00' },
-      ] // Default evening slot
+      ]
       return {
         ...prev,
         availability: {
@@ -113,17 +110,15 @@ export default function Availability({
     })
   }
 
-  // Apply Monday's schedule to all other days
   const applyMondayToAllDays = () => {
     const mondaySchedule = formData.availability.Monday
     setFormData(prev => {
       const newAvailability = { ...prev.availability }
       weekdays.slice(1).forEach(day => {
-        // Skip Monday itself
         newAvailability[day] = {
           isEnabled: mondaySchedule.isEnabled,
-          slots: mondaySchedule.slots.map(slot => ({ ...slot })), // Deep copy slots
-        } // changed
+          slots: mondaySchedule.slots.map(slot => ({ ...slot })),
+        }
       })
       return {
         ...prev,
@@ -132,143 +127,155 @@ export default function Availability({
     })
   }
 
+  // const handleNext = () => {
+  //   const hasAnySlot = Object.values(formData.availability).some(
+  //     day => day.isEnabled && day.slots.length > 0
+  //   )
+
+  //   if (!hasAnySlot) {
+  //     toast.error('Please set at least one availability slot')
+  //     return
+  //   }
+
+  //   onNext()
+  // }
+
   return (
-    <section className="max-w-xl mx-auto w-full animate-in fade-in duration-500">
-      <header className="mb-8 text-center flex flex-row gap-3 items-center justify-center">
-        <CalendarDays size={30} />
-        <h3 className="text-3xl font-semibold text-gray-800">Availability</h3>
-      </header>
+    <div className="w-full h-screen">
+      {/* Info Box */}
+      <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <p className="text-sm text-blue-800">
+          Set your weekly availability. Students can only book sessions during
+          these times.
+        </p>
+      </div>
 
-      {/* Card displaying timings */}
-      <Card className="bg-white shadow-sm border-gray-200/80 h-95">
-        <ScrollArea className="h-80">
-          {/* <CardHeader>
-            <div className="flex items-center space-x-3 ">
-              <CalendarDays className="w-6 h-6 text-violet-600" />
-              <CardTitle className="text-xl font-semibold text-gray-800">
-                Weekly Schedule
-              </CardTitle>
-            </div>
-            <CardDescription>
-              You can adjust this schedule at any time from your account
-              settings.
-            </CardDescription>
-          </CardHeader> */}
-          <CardContent className="space-y-4">
-            {weekdays.map(day => (
-              <div
-                key={day}
-                className="p-4 border rounded-lg bg-gray-50/50 transition-all"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
-                    <Switch
-                      checked={formData.availability[day].isEnabled}
-                      onCheckedChange={checked => handleDayToggle(day, checked)}
-                    />
-                    <span className="font-medium text-gray-700 w-28 text-base">
-                      {day}
-                    </span>
-                  </div>
-                  {formData.availability[day]?.isEnabled && (
-                    <button
-                      onClick={() => addSlot(day)}
-                      className="flex items-center text-sm font-medium text-violet-600 hover:text-violet-800 transition-colors"
-                    >
-                      <PlusCircle className="w-4 h-4 mr-2" />
-                      Add slot
-                    </button>
-                  )}
+      {/* Availability Schedule */}
+      <ScrollArea className="h-[400px] rounded-lg border border-gray-200 p-4">
+        <div className="space-y-4 pr-4">
+          {weekdays.map(day => (
+            <div
+              key={day}
+              className="p-4 border rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors"
+            >
+              {/* Day Header */}
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <Switch
+                    checked={formData.availability[day].isEnabled}
+                    onCheckedChange={checked => handleDayToggle(day, checked)}
+                  />
+                  <span className="font-semibold text-gray-800 w-28">
+                    {day}
+                  </span>
                 </div>
-
-                {formData.availability[day]?.isEnabled ? (
-                  <div className="pl-12 pt-3 space-y-3">
-                    <div className="flex flex-col">
-                      {formData.availability[day].slots.length > 0 ? (
-                        formData.availability[day].slots.map((slot, index) => (
-                          <div
-                            key={index}
-                            className="flex items-center space-x-3 space-y-3 animate-in fade-in duration-300"
-                          >
-                            <Select
-                              value={slot.from}
-                              onValueChange={value =>
-                                handleSlotChange(day, index, 'from', value)
-                              }
-                            >
-                              <SelectTrigger className="w-40 h-10">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {timeOptions.map(option => (
-                                  <SelectItem
-                                    key={option.value}
-                                    value={option.value}
-                                  >
-                                    {option.label}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            <span className="text-gray-500 font-medium">
-                              to
-                            </span>
-                            <Select
-                              value={slot.to}
-                              onValueChange={value =>
-                                handleSlotChange(day, index, 'to', value)
-                              }
-                            >
-                              <SelectTrigger className="w-40 h-10">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {timeOptions.map(option => (
-                                  <SelectItem
-                                    key={option.value}
-                                    value={option.value}
-                                  >
-                                    {option.label}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            <button onClick={() => removeSlot(day, index)}>
-                              <MinusCircle className="w-5 h-5 text-red-400 hover:text-red-600 transition-colors" />
-                            </button>
-                          </div>
-                        ))
-                      ) : (
-                        <p className="text-sm text-gray-400 italic">
-                          Click &apos;Add slot&apos; to set your available
-                          times.
-                        </p>
-                      )}
-                      {day === 'Monday' && (
-                        <p className="mt-2 flex justify-start items-start">
-                          To apply this slot to all days
-                          <button
-                            className="italic text-blue-900 ml-3 cursor-pointer"
-                            onClick={applyMondayToAllDays}
-                          >
-                            Click here
-                          </button>
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="pl-12 pt-3">
-                    <span className="text-sm text-gray-400 italic">
-                      Unavailable
-                    </span>
-                  </div>
+                {formData.availability[day]?.isEnabled && (
+                  <button
+                    onClick={() => addSlot(day)}
+                    className="flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors"
+                  >
+                    <PlusCircle className="w-4 h-4" />
+                    Add slot
+                  </button>
                 )}
               </div>
-            ))}
-          </CardContent>
-        </ScrollArea>
-      </Card>
-    </section>
+
+              {/* Time Slots */}
+              {formData.availability[day]?.isEnabled ? (
+                <div className="pl-12 space-y-2">
+                  {formData.availability[day].slots.length > 0 ? (
+                    <>
+                      {formData.availability[day].slots.map((slot, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center gap-2 animate-in fade-in duration-300"
+                        >
+                          <Select
+                            value={slot.from}
+                            onValueChange={value =>
+                              handleSlotChange(day, index, 'from', value)
+                            }
+                          >
+                            <SelectTrigger className="w-32 h-9 text-sm">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent className="max-h-48">
+                              {timeOptions.map(option => (
+                                <SelectItem
+                                  key={option.value}
+                                  value={option.value}
+                                  className="text-sm"
+                                >
+                                  {option.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+
+                          <span className="text-gray-400 text-sm">to</span>
+
+                          <Select
+                            value={slot.to}
+                            onValueChange={value =>
+                              handleSlotChange(day, index, 'to', value)
+                            }
+                          >
+                            <SelectTrigger className="w-32 h-9 text-sm">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent className="max-h-48">
+                              {timeOptions.map(option => (
+                                <SelectItem
+                                  key={option.value}
+                                  value={option.value}
+                                  className="text-sm"
+                                >
+                                  {option.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+
+                          <button
+                            onClick={() => removeSlot(day, index)}
+                            className="text-red-400 hover:text-red-600 transition-colors"
+                          >
+                            <MinusCircle className="w-5 h-5" />
+                          </button>
+                        </div>
+                      ))}
+
+                      {day === 'Monday' && (
+                        <button
+                          onClick={applyMondayToAllDays}
+                          className="text-xs font-medium text-blue-600 hover:text-blue-800 mt-2 flex items-center gap-1"
+                        >
+                          → Apply to all days
+                        </button>
+                      )}
+                    </>
+                  ) : (
+                    <p className="text-sm text-gray-400 italic">
+                      No slots added yet
+                    </p>
+                  )}
+                </div>
+              ) : (
+                <div className="pl-12">
+                  <span className="text-sm text-gray-400 italic">
+                    Unavailable
+                  </span>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </ScrollArea>
+
+      {/* Info */}
+      <p className="text-xs text-gray-500 mt-4">
+        📌 You can modify your availability at any time from your dashboard
+      </p>
+    </div>
   )
 }

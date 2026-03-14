@@ -1,18 +1,20 @@
 'use client'
-import { useState } from 'react'
-import InstructorLogin from '../components/instructorLogin'
-import InstructorSignup from '../components/instructorSignup'
 
-export default function Instructor() {
+import { useState } from 'react'
+import ImageAuthLayout from '../components/image-auth-layout'
+import InstructorLogin from '../components/instructor-login'
+import InstructorSignup from '../components/instructor-signup'
+
+export default function InstructorPage() {
   const [isSignin, setIsSignin] = useState<boolean>(true)
 
   return (
-    <div>
+    <ImageAuthLayout mode="instructor">
       {isSignin ? (
-        <InstructorLogin isSignin={isSignin} setIsSignin={setIsSignin} />
+        <InstructorLogin setIsSignin={setIsSignin} />
       ) : (
-        <InstructorSignup isSignin={isSignin} setIsSignin={setIsSignin} />
+        <InstructorSignup setIsSignin={setIsSignin} />
       )}
-    </div>
+    </ImageAuthLayout>
   )
 }

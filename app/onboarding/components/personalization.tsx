@@ -1,11 +1,15 @@
+'use client'
+
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import type { OnboardingFormData } from '@/types/types'
-import { UploadCloud, User2, UserCog } from 'lucide-react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { Camera, Github, Linkedin, Sparkles, User2 } from 'lucide-react'
 import Image from 'next/image'
 import React, { useRef, useState } from 'react'
 import { toast } from 'sonner'
+import { FileText } from 'lucide-react'
 
 interface PersonalizationProps {
   formData: OnboardingFormData
@@ -14,7 +18,10 @@ interface PersonalizationProps {
 
 interface PersonalizationErrors {
   profilePicture?: boolean
+  about?: boolean
   bio?: boolean
+  githubUrl?: boolean
+  linkedinUrl?: boolean
 }
 
 export default function Personalization({
@@ -26,191 +33,485 @@ export default function Personalization({
     formData.profilePicture || null
   )
   const [errors, setErrors] = useState<PersonalizationErrors>({})
+  const [isDragging, setIsDragging] = useState(false)
+  const aboutLength = formData.about.trim().length
+  const aboutPercent = Math.min((aboutLength / 500) * 100, 100)
+  const aboutGood = aboutLength >= 50 && aboutLength <= 500
+  const bioLength = formData.bio.trim().length
+  const bioPercent = Math.min((bioLength / 500) * 100, 100)
+  const bioGood = bioLength >= 50 && bioLength <= 500
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (!file) {
-      toast.error('No file selected')
-      return
-    }
-
-    // validating the file size ( max 2MB )
+  const processFile = (file: File) => {
     if (file.size > 2 * 1024 * 1024) {
       toast.error('File size exceeds 2MB. Please upload a smaller image.')
       return
     }
-
-    // creating and setting a preview url
     const reader = new FileReader()
     reader.onloadend = () => {
       const result = reader.result as string
       setPreviewUrl(result)
-
-      // updating the parent state with the file object
-      setFormData(prev => ({
-        ...prev,
-        profilePicture: result,
-      }))
+      setFormData(prev => ({ ...prev, profilePicture: result }))
       setErrors(prev => ({ ...prev, profilePicture: false }))
     }
     reader.readAsDataURL(file)
   }
-  return (
-    <section className="max-w-4xl mx-auto w-full">
-      <header className="mb-8 text-center flex flex-row gap-3 items-center justify-center">
-        <UserCog size={30} />
-        <h3 className="text-3xl font-semibold text-gray-800">
-          Personalization
-        </h3>
-      </header>
 
-      {/* main container - grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 items-start">
-        {/* Left column - Profile picture */}
-        <div className="md:col-span-1 flex flex-col items-center text-center">
-          <Label className="font-semibold text-gray-500 mb-6">
-            Profile Picture
-          </Label>
-          <Input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleFileChange}
-            accept="image/png, image/jpeg, image/webp"
-            className="hidden"
-          />
-          <div
-            onClick={() => fileInputRef.current?.click()}
-            onBlur={() => {
-              if (!formData.profilePicture) {
-                setErrors(prev => ({ ...prev, profilePicture: true }))
-              }
-            }}
-            tabIndex={0}
-            className={`relative w-40 h-40 rounded-full border-2 border-dashed flex items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors group ${
-              errors.profilePicture ? 'border-red-500' : ''
-            }`}
-          >
-            {previewUrl ? (
-              <Image
-                src={previewUrl}
-                alt="Profile Preview"
-                fill
-                className="rounded-full object-cover"
-              />
-            ) : (
-              <User2 className="w-16 h-16 text-gray-400" />
-            )}
-            <div className="absolute inset-0 rounded-full bg-opacity-0 group-hover:bg-opacity-40 bg-opacity-0 group-hover:bg-opacity-40 flex items-center justify-center transition-opacity">
-              <UploadCloud className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
-            </div>
-          </div>
-          {errors.profilePicture && (
-            <p className="text-red-500 text-sm mt-2">
-              Profile picture is required.
-            </p>
-          )}
-          <p className="text-xs text-gray-500 mt-3">
-            Upload a professional photo. (Max 2MB)
-          </p>
-        </div>
-        {/* Right column - Bio and Links */}
-        <div className="md:col-span-2 space-y-6">
-          {/* Bio Textarea */}
-          <div className="space-y-2">
-            <Label htmlFor="bio" className="text-md font-medium">
-              Bio
-            </Label>
-            <Textarea
-              id="bio"
-              placeholder="Tell us a little about yourself, your teaching style, and your expertise."
-              value={formData.bio}
-              onChange={e => {
-                const value = e.target.value
-                setFormData(prev => ({ ...prev, bio: value }))
-                if (value.trim().length < 50 || value.trim().length > 500) {
-                  setErrors(prev => ({ ...prev, bio: true }))
-                } else {
-                  setErrors(prev => ({ ...prev, bio: false }))
-                }
-              }}
-              onBlur={e => {
-                const value = e.target.value.trim()
-                if (value.length < 50 || value.length > 500) {
-                  setErrors(prev => ({ ...prev, bio: true }))
-                }
-              }}
-              className={`min-h-[120px] transition-all duration-200 focus:ring-2 focus:ring-blue-500 ${
-                errors.bio ? 'border-red-500 focus-visible:ring-red-500' : ''
-              }`}
-              rows={3}
-              maxLength={500}
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) processFile(file)
+  }
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragging(false)
+    const file = e.dataTransfer.files?.[0]
+    if (file && file.type.startsWith('image/')) processFile(file)
+  }
+
+  return (
+    <div className="w-full space-y-8">
+      {/* ── PROFILE PICTURE ─────────────────────────────────────────── */}
+      <div className="space-y-3">
+        <Label className="text-sm font-semibold text-gray-700 tracking-wide uppercase">
+          Profile Picture
+        </Label>
+
+        <div className="flex items-start gap-6">
+          {/* Avatar preview circle */}
+          <div className="relative shrink-0 group">
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              accept="image/png, image/jpeg, image/webp"
+              className="hidden"
             />
-            {errors.bio && (
-              <p className="text-red-500 text-sm">
-                Bio must be between 50 and 500 characters.
+
+            {/* Outer ring pulse when no image */}
+            {!previewUrl && (
+              <motion.div
+                animate={{ scale: [1, 1.06, 1], opacity: [0.4, 0.7, 0.4] }}
+                transition={{
+                  duration: 2.4,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
+                className="absolute -inset-1.5 rounded-full border-2 border-dashed border-blue-300 pointer-events-none"
+              />
+            )}
+
+            {/* Avatar circle */}
+            <motion.div
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => fileInputRef.current?.click()}
+              onDragOver={e => {
+                e.preventDefault()
+                setIsDragging(true)
+              }}
+              onDragLeave={() => setIsDragging(false)}
+              onDrop={handleDrop}
+              className={`relative w-28 h-28 rounded-full cursor-pointer overflow-hidden transition-all duration-200 ${
+                errors.profilePicture
+                  ? 'ring-2 ring-red-400 ring-offset-2'
+                  : previewUrl
+                    ? 'ring-2 ring-blue-400 ring-offset-2 shadow-lg shadow-blue-100'
+                    : isDragging
+                      ? 'ring-2 ring-blue-400 ring-offset-2 bg-blue-50'
+                      : 'bg-gradient-to-br from-gray-100 to-gray-200'
+              }`}
+            >
+              <AnimatePresence mode="wait">
+                {previewUrl ? (
+                  <motion.div
+                    key="preview"
+                    initial={{ opacity: 0, scale: 1.1 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="absolute inset-0"
+                  >
+                    <Image
+                      src={previewUrl}
+                      alt="Profile Preview"
+                      fill
+                      className="object-cover"
+                    />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="placeholder"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="absolute inset-0 flex flex-col items-center justify-center gap-1"
+                  >
+                    <User2 className="w-9 h-9 text-gray-400" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Hover overlay */}
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-200 flex items-center justify-center">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileHover={{ opacity: 1, scale: 1 }}
+                  className="opacity-0 group-hover:opacity-100 flex flex-col items-center gap-1 transition-opacity duration-200"
+                >
+                  <Camera className="w-6 h-6 text-white" />
+                  <span className="text-white text-[10px] font-semibold">
+                    {previewUrl ? 'Change' : 'Upload'}
+                  </span>
+                </motion.div>
+              </div>
+            </motion.div>
+
+            {/* Green check badge when uploaded */}
+            <AnimatePresence>
+              {previewUrl && (
+                <motion.div
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0, opacity: 0 }}
+                  className="absolute -bottom-1 -right-1 w-7 h-7 bg-green-500 rounded-full flex items-center justify-center border-2 border-white shadow-md"
+                >
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path
+                      d="M2 6l3 3 5-5"
+                      stroke="white"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Upload instructions */}
+          <div className="flex-1 pt-1 space-y-3">
+            <div>
+              <p className="text-sm font-medium text-gray-800">
+                {previewUrl ? 'Looking great! 👋' : 'Upload your photo'}
+              </p>
+              <p className="text-xs text-gray-400 mt-0.5">
+                PNG, JPG or WebP · Max 2MB
+              </p>
+            </div>
+
+            {/* Drop zone card */}
+            <motion.div
+              whileHover={{ scale: 1.01 }}
+              onClick={() => fileInputRef.current?.click()}
+              onDragOver={e => {
+                e.preventDefault()
+                setIsDragging(true)
+              }}
+              onDragLeave={() => setIsDragging(false)}
+              onDrop={handleDrop}
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl border-2 border-dashed cursor-pointer transition-all duration-200 ${
+                isDragging
+                  ? 'border-blue-400 bg-blue-50'
+                  : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50/40'
+              }`}
+            >
+              <div
+                className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
+                  isDragging ? 'bg-blue-100' : 'bg-gray-100'
+                }`}
+              >
+                <Camera
+                  size={15}
+                  className={isDragging ? 'text-blue-500' : 'text-gray-500'}
+                />
+              </div>
+              <div>
+                <p className="text-xs font-medium text-gray-700">
+                  {isDragging ? 'Drop it here!' : 'Click or drag & drop'}
+                </p>
+                <p className="text-[11px] text-gray-400">
+                  to upload your picture
+                </p>
+              </div>
+            </motion.div>
+
+            {errors.profilePicture && (
+              <p className="text-red-500 text-xs">
+                Profile picture is required
               </p>
             )}
           </div>
+        </div>
+      </div>
 
-          {/* Github URL */}
-          <div className="space-y-2">
+      {/* ── DIVIDER ──────────────────────────────────────────────────── */}
+      <div className="border-t border-gray-100" />
+
+      {/* ── ABOUT ────────────────────────────────────────────────────── */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-lg bg-indigo-100 flex items-center justify-center">
+              <FileText size={13} className="text-indigo-500" />
+            </div>
             <Label
-              htmlFor="githubUrl"
-              className="text-sm font-medium text-gray-700 flex items-center gap-2"
+              htmlFor="about"
+              className="text-sm font-semibold text-gray-700 tracking-wide uppercase"
             >
-              <Image
-                src="/github.svg"
-                alt="GitHub"
-                width={20}
-                height={20}
-                className="text-gray-700"
-              />
-              GitHub URL (Optional)
+              About
             </Label>
-            <div className="relative">
-              <Input
-                id="githubUrl"
-                type="url"
-                placeholder="https://github.com/yourusername"
-                value={formData.githubUrl}
-                onChange={e =>
-                  setFormData({ ...formData, githubUrl: e.target.value })
-                }
-                className=""
-              />
+          </div>
+          <span
+            className={`text-xs font-medium tabular-nums transition-colors ${
+              aboutLength === 0
+                ? 'text-gray-400'
+                : aboutLength < 50
+                  ? 'text-amber-500'
+                  : aboutLength <= 500
+                    ? 'text-green-500'
+                    : 'text-red-500'
+            }`}
+          >
+            {formData.about.length} / 500
+          </span>
+        </div>
+
+        <div className="relative">
+          <Textarea
+            id="about"
+            placeholder="Tell us a bit about your background, education, and professional experience..."
+            value={formData.about}
+            onChange={e => {
+              const value = e.target.value
+              setFormData(prev => ({ ...prev, about: value }))
+              const len = value.trim().length
+              setErrors(prev => ({ ...prev, about: len < 50 || len > 500 }))
+            }}
+            onBlur={e => {
+              const len = e.target.value.trim().length
+              if (len < 50 || len > 500)
+                setErrors(prev => ({ ...prev, about: true }))
+            }}
+            className={`min-h-32 resize-none text-sm leading-relaxed transition-all duration-200 rounded-xl border-gray-200 focus:ring-2 focus:ring-indigo-400 focus:border-transparent pr-4 ${
+              errors.about ? 'border-red-300 focus:ring-red-400' : ''
+            }`}
+            rows={4}
+            maxLength={500}
+          />
+
+          {/* Character progress bar */}
+          <div className="mt-2 h-1 w-full bg-gray-100 rounded-full overflow-hidden">
+            <motion.div
+              animate={{ width: `${aboutPercent}%` }}
+              transition={{ duration: 0.3 }}
+              className={`h-full rounded-full transition-colors ${
+                aboutLength < 50
+                  ? 'bg-amber-400'
+                  : aboutGood
+                    ? 'bg-green-400'
+                    : 'bg-red-400'
+              }`}
+            />
+          </div>
+        </div>
+
+        <AnimatePresence>
+          {errors.about && (
+            <motion.p
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="text-red-500 text-xs"
+            >
+              {aboutLength < 50
+                ? `${50 - aboutLength} more characters needed`
+                : 'About cannot exceed 500 characters'}
+            </motion.p>
+          )}
+          {aboutGood && (
+            <motion.p
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="text-green-600 text-xs font-medium"
+            >
+              ✓ Looks great!
+            </motion.p>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* ── DIVIDER ──────────────────────────────────────────────────── */}
+      <div className="border-t border-gray-100" />
+
+      {/* ── BIO ──────────────────────────────────────────────────────── */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-lg bg-purple-100 flex items-center justify-center">
+              <Sparkles size={13} className="text-purple-500" />
+            </div>
+            <Label
+              htmlFor="bio"
+              className="text-sm font-semibold text-gray-700 tracking-wide uppercase"
+            >
+              Bio
+            </Label>
+          </div>
+          <span
+            className={`text-xs font-medium tabular-nums transition-colors ${
+              bioLength === 0
+                ? 'text-gray-400'
+                : bioLength < 50
+                  ? 'text-amber-500'
+                  : bioLength <= 500
+                    ? 'text-green-500'
+                    : 'text-red-500'
+            }`}
+          >
+            {formData.bio.length} / 500
+          </span>
+        </div>
+
+        <div className="relative">
+          <Textarea
+            id="bio"
+            placeholder="Tell us about yourself — your teaching style, areas of expertise, what students can expect from your sessions…"
+            value={formData.bio}
+            onChange={e => {
+              const value = e.target.value
+              setFormData(prev => ({ ...prev, bio: value }))
+              const len = value.trim().length
+              setErrors(prev => ({ ...prev, bio: len < 50 || len > 500 }))
+            }}
+            onBlur={e => {
+              const len = e.target.value.trim().length
+              if (len < 50 || len > 500)
+                setErrors(prev => ({ ...prev, bio: true }))
+            }}
+            className={`min-h-32 resize-none text-sm leading-relaxed transition-all duration-200 rounded-xl border-gray-200 focus:ring-2 focus:ring-blue-400 focus:border-transparent pr-4 ${
+              errors.bio ? 'border-red-300 focus:ring-red-400' : ''
+            }`}
+            rows={4}
+            maxLength={500}
+          />
+
+          {/* Character progress bar */}
+          <div className="mt-2 h-1 w-full bg-gray-100 rounded-full overflow-hidden">
+            <motion.div
+              animate={{ width: `${bioPercent}%` }}
+              transition={{ duration: 0.3 }}
+              className={`h-full rounded-full transition-colors ${
+                bioLength < 50
+                  ? 'bg-amber-400'
+                  : bioGood
+                    ? 'bg-green-400'
+                    : 'bg-red-400'
+              }`}
+            />
+          </div>
+        </div>
+
+        <AnimatePresence>
+          {errors.bio && (
+            <motion.p
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="text-red-500 text-xs"
+            >
+              {bioLength < 50
+                ? `${50 - bioLength} more characters needed`
+                : 'Bio cannot exceed 500 characters'}
+            </motion.p>
+          )}
+          {bioGood && (
+            <motion.p
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="text-green-600 text-xs font-medium"
+            >
+              ✓ Looks great!
+            </motion.p>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* ── DIVIDER ──────────────────────────────────────────────────── */}
+      <div className="border-t border-gray-100" />
+
+      {/* ── SOCIAL LINKS ─────────────────────────────────────────────── */}
+      <div className="space-y-4">
+        <p className="text-sm font-semibold text-gray-700 tracking-wide uppercase">
+          Social Links{' '}
+          <span className="text-gray-400 font-normal normal-case tracking-normal">
+            (optional)
+          </span>
+        </p>
+
+        <div className="grid grid-cols-1 gap-4">
+          {/* GitHub */}
+          <div className="group">
+            <div
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl border bg-white transition-all duration-200 focus-within:ring-2 focus-within:ring-gray-800 focus-within:border-gray-800 ${
+                errors.githubUrl
+                  ? 'border-red-300'
+                  : 'border-gray-200 hover:border-gray-300'
+              }`}
+            >
+              <div className="w-8 h-8 rounded-lg bg-gray-900 flex items-center justify-center shrink-0">
+                <Github size={15} className="text-white" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">
+                  GitHub
+                </p>
+                <input
+                  id="githubUrl"
+                  type="url"
+                  placeholder="github.com/yourusername"
+                  value={formData.githubUrl}
+                  onChange={e =>
+                    setFormData({ ...formData, githubUrl: e.target.value })
+                  }
+                  className="w-full text-sm text-gray-800 placeholder-gray-300 bg-transparent outline-none"
+                />
+              </div>
             </div>
           </div>
 
-          {/* Linkedin URL */}
-          <div className="space-y-2">
-            <Label
-              htmlFor="linkedinUrl"
-              className="text-sm font-medium text-gray-700 flex items-center gap-2"
+          {/* LinkedIn */}
+          <div className="group">
+            <div
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl border bg-white transition-all duration-200 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 ${
+                errors.linkedinUrl
+                  ? 'border-red-300'
+                  : 'border-gray-200 hover:border-blue-200'
+              }`}
             >
-              <Image
-                src="/icons8-linkedin.svg"
-                alt="LinkedIn"
-                width={20}
-                height={20}
-                className="text-[#0077B5]"
-              />
-              Linkedin URL (Optional)
-            </Label>
-            <div className="relative">
-              <Input
-                id="linkedinUrl"
-                type="url"
-                placeholder="https://linkedin.com/in/yourusername"
-                value={formData.linkedinUrl}
-                onChange={e =>
-                  setFormData({ ...formData, linkedinUrl: e.target.value })
-                }
-                className=""
-              />
+              <div className="w-8 h-8 rounded-lg bg-[#0A66C2] flex items-center justify-center shrink-0">
+                <Linkedin size={15} className="text-white" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">
+                  LinkedIn
+                </p>
+                <input
+                  id="linkedinUrl"
+                  type="url"
+                  placeholder="linkedin.com/in/yourusername"
+                  value={formData.linkedinUrl}
+                  onChange={e =>
+                    setFormData({ ...formData, linkedinUrl: e.target.value })
+                  }
+                  className="w-full text-sm text-gray-800 placeholder-gray-300 bg-transparent outline-none"
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
   )
 }
