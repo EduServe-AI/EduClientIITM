@@ -152,10 +152,10 @@ function ChatItem({ chat, href }: ChatItemProps) {
       {/* Chat info - Hidden when sidebar is collapsed */}
       <div className="flex-1 min-w-0 group-data-[state=closed]:hidden">
         <div className="flex items-center justify-between gap-2">
-          <p className="text-sm font-medium text-sidebar-foreground truncate">
+          <p className="text-sm font-medium text-sidebar-foreground truncate min-w-0">
             {chat.botName}
           </p>
-          <span className="text-xs text-muted-foreground whitespace-nowrap">
+          <span className="text-xs text-muted-foreground whitespace-nowrap flex-shrink-0">
             {formatTime(chat.lastInteractionTime)}
           </span>
         </div>
