@@ -1,19 +1,20 @@
 'use client'
 
 import { useState } from 'react'
-import StudentLogin from '../components/studentLogin'
-import StudentSignup from '../components/studentSignup'
+import ImageAuthLayout from '../components/image-auth-layout'
+import StudentLogin from '../components/student-login'
+import StudentSignup from '../components/student-signup'
 
-export default function Student() {
+export default function StudentPage() {
   const [isSignin, setIsSignin] = useState<boolean>(true)
 
   return (
-    <div>
+    <ImageAuthLayout mode="student">
       {isSignin ? (
-        <StudentLogin isSignin={isSignin} setIsSignin={setIsSignin} />
+        <StudentLogin setIsSignin={setIsSignin} />
       ) : (
-        <StudentSignup isSignin={isSignin} setIsSignin={setIsSignin} />
+        <StudentSignup setIsSignin={setIsSignin} />
       )}
-    </div>
+    </ImageAuthLayout>
   )
 }
