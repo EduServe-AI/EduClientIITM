@@ -1,6 +1,6 @@
 import { LucideIcon } from 'lucide-react'
 
-export type ProgramLevelId = 'foundation' | 'diploma' | 'bsc' | 'bs' | undefined
+export type ProgramLevelId = 'foundation' | 'diploma' | 'bsc' | 'bs'
 
 export type foundationSubjects =
   | 'Maths-I'
@@ -116,10 +116,11 @@ export type AvailabilityType = { [day in DayType]: DayAvailability }
 export type OnboardingFormData = {
   iitmProfileUrl: string
   cgpa: number
-  level: ProgramLevelId
+  level: ProgramLevelId | null
   subjects: Subjects[]
   languages: Languages[]
   profilePicture: string | null
+  about: string
   bio: string
   githubUrl: string
   linkedinUrl: string
