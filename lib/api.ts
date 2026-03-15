@@ -1,8 +1,10 @@
 import {
   CreateSessionRequest,
   CreateSessionResponse,
+  featureChatBotsResponseType,
   FeaturedInstructorsResponseType,
   InstructorProfileType,
+  recommendedBotsResponseType,
   searchInstructorResponseType,
   searchResponseType,
   UserChatsResponse,
@@ -90,6 +92,21 @@ export const getBotsQueryFn = async (search: string, level: string) => {
 
   // Return the bots array from the nested data structure
   return response.data.data.bots
+}
+
+export const getFeatureChatBotsQueryFn = async () => {
+  const response = await api.get<featureChatBotsResponseType>('/bot/featured')
+
+  // Return the bots array from the nested data structure
+  return response.data.data.featuredChatBots ?? []
+}
+
+export const getrecommendedChatBotsQueryFn = async () => {
+  const response =
+    await api.get<recommendedBotsResponseType>('/bot/recommended')
+
+  // Return the bots array from the nested data structure
+  return response.data.data.recommendedBots ?? []
 }
 
 // Searching the instructors

@@ -1,40 +1,17 @@
 'use client'
 
-import { apiService } from '@/lib/api'
+import { getRecentChats } from '@/lib/api'
+import { useQuery } from '@tanstack/react-query'
 import WheelGesturesPlugin from 'embla-carousel-wheel-gestures'
-import { useEffect, useState } from 'react'
 import ChatBotCard from './chatBotCard'
-import { Chat, UserChatsResponse } from './recentChatsList'
 import { Carousel, CarouselContent, CarouselItem } from './ui/carousel'
 import { Skeleton } from './ui/skeleton'
 
 export function RecentChats() {
-  const [chats, setChats] = useState<Chat[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    let isMounted = true
-    async function fetchRecentChats() {
-      try {
-        const response = await apiService<UserChatsResponse>('/chat/user-chats')
-        if (isMounted) {
-          setChats(response.data.chats.slice(0, 10)) // Limit to 10 most recent
-        }
-      } catch (error) {
-        console.error('Failed to fetch recent chats:', error)
-      } finally {
-        if (isMounted) {
-          setIsLoading(false)
-        }
-      }
-    }
-
-    fetchRecentChats()
-
-    return () => {
-      isMounted = false
-    }
-  }, [])
+  const { data: chats = [], isLoading } = useQuery({
+    queryKey: ['recent-chats'],
+    queryFn: getRecentChats,
+  })
 
   if (isLoading) {
     return (
