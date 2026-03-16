@@ -165,20 +165,21 @@ body {
 
 /* For Webkit-based browsers (Chrome, Safari, Edge) */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
+  height: 4px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(214, 199, 156, 0.26); /* --- Color of the track --- */
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #000000; /* --- Color of the scrollbar handle --- */
-  border-radius: 6px; /* --- Makes the handle rounded --- */
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: skyblue; /* --- Color of the handle on hover --- */
+  background: rgba(0, 0, 0, 0.45);
 }
 
 /* Contain KaTeX and code blocks within chat messages */

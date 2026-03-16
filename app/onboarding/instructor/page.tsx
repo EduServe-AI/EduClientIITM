@@ -2,18 +2,19 @@
 import { Button } from '@/components/ui/button'
 // import { useIsMobile } from '@/hooks/use-mobile'
 import { apiService } from '@/lib/api'
+import { getAccessToken, getCurrentUserId } from '@/lib/auth'
 import { AvailabilityType, OnboardingFormData } from '@/types/types'
+import { AnimatePresence, motion } from 'framer-motion'
 import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
-import Verification from '../components/verification'
+import Availability from '../components/availability'
 import Expertise from '../components/expertise'
 import Personalization from '../components/personalization'
 import Pricing from '../components/pricing'
-import Availability from '../components/availability'
+import Verification from '../components/verification'
 
 // ─── Hand-drawn tick ───────────────────────────────────────────────────────
 function HandDrawnTick() {
@@ -425,6 +426,7 @@ export default function InstructorOnboarding() {
     subjects: [],
     languages: [],
     profilePicture: null,
+    profilePictureFile: null,
     about: '',
     bio: '',
     githubUrl: '',
@@ -562,6 +564,33 @@ export default function InstructorOnboarding() {
     setStudentMood('celebrating')
     setIsPending(true)
     try {
+      // Upload profile picture to Azure if one was selected
+      if (formData.profilePictureFile) {
+        const currentUser = getCurrentUserId()
+        if (!currentUser?.userId) {
+          throw new Error('User not authenticated. Please log in again.')
+        }
+
+        const uploadFormData = new FormData()
+        uploadFormData.append('file', formData.profilePictureFile)
+        uploadFormData.append('userId', currentUser.userId)
+        uploadFormData.append('imageType', 'profile')
+
+        const accessToken = getAccessToken()
+        const uploadResponse = await fetch('/api/upload', {
+          method: 'POST',
+          body: uploadFormData,
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+
+        const uploadData = await uploadResponse.json()
+        if (!uploadResponse.ok) {
+          throw new Error(uploadData.error || 'Failed to upload profile image')
+        }
+      }
+
       await apiService('/instructor/onboarding', {
         body: {
           iitmProfileUrl: formData.iitmProfileUrl,
@@ -569,6 +598,7 @@ export default function InstructorOnboarding() {
           level: formData.level,
           subjects: formData.subjects,
           languages: formData.languages,
+          about: formData.about,
           bio: formData.bio,
           githubUrl: formData.githubUrl,
           linkedinUrl: formData.linkedinUrl,
@@ -948,7 +978,7 @@ export default function InstructorOnboarding() {
                   ) : !isStepValid() ? (
                     'Continue'
                   ) : (
-                    '🎉 Submit Application'
+                    'Submit Application'
                   )}
                 </Button>
               )}

@@ -4,11 +4,17 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import type { OnboardingFormData } from '@/types/types'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Camera, Github, Linkedin, Sparkles, User2 } from 'lucide-react'
+import {
+  Camera,
+  FileText,
+  Github,
+  Linkedin,
+  Sparkles,
+  User2,
+} from 'lucide-react'
 import Image from 'next/image'
 import React, { useRef, useState } from 'react'
 import { toast } from 'sonner'
-import { FileText } from 'lucide-react'
 
 interface PersonalizationProps {
   formData: OnboardingFormData
@@ -49,7 +55,11 @@ export default function Personalization({
     reader.onloadend = () => {
       const result = reader.result as string
       setPreviewUrl(result)
-      setFormData(prev => ({ ...prev, profilePicture: result }))
+      setFormData(prev => ({
+        ...prev,
+        profilePicture: result,
+        profilePictureFile: file,
+      }))
       setErrors(prev => ({ ...prev, profilePicture: false }))
     }
     reader.readAsDataURL(file)

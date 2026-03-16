@@ -120,6 +120,7 @@ export type OnboardingFormData = {
   subjects: Subjects[]
   languages: Languages[]
   profilePicture: string | null
+  profilePictureFile: File | null
   about: string
   bio: string
   githubUrl: string
