@@ -37,7 +37,7 @@ export default function FeauturedInstructors() {
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                className=" bg-fuchsia-50 hover:bg-gray-400 cursor-pointer"
+                className="hidden md:flex bg-fuchsia-50 hover:bg-gray-400 cursor-pointer"
                 size="icon"
               >
                 <Info size={20} className="" color="black" />

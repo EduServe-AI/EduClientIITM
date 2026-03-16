@@ -155,7 +155,7 @@ function ChatItem({ chat, href }: ChatItemProps) {
           <p className="text-sm font-medium text-sidebar-foreground truncate min-w-0">
             {chat.botName}
           </p>
-          <span className="text-xs text-muted-foreground whitespace-nowrap flex-shrink-0">
+          <span className="text-xs text-muted-foreground whitespace-nowrap flex-shrink-0 md:hidden block">
             {formatTime(chat.lastInteractionTime)}
           </span>
         </div>
