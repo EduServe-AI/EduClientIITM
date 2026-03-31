@@ -4,8 +4,11 @@ import { BRAND_ASSETS } from '@/constants/brandAssets'
 import QueryProvider from '@/contexts/queryProvider'
 import 'katex/dist/katex.min.css'
 import type { Metadata, Viewport } from 'next'
-import { Outfit } from 'next/font/google'
+import { Outfit, Inter } from 'next/font/google'
 import './globals.css'
+import { cn } from '@/lib/utils'
+
+const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -37,7 +40,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={cn('font-sans', inter.variable)}>
       <body
         className={`${outfit.variable} font-sans antialiased bg-white text-black`}
       >
