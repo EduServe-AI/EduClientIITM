@@ -4,9 +4,9 @@ import {
   Bot,
   CalendarClockIcon,
   Home,
-  LogOut,
+  LifeBuoy,
+  Send,
   Star,
-  UserCircle,
   Users,
 } from 'lucide-react'
 
@@ -61,13 +61,13 @@ export const instructorNavItems: NavItem[] = [
 // ----------- Common Footer Links -------------
 export const footerNavItems: NavItem[] = [
   {
-    title: 'Profile',
-    href: '/dashboard/profile',
-    icon: UserCircle,
+    title: 'Support',
+    href: '#',
+    icon: LifeBuoy,
   },
   {
-    title: 'Logout',
-    href: '/logout',
-    icon: LogOut,
+    title: 'Feedback',
+    href: '#',
+    icon: Send,
   },
 ]

@@ -1,12 +1,14 @@
 import TopLoader from '@/components/topLoader'
 import { Toaster } from '@/components/ui/sonner'
+import { ThemeProvider } from '@/components/ui/theme-provider'
+import { TooltipProvider } from '@/components/ui/tooltip'
 import { BRAND_ASSETS } from '@/constants/brandAssets'
 import QueryProvider from '@/contexts/queryProvider'
+import { cn } from '@/lib/utils'
 import 'katex/dist/katex.min.css'
 import type { Metadata, Viewport } from 'next'
-import { Outfit, Inter } from 'next/font/google'
+import { Inter, Outfit } from 'next/font/google'
 import './globals.css'
-import { cn } from '@/lib/utils'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
@@ -40,15 +42,24 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={cn('font-sans', inter.variable)}>
-      <body
-        className={`${outfit.variable} font-sans antialiased bg-white text-black`}
-      >
-        <QueryProvider>
-          <TopLoader />
-          {children}
-          <Toaster richColors position="top-center" />
-        </QueryProvider>
+    <html
+      suppressHydrationWarning
+      lang="en"
+      className={cn('font-sans', inter.variable)}
+    >
+      <body className={`${outfit.variable} font-sans antialiased`}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <QueryProvider>
+            <TopLoader />
+            <TooltipProvider>{children}</TooltipProvider>
+            <Toaster richColors position="top-center" />
+          </QueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

@@ -1,12 +1,17 @@
 'use client'
 
-import { AppSidebar } from '@/components/appSidebar'
-import { SidebarProvider, useSidebar } from '@/components/ui/sidebar'
+import { AppSidebar } from '@/components/asidebar/appSidebar'
+import Header from '@/components/header'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import {
+  SidebarInset,
+  SidebarProvider,
+  useSidebar,
+} from '@/components/ui/sidebar'
 import { StudentProvider } from '@/contexts/studentContext'
 import { footerNavItems, studentNavItems } from '@/lib/navlinks'
 import { Menu } from 'lucide-react'
 import Image from 'next/image'
-import { usePathname } from 'next/navigation'
 
 function MobileTrigger() {
   const { toggleSidebar } = useSidebar()
@@ -29,30 +34,26 @@ function MobileTrigger() {
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname()
+  // const pathname = usePathname()
 
   // Hide sidebar trigger on chat interface and session video
-  const isChatRoute = pathname.includes('/chat/')
-  const isSessionRoute =
-    pathname.includes('/sessions/') && pathname.split('/').length > 4
+  // const isChatRoute = pathname.includes('/chat/')
+  // const isSessionRoute =
+  //   pathname.includes('/sessions/') && pathname.split('/').length > 4
 
   return (
     <StudentProvider>
-      <SidebarProvider className="!min-h-0 h-full">
-        <div className="flex h-screen w-full overflow-hidden bg-white">
-          <AppSidebar
-            mainNavItems={studentNavItems}
-            footerNavItems={footerNavItems}
-          />
-          <main className="flex-1 flex flex-col overflow-hidden">
-            {!isChatRoute && !isSessionRoute && (
-              <div className="p-4 md:hidden">
-                <MobileTrigger />
-              </div>
-            )}
+      <SidebarProvider>
+        <AppSidebar
+          mainNavItems={studentNavItems}
+          footerNavItems={footerNavItems}
+        />
+        <SidebarInset className="h-[calc(100vh_-_0px)]">
+          <Header />
+          <ScrollArea className="overflow-x-hidden flex flex-1 flex-col gap-4 px-4">
             {children}
-          </main>
-        </div>
+          </ScrollArea>
+        </SidebarInset>
       </SidebarProvider>
     </StudentProvider>
   )

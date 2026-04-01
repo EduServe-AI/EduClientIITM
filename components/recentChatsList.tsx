@@ -7,6 +7,7 @@ import { AlertCircle, MessageCircle } from 'lucide-react'
 import Link from 'next/link'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { ScrollArea } from './ui/scroll-area'
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from './ui/sidebar'
 import { Skeleton } from './ui/skeleton'
 
 export interface Chat {
@@ -80,19 +81,17 @@ export function RecentChatsList() {
   }
 
   return (
-    <div className="flex flex-col">
-      <ScrollArea className="max-h-[400px] px-2">
-        <div className="space-y-1">
-          {chats.map(chat => (
-            <ChatItem
-              key={chat.id}
-              chat={chat}
-              href={`/dashboard/student/chat/${chat.botId}/${chat.id}`}
-            />
-          ))}
-        </div>
+    <SidebarMenu>
+      <ScrollArea className="max-h-[400px]">
+        {chats.map(chat => (
+          <ChatItem
+            key={chat.id}
+            chat={chat}
+            href={`/dashboard/student/chat/${chat.botId}/${chat.id}`}
+          />
+        ))}
       </ScrollArea>
-    </div>
+    </SidebarMenu>
   )
 }
 
@@ -127,42 +126,38 @@ function ChatItem({ chat, href }: ChatItemProps) {
   }
 
   return (
-    <Link
-      href={href}
-      className={`
-        group relative flex items-center gap-3 p-2 rounded-lg cursor-pointer
-        transition-all duration-200
-        group-data-[state=closed]:justify-center hover:bg-neutral-200
-        
-      `}
-    >
-      {/* Active indicator - Orange bar on the right */}
-      {/* {isActive && (
+    <SidebarMenuItem>
+      <SidebarMenuButton className="h-12" asChild>
+        <Link href={href}>
+          {/* Active indicator - Orange bar on the right */}
+          {/* {isActive && (
         <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-3/4 bg-orange-500 rounded-l-full" />
       )} */}
 
-      {/* Avatar */}
-      <Avatar className="h-10 w-10 flex-shrink-0">
-        <AvatarImage src={imageUrl || '/Chat-Bot.jpg'} alt={chat.botName} />
-        <AvatarFallback className="text-sm">
-          {chat.botName.substring(0, 2).toUpperCase()}
-        </AvatarFallback>
-      </Avatar>
+          {/* Avatar */}
+          <Avatar className="h-8 w-8 flex-shrink-0">
+            <AvatarImage src={imageUrl || '/Chat-Bot.jpg'} alt={chat.botName} />
+            <AvatarFallback className="text-sm">
+              {chat.botName.substring(0, 2).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
 
-      {/* Chat info - Hidden when sidebar is collapsed */}
-      <div className="flex-1 min-w-0 group-data-[state=closed]:hidden">
-        <div className="flex items-center justify-between gap-2">
-          <p className="text-sm font-medium text-sidebar-foreground truncate min-w-0">
-            {chat.botName}
-          </p>
-          <span className="text-xs text-muted-foreground whitespace-nowrap flex-shrink-0 md:hidden block">
-            {formatTime(chat.lastInteractionTime)}
-          </span>
-        </div>
-        <p className="text-xs text-muted-foreground truncate mt-0.5">
-          {chat.title || 'Conversation with ' + chat.botName}
-        </p>
-      </div>
-    </Link>
+          {/* Chat info - Hidden when sidebar is collapsed */}
+          <div className="flex w-full flex-col group-data-[state=closed]:hidden">
+            <div className="flex flex-1 items-center justify-between gap-1">
+              <p className="text-sm font-semibold line-clamp-1">
+                {chat.botName}sdfsdfsdfsdf sdf sdf sdf
+              </p>
+              <span className="text-[10px] text-muted-foreground whitespace-nowrap flex-shrink-0 block">
+                {formatTime(chat.lastInteractionTime)}
+              </span>
+            </div>
+            <p className="text-xs text-muted-foreground line-clamp-1">
+              {chat.title || 'Conversation with ' + chat.botName} dfg dfg
+            </p>
+          </div>
+        </Link>
+      </SidebarMenuButton>
+    </SidebarMenuItem>
   )
 }

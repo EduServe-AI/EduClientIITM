@@ -6,7 +6,7 @@ export default function TopLoader() {
   return (
     <>
       <NextTopLoader
-        color="#000000"
+        color="#ec6726"
         initialPosition={0.08}
         crawlSpeed={200}
         height={4}

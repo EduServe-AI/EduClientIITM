@@ -41,26 +41,29 @@ export default function Sessions() {
     <div className="flex flex-col gap-5 p-4 sm:p-7 max-w-7xl ml-5 h-full">
       {/* Top Heading - session */}
 
-      <h1 className="font-serif text-start text-2xl sm:text-3xl font-semibold">
-        My Sessions
-      </h1>
-
-      {/* List of Tabs - Upcoming , Completed , Cancelled */}
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-row gap-2 flex-wrap">
-          {Tabs.map(tab => (
-            <Button
-              key={tab}
-              className={`text-black ${currentTab === tab ? 'text-white bg-black' : 'text-black bg-transparent '} hover:bg-neutral-500`}
-              onClick={() => setCurrentTab(tab)}
-            >
-              {tab}
-            </Button>
-          ))}
+      <div className="pb-4 border-b border-gray-200">
+        <h3 className="text-lg leading-6 font-medium text-gray-900">
+          My Sessions
+        </h3>
+        <p className="mt-2 max-w-4xl text-sm text-gray-500">
+          Workcation is a property rental website. Etiam ullamcorper massa
+          viverra consequat, consectetur id nulla tempus. Fringilla egestas
+          justo massa purus sagittis malesuada.
+        </p>
+        {/* List of Tabs - Upcoming , Completed , Cancelled */}
+        <div className="flex flex-col gap-4 mt-4">
+          <div className="flex flex-row gap-2 flex-wrap">
+            {Tabs.map(tab => (
+              <Button
+                key={tab}
+                className={`text-black ${currentTab === tab ? 'text-white bg-black' : 'text-black bg-transparent '} hover:bg-neutral-500`}
+                onClick={() => setCurrentTab(tab)}
+              >
+                {tab}
+              </Button>
+            ))}
+          </div>
         </div>
-
-        {/* Separator Line */}
-        <div className="w-full h-px bg-border" />
       </div>
 
       {/* Sessions List with Scroll Shadow */}

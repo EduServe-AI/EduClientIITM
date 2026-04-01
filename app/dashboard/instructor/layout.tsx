@@ -1,6 +1,6 @@
 'use client'
 
-import { AppSidebar } from '@/components/appSidebar'
+import { AppSidebar } from '@/components/asidebar/appSidebar'
 import { SidebarProvider, useSidebar } from '@/components/ui/sidebar'
 import { InstructorProvider } from '@/contexts/instructorContext'
 import { footerNavItems, instructorNavItems } from '@/lib/navlinks'

@@ -37,7 +37,7 @@ export default function EditProfileField({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
-          variant="ghost"
+          variant="outline"
           size="icon"
           className="text-gray-500 hover:text-black cursor-pointer mr-3"
         >
