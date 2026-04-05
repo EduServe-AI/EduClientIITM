@@ -61,12 +61,12 @@ export function FeaturedInstructorCard(instructor: FeaturedInstructorProps) {
           <div className="flex items-center text-sm gap-1">
             <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
             <span className="font-semibold">5.0</span>
-            <span className="text-gray-500">(30 reviews)</span>
+            <span className="text-muted-foreground">(30 reviews)</span>
           </div>
-          <div className="flex items-center text-md font-bold text-gray-800">
+          <div className="flex items-center text-md font-bold text-foreground">
             <IndianRupee className="w-4 h-4" />
             {instructor.basePrice}
-            <span className="text-sm font-normal text-gray-500 ml-1">
+            <span className="text-sm font-normal text-muted-foreground ml-1">
               / session
             </span>
           </div>

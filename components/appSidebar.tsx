@@ -71,7 +71,7 @@ export function AppSidebar({ mainNavItems }: SidebarProps) {
   return (
     <Sidebar
       collapsible={isMobile ? 'offcanvas' : 'icon'}
-      className="border-r border-neutral-900"
+      className="border-r border-sidebar-border"
       color=""
     >
       {/* Sidebar Header */}
@@ -81,14 +81,15 @@ export function AppSidebar({ mainNavItems }: SidebarProps) {
             href="/home"
             className="flex items-center gap-2 group-data-[state=closed]:hidden bg-sidebar"
           >
-            <Image
+            {/* <Image
               src={BRAND_ASSETS.LOGOS.EDU_WORD_MARK}
               width={300}
               height={70}
               alt="EduserveAI"
               className="hover:opacity-80 transition-all duration-300"
               unoptimized
-            />
+            /> */}
+            <h1 className="font-semibold text-xl ml-2">(eduserve.ai)</h1>
           </Link>
           <div className="flex items-center gap-2">
             {/* Chevron Left */}
@@ -129,7 +130,7 @@ export function AppSidebar({ mainNavItems }: SidebarProps) {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     asChild
-                    className="gap-2 group hover:bg-sidebar-primary hover:text-sidebar-primary-foreground"
+                    className="gap-2 group hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                     onClick={() => {
                       // Close sidebar on mobile after navigation
                       if (isMobile) {
@@ -153,7 +154,7 @@ export function AppSidebar({ mainNavItems }: SidebarProps) {
         {/* Recent Chats Section - Only for Students */}
         {isStudent && (
           <>
-            <Separator className="my-2 border-neutral-900" color="cyan-900" />
+            <Separator className="my-2 border-sidebar-border" />
 
             <p className="text-lg font-semibold px-4 py-3 group-data-[state=closed]:hidden">
               Chats
@@ -167,14 +168,14 @@ export function AppSidebar({ mainNavItems }: SidebarProps) {
       </SidebarContent>
 
       {/* Sidebar Footer */}
-      <SidebarFooter className="p-4 mb-9">
-        <SidebarSeparator className="border-neutral-900" color="cyan-900" />
+      <SidebarFooter className="p-4 mb-2">
+        <SidebarSeparator className="border-sidebar-border" />
         <SidebarMenu>
           {/* For profile */}
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
-              className="gap-5 group hover:bg-sidebar-primary hover:text-sidebar-primary-foreground"
+              className="gap-5 group hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
               onClick={() => {
                 // Close sidebar on mobile after navigation
                 if (isMobile) {
@@ -195,7 +196,7 @@ export function AppSidebar({ mainNavItems }: SidebarProps) {
           <SidebarMenuItem>
             <SidebarMenuButton
               onClick={() => setShowLogoutModal(true)}
-              className="gap-5 group hover:bg-sidebar-primary hover:text-sidebar-primary-foreground cursor-pointer"
+              className="gap-5 group hover:bg-sidebar-accent hover:text-sidebar-accent-foreground cursor-pointer"
             >
               <div className="flex-shrink-0 min-w-[20px]">
                 <LogOutIcon className="h-5 w-5" strokeWidth={2} />

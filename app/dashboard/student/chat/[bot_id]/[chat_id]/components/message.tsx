@@ -37,14 +37,14 @@ export default function Message({ message }: { message: chatMessage }) {
       {/* Message Content */}
       <div
         className={cn(
-          'rounded-lg p-2.5 md:p-3 break-words overflow-hidden min-w-0',
+          'break-words overflow-hidden min-w-0',
           isUser
-            ? 'bg-black text-white ml-auto max-w-[85%] md:max-w-[75%]'
-            : 'text-gray-900 max-w-[85%] md:max-w-[90%]'
+            ? 'bg-secondary text-foreground ml-auto max-w-[85%] md:max-w-[75%] rounded-2xl rounded-tr-sm p-3 md:p-3.5'
+            : 'text-foreground max-w-[85%] md:max-w-[90%] rounded-lg p-2.5 md:p-3'
         )}
       >
         {message.id === 'loading' ? (
-          <div className="flex items-center gap-2.5 text-gray-600 text-sm">
+          <div className="flex items-center gap-2.5 text-muted-foreground text-sm">
             <Loader2 className="h-4 w-4 animate-spin" />
             <span className="font-medium">AI assistant is thinking...</span>
           </div>

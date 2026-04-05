@@ -13,7 +13,7 @@ function MobileTrigger() {
   return (
     <button
       onClick={toggleSidebar}
-      className="flex items-center gap-2 p-1 rounded-lg hover:bg-neutral-100 transition-colors"
+      className="flex items-center gap-2 p-1 rounded-lg hover:bg-accent transition-colors"
       aria-label="Toggle Sidebar"
     >
       <Image
@@ -23,7 +23,7 @@ function MobileTrigger() {
         height={28}
         className="object-contain"
       />
-      <Menu className="h-5 w-5 text-neutral-700" />
+      <Menu className="h-5 w-5 text-foreground" />
     </button>
   )
 }
@@ -39,7 +39,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <StudentProvider>
       <SidebarProvider className="!min-h-0 h-full">
-        <div className="flex h-screen w-full overflow-hidden bg-white">
+        <div className="flex h-screen w-full overflow-hidden bg-background">
           <AppSidebar
             mainNavItems={studentNavItems}
             footerNavItems={footerNavItems}

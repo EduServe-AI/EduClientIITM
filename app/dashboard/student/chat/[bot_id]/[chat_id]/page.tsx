@@ -83,7 +83,7 @@ export default function BotChat() {
               className="md:hidden hover:bg-accent"
               onClick={handleBack}
             >
-              <ChevronLeft size={28} className="text-black" />
+              <ChevronLeft size={28} className="text-foreground" />
             </Button>
 
             {/* Bot Image - Fully Rounded */}
@@ -113,7 +113,7 @@ export default function BotChat() {
             >
               <Heart
                 className={`${
-                  isFavourite ? 'text-red-600 fill-red-600' : 'text-black'
+                  isFavourite ? 'text-red-600 fill-red-600' : 'text-foreground'
                 }`}
                 size={isMobile ? 18 : 24}
               />
@@ -121,7 +121,7 @@ export default function BotChat() {
 
             {/* Settings icon */}
             <Button size="icon" variant="ghost" className="hover:bg-accent">
-              <Settings className="text-black" size={isMobile ? 18 : 24} />
+              <Settings className="text-foreground" size={isMobile ? 18 : 24} />
             </Button>
           </div>
         </div>
@@ -141,11 +141,11 @@ export default function BotChat() {
             </div>
           ) : (
             <div className="flex items-center justify-center min-h-[60vh]">
-              <div className="text-center text-black px-4">
+              <div className="text-center text-foreground px-4">
                 <h2 className="text-2xl md:text-4xl font-semibold">
                   Hello, {student?.username}
                 </h2>
-                <p className="text-sm md:text-base text-gray-600 mt-2">
+                <p className="text-sm md:text-base text-muted-foreground mt-2">
                   Start a conversation with {chat.botName}
                 </p>
               </div>

@@ -51,7 +51,7 @@ export default function Sessions() {
           {Tabs.map(tab => (
             <Button
               key={tab}
-              className={`text-black ${currentTab === tab ? 'text-white bg-black' : 'text-black bg-transparent '} hover:bg-neutral-500`}
+              className={`${currentTab === tab ? 'text-primary-foreground bg-primary' : 'text-foreground bg-transparent'} hover:bg-accent`}
               onClick={() => setCurrentTab(tab)}
             >
               {tab}
@@ -66,17 +66,7 @@ export default function Sessions() {
       {/* Sessions List with Scroll Shadow */}
       <div
         className="flex flex-col gap-4 items-center sm:items-start w-full mt-4 overflow-y-auto flex-1 relative"
-        style={{
-          background: `
-            linear-gradient(white 30%, rgba(255,255,255,0)),
-            linear-gradient(rgba(255,255,255,0), white 70%) 0 100%,
-            radial-gradient(farthest-side at 50% 0, rgba(0,0,0,.2), rgba(0,0,0,0)),
-            radial-gradient(farthest-side at 50% 100%, rgba(0,0,0,.2), rgba(0,0,0,0)) 0 100%
-          `,
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: '100% 40px, 100% 40px, 100% 14px, 100% 14px',
-          backgroundAttachment: 'local, local, scroll, scroll',
-        }}
+        style={{}}
       >
         {isLoading ? (
           <div className="text-center py-8 text-muted-foreground w-full">

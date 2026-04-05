@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#ffffff',
+  themeColor: '#1a1a1d',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
@@ -41,7 +41,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${outfit.variable} font-sans antialiased bg-white text-black`}
+        className={`${outfit.variable} font-sans antialiased bg-background text-foreground`}
       >
         <QueryProvider>
           <RouteGuard>

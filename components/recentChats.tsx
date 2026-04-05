@@ -52,7 +52,7 @@ export function RecentChats() {
     <div className=" pt-2">
       {chats.length > 0 && (
         <>
-          <h1 className="text-2xl font-serif font-semibold mb-4 ml-2">
+          <h1 className="text-xl font-serif font-semibold mb-4 ml-2">
             Continue ...
           </h1>
 

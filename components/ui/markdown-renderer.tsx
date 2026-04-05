@@ -104,7 +104,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             // INLINE CODE (e.g. `const x = 1`)
             <code
               {...props}
-              className="bg-gray-200 text-red-500 rounded px-1 py-0.5 font-mono text-sm"
+              className="bg-secondary text-orange-400 rounded px-1 py-0.5 font-mono text-sm"
             >
               {children}
             </code>
@@ -136,7 +136,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
         ),
         a: ({ ...props }) => (
           <a
-            className="text-blue-600 underline hover:text-blue-800"
+            className="text-blue-400 underline hover:text-blue-300"
             target="_blank"
             rel="noopener noreferrer"
             {...props}
@@ -144,27 +144,27 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
         ),
         blockquote: ({ ...props }) => (
           <blockquote
-            className="border-l-4 border-gray-300 pl-4 italic my-4 text-gray-700"
+            className="border-l-4 border-border pl-4 italic my-4 text-muted-foreground"
             {...props}
           />
         ),
         table: ({ ...props }) => (
           <div className="overflow-x-auto my-4 -mx-1 px-1">
             <table
-              className="border-collapse border border-gray-300 min-w-full w-max"
+              className="border-collapse border border-border min-w-full w-max"
               {...props}
             />
           </div>
         ),
         th: ({ ...props }) => (
           <th
-            className="border border-gray-300 px-4 py-2 bg-gray-100 font-semibold text-left whitespace-nowrap"
+            className="border border-border px-4 py-2 bg-secondary font-semibold text-left whitespace-nowrap"
             {...props}
           />
         ),
         td: ({ ...props }) => (
           <td
-            className="border border-gray-300 px-4 py-2 whitespace-nowrap"
+            className="border border-border px-4 py-2 whitespace-nowrap"
             {...props}
           />
         ),
