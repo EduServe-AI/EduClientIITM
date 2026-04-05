@@ -1,6 +1,6 @@
 'use client'
 
-import { FeaturedInstructorCard } from '@/components/featuredInstructorCard'
+import { FeaturedInstructorCard } from '@/components/instructor/featuredInstructorCard'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {

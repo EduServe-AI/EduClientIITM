@@ -1,7 +1,7 @@
-import Slidercarousel from '@/components/carousel'
+import Slidercarousel from '@/components/common/carousel'
+import Header from '@/components/common/header'
 import FeaturedChatBots from '@/components/featuredChatBots'
 import FeauturedInstructors from '@/components/featuredInstructors'
-import Header from '@/components/header'
 import { RecentChats } from '@/components/recentChats'
 import { RecommendedBots } from '@/components/recommendedBots'
 

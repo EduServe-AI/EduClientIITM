@@ -31,6 +31,8 @@ export const viewport: Viewport = {
   viewportFit: 'cover',
 }
 
+import RouteGuard from '@/components/common/routeGuard'
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -42,9 +44,11 @@ export default function RootLayout({
         className={`${outfit.variable} font-sans antialiased bg-white text-black`}
       >
         <QueryProvider>
-          <TopLoader />
-          {children}
-          <Toaster richColors position="top-center" />
+          <RouteGuard>
+            <TopLoader />
+            {children}
+            <Toaster richColors position="top-center" />
+          </RouteGuard>
         </QueryProvider>
       </body>
     </html>

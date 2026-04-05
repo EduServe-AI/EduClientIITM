@@ -3,7 +3,7 @@
 import { getFeatureChatBotsQueryFn } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
 import WheelGesturesPlugin from 'embla-carousel-wheel-gestures'
-import FeaturedChatBotCard from './featuredChatBotCard'
+import FeaturedChatBotCard from './bot/featuredChatBotCard'
 import { Carousel, CarouselContent, CarouselItem } from './ui/carousel'
 
 // interface ChatBot {

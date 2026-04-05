@@ -1,6 +1,6 @@
 'use client'
 
-import FeaturedChatBotCard from '@/components/featuredChatBotCard'
+import FeaturedChatBotCard from '@/components/bot/featuredChatBotCard'
 import { getFeatureChatBotsQueryFn } from '@/lib/api'
 import { Tooltip } from '@radix-ui/react-tooltip'
 import { useQuery } from '@tanstack/react-query'

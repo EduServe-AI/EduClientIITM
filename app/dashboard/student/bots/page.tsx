@@ -1,5 +1,5 @@
 'use client'
-import FeaturedChatBotCard from '@/components/featuredChatBotCard'
+import FeaturedChatBotCard from '@/components/bot/featuredChatBotCard'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Spinner } from '@/components/ui/spinner'

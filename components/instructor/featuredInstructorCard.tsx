@@ -4,7 +4,7 @@ import { ProgramLevelId } from '@/types/types'
 import { IndianRupee, Star } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { Badge } from './ui/badge'
+import { Badge } from '../ui/badge'
 
 // Defining the shape of the featured instructor object
 interface FeaturedInstructorProps {

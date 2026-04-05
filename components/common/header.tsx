@@ -5,8 +5,8 @@ import { useImageUrl } from '@/lib/utils'
 import { AvatarFallback } from '@radix-ui/react-avatar'
 import { BellIcon, Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { Avatar, AvatarImage } from './ui/avatar'
-import { Button } from './ui/button'
+import { Avatar, AvatarImage } from '../ui/avatar'
+import { Button } from '../ui/button'
 
 export default function Header() {
   const { student, isLoading } = useStudent()

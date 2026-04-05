@@ -1,6 +1,6 @@
 'use client'
 
-import { LogoutConfirmation } from '@/components/logoutConfirmation'
+import { LogoutConfirmation } from '@/components/common/logoutConfirmation'
 import { RecentChatsList } from '@/components/recentChatsList'
 import {
   Sidebar,

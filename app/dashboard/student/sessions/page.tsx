@@ -1,5 +1,5 @@
 'use client'
-import MeetCard from '@/components/meetCard'
+import MeetCard from '@/components/instructor/meetCard'
 import { Button } from '@/components/ui/button'
 import { getSessionsQueryFn } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'

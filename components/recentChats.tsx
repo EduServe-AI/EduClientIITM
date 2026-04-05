@@ -3,7 +3,7 @@
 import { getRecentChats } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
 import WheelGesturesPlugin from 'embla-carousel-wheel-gestures'
-import ChatBotCard from './chatBotCard'
+import ChatBotCard from './bot/chatBotCard'
 import { Carousel, CarouselContent, CarouselItem } from './ui/carousel'
 import { Skeleton } from './ui/skeleton'
 
