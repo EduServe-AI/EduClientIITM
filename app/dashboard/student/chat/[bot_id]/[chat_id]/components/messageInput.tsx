@@ -8,16 +8,14 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
-  InputGroupText,
   InputGroupTextarea,
 } from '@/components/ui/input-group'
-import { Separator } from '@/components/ui/separator'
 import { useChat } from '@/contexts/chatContext'
 import { ArrowUpIcon, CirclePlus } from 'lucide-react'
 import { useState } from 'react'
 
 export default function MessageInput() {
-  const { handleSendMessage } = useChat()
+  const { handleSendMessage, isGenerating } = useChat()
 
   const [userPrompt, setUserPrompt] = useState('')
 
@@ -33,7 +31,7 @@ export default function MessageInput() {
   return (
     <div className="w-full max-w-5xl mx-auto px-0 md:px-0 flex flex-col items-center justify-center gap-2">
       {/* Input component will go here */}
-      <InputGroup className="border-2 border-black">
+      <InputGroup className="border-2 border-black rounded-2xl">
         <InputGroupTextarea
           placeholder="Ask anything ...."
           value={userPrompt}
@@ -42,7 +40,9 @@ export default function MessageInput() {
             // Submit on Enter without Shift key
             if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault()
-              handleSubmit()
+              if (!isGenerating) {
+                handleSubmit()
+              }
             }
           }}
         />
@@ -50,7 +50,7 @@ export default function MessageInput() {
           {/* plus button - non-clickable */}
           <InputGroupButton
             variant="outline"
-            className="cursor-pointer"
+            className="cursor-not-allowed hover:bg-gray-200"
             size="icon-xs"
           >
             <CirclePlus />
@@ -73,17 +73,17 @@ export default function MessageInput() {
           </DropdownMenu>
 
           {/* Usage */}
-          <InputGroupText className="ml-auto text-gray-800">
+          {/* <InputGroupText className="ml-auto text-gray-800">
             57% used
           </InputGroupText>
-          <Separator orientation="vertical" className="!h-4" />
+          <Separator orientation="vertical" className="!h-4" /> */}
 
           {/* Trigger button */}
           <InputGroupButton
             variant="default"
-            className="rounded-full"
+            className="rounded-full ml-auto"
             size="icon-xs"
-            disabled={userPrompt.trim() === ''}
+            disabled={isGenerating || userPrompt.trim() === ''}
             onClick={handleSubmit}
           >
             <ArrowUpIcon />

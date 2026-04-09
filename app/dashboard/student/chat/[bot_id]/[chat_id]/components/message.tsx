@@ -2,15 +2,19 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { MarkdownRenderer } from '@/components/ui/markdown-renderer'
+import { ChatSpinner } from '@/components/ui/spinner'
 import { chatMessage, useChat } from '@/contexts/chatContext' // Import your type
 import { useStudent } from '@/contexts/studentContext' // To show user avatar
 import { cn, useImageUrl } from '@/lib/utils'
-import { Loader2 } from 'lucide-react'
+import MessageActions from './messageActions'
+import SourceLinks from './sourceLinks'
 
 export default function Message({ message }: { message: chatMessage }) {
   const { student } = useStudent()
-  const { chat } = useChat()
+  const { chat, isGenerating, messages, stopGeneration } = useChat()
   const isUser = message.sender === 'user'
+
+  const isLastMessage = messages[messages.length - 1]?.id === message.id
 
   const profileImage = useImageUrl(student?.id, 'profile')
   const botImage = useImageUrl(chat?.botName, 'bot')
@@ -43,15 +47,27 @@ export default function Message({ message }: { message: chatMessage }) {
             : 'text-gray-900 max-w-[85%] md:max-w-[90%]'
         )}
       >
-        {message.id === 'loading' ? (
-          <div className="flex items-center gap-2.5 text-gray-600 text-sm">
-            <Loader2 className="h-4 w-4 animate-spin" />
-            <span className="font-medium">AI assistant is thinking...</span>
+        {message.id === 'loading' ||
+        (isGenerating && isLastMessage && !message.content) ? (
+          <div className="flex items-center gap-2.5 text-blue-500 text-xl h-12 w-12">
+            <ChatSpinner className="text-black" />
           </div>
         ) : (
-          <div className="prose prose-sm md:prose-base dark:prose-invert w-full max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
-            <MarkdownRenderer content={message.content} />
-          </div>
+          <>
+            <div className="prose prose-sm md:prose-base dark:prose-invert w-full max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+              <MarkdownRenderer content={message.content} />
+            </div>
+            {!isUser &&
+              message.sourceLinks &&
+              message.sourceLinks.length > 0 && (
+                <SourceLinks sources={message.sourceLinks} />
+              )}
+            {!isUser &&
+              message.id !== 'loading' &&
+              (!isGenerating || !isLastMessage) && (
+                <MessageActions content={message.content} />
+              )}
+          </>
         )}
       </div>
 

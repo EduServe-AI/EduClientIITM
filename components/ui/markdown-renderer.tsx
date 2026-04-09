@@ -2,7 +2,7 @@ import { Check, Copy } from 'lucide-react'
 import { useState, type ComponentPropsWithoutRef } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { oneDark } from 'react-syntax-highlighter/dist/cjs/styles/prism'
+import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import rehypeKatex from 'rehype-katex'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
@@ -60,19 +60,35 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           ...props
         }: ComponentPropsWithoutRef<'code'> & { inline?: boolean }) {
           const match = /language-(\w+)/.exec(className || '')
-          const language = match ? match[1] : ''
+          let language = match ? match[1] : ''
           const codeString = String(children).replace(/\n$/, '')
 
-          return !inline && match ? (
+          const isTreeSection =
+            language === 'tree' ||
+            (!inline &&
+              (!language || language === 'plaintext' || language === 'text') &&
+              (codeString.includes('├──') ||
+                codeString.includes('└──') ||
+                /^tree\r?\n/i.test(codeString)))
+
+          let displayLanguage = language
+          if (isTreeSection) {
+            displayLanguage = 'Plaintext'
+            language = 'plaintext'
+          }
+
+          const renderAsBlock = !inline && (match || isTreeSection)
+
+          return renderAsBlock ? (
             // BLOCK CODE (e.g. ```python print("hi") ```)
             <div className="rounded-md overflow-hidden my-2 max-w-full">
               <div className="bg-gray-800 px-4 py-1 flex justify-between items-center">
                 <span className="text-xs text-gray-400 font-mono">
-                  {language}
+                  {displayLanguage}
                 </span>
                 <button
                   onClick={() => handleCopyCode(codeString)}
-                  className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-white transition-colors px-2 py-1 rounded hover:bg-gray-700"
+                  className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-white cursor-pointer transition-colors px-2 py-1 rounded hover:bg-gray-700"
                   aria-label="Copy code"
                 >
                   {copiedCode === codeString ? (
@@ -91,7 +107,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               <div className="overflow-x-auto">
                 <SyntaxHighlighter
                   {...props}
-                  style={oneDark}
+                  style={atomDark}
                   language={language}
                   PreTag="div"
                   customStyle={{ margin: 0, borderRadius: '0 0 4px 4px' }}
@@ -104,7 +120,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             // INLINE CODE (e.g. `const x = 1`)
             <code
               {...props}
-              className="bg-gray-200 text-red-500 rounded px-1 py-0.5 font-mono text-sm"
+              className="bg-blue-50 rounded-lg px-1.5 py-1.5 font-mono text-sm"
             >
               {children}
             </code>
