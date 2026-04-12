@@ -3,23 +3,58 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ── Light mode (default) ── */
 :root {
   --transition-duration: 0.3s;
   --radius: 0.625rem;
-  /* Unified dark warm-neutral theme — same in both light & dark */
-  --background: #1a1a1d;
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+  --card: #f4f4f5;
+  --card-foreground: #0a0a0a;
+  --popover: #ffffff;
+  --popover-foreground: #0a0a0a;
+  --primary: #0a0a0a;
+  --primary-foreground: #fafafa;
+  --secondary: #f0f0f2;
+  --secondary-foreground: #0a0a0a;
+  --muted: #f0f0f2;
+  --muted-foreground: #6e6e77;
+  --accent: #f0f0f2;
+  --accent-foreground: #0a0a0a;
+  --destructive: #e5484d;
+  --border: rgba(0, 0, 0, 0.1);
+  --input: rgba(0, 0, 0, 0.12);
+  --ring: rgba(0, 0, 0, 0.2);
+  --chart-1: #7c5bf0;
+  --chart-2: #34d399;
+  --chart-3: #f59e0b;
+  --chart-4: #a78bfa;
+  --chart-5: #f472b6;
+  --sidebar: #f8f8fa;
+  --sidebar-foreground: #0a0a0a;
+  --sidebar-primary: #0a0a0a;
+  --sidebar-primary-foreground: #fafafa;
+  --sidebar-accent: #e8e8ec;
+  --sidebar-accent-foreground: #0a0a0a;
+  --sidebar-border: rgba(0, 0, 0, 0.08);
+  --sidebar-ring: rgba(0, 0, 0, 0.2);
+}
+
+/* ── Dark mode ── */
+.dark {
+  --background: #000000;
   --foreground: #e8e6e3;
-  --card: #242427;
+  --card: #111113;
   --card-foreground: #e8e6e3;
-  --popover: #242427;
+  --popover: #111113;
   --popover-foreground: #e8e6e3;
   --primary: #e8e6e3;
-  --primary-foreground: #1a1a1d;
-  --secondary: #2c2c30;
+  --primary-foreground: #000000;
+  --secondary: #1a1a1e;
   --secondary-foreground: #e8e6e3;
-  --muted: #2c2c30;
+  --muted: #1a1a1e;
   --muted-foreground: #9a9a9e;
-  --accent: #2c2c30;
+  --accent: #1a1a1e;
   --accent-foreground: #e8e6e3;
   --destructive: #e5484d;
   --border: rgba(255, 255, 255, 0.08);
@@ -30,11 +65,11 @@
   --chart-3: #f59e0b;
   --chart-4: #a78bfa;
   --chart-5: #f472b6;
-  --sidebar: #1f1f23;
+  --sidebar: #0a0a0c;
   --sidebar-foreground: #e8e6e3;
   --sidebar-primary: #e8e6e3;
-  --sidebar-primary-foreground: #1a1a1d;
-  --sidebar-accent: #2a2a2e;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #1a1a1e;
   --sidebar-accent-foreground: #e8e6e3;
   --sidebar-border: rgba(255, 255, 255, 0.08);
   --sidebar-ring: rgba(255, 255, 255, 0.2);
@@ -84,41 +119,6 @@ body {
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
-/* Identical dark block so toggling .dark class changes nothing */
-.dark {
-  --background: #1a1a1d;
-  --foreground: #e8e6e3;
-  --card: #242427;
-  --card-foreground: #e8e6e3;
-  --popover: #242427;
-  --popover-foreground: #e8e6e3;
-  --primary: #e8e6e3;
-  --primary-foreground: #1a1a1d;
-  --secondary: #2c2c30;
-  --secondary-foreground: #e8e6e3;
-  --muted: #2c2c30;
-  --muted-foreground: #9a9a9e;
-  --accent: #2c2c30;
-  --accent-foreground: #e8e6e3;
-  --destructive: #e5484d;
-  --border: rgba(255, 255, 255, 0.08);
-  --input: rgba(255, 255, 255, 0.12);
-  --ring: rgba(255, 255, 255, 0.2);
-  --chart-1: #7c5bf0;
-  --chart-2: #34d399;
-  --chart-3: #f59e0b;
-  --chart-4: #a78bfa;
-  --chart-5: #f472b6;
-  --sidebar: #1f1f23;
-  --sidebar-foreground: #e8e6e3;
-  --sidebar-primary: #e8e6e3;
-  --sidebar-primary-foreground: #1a1a1d;
-  --sidebar-accent: #2a2a2e;
-  --sidebar-accent-foreground: #e8e6e3;
-  --sidebar-border: rgba(255, 255, 255, 0.08);
-  --sidebar-ring: rgba(255, 255, 255, 0.2);
-}
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -145,12 +145,13 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--muted-foreground);
+  opacity: 0.3;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.35);
+  opacity: 0.5;
 }
 
 /* Contain KaTeX and code blocks within chat messages */

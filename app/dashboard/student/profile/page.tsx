@@ -1,5 +1,6 @@
 'use client'
 
+import { ThemeSelector } from '@/components/themeSelector'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -8,7 +9,14 @@ import { Separator } from '@/components/ui/separator'
 import { useStudent } from '@/contexts/studentContext'
 import { getAccessToken } from '@/lib/auth'
 import { useImageUrl } from '@/lib/utils'
-import { BookOpen, EditIcon, GraduationCap, Mail, User } from 'lucide-react'
+import {
+  BookOpen,
+  EditIcon,
+  GraduationCap,
+  Mail,
+  Palette,
+  User,
+} from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import EditProfileField from './components/editField'
@@ -247,6 +255,23 @@ export default function Profile() {
                     No active courses found.
                   </span>
                 )}
+              </div>
+            </div>
+
+            {/* Theme Card */}
+            <div className="rounded-lg border border-border p-4 hover:bg-accent/50 transition-colors space-y-4">
+              <div className="flex items-center gap-4 flex-1 min-w-0">
+                <div className="bg-secondary p-3 rounded-full border border-border shadow-sm">
+                  <Palette className="h-5 w-5 text-foreground" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
+                    Theme
+                  </p>
+                </div>
+              </div>
+              <div className="md:pl-16">
+                <ThemeSelector />
               </div>
             </div>
           </div>

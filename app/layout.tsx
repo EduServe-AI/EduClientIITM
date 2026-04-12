@@ -1,3 +1,4 @@
+import { ThemeProvider } from '@/components/themeProvider'
 import TopLoader from '@/components/topLoader'
 import { Toaster } from '@/components/ui/sonner'
 import { BRAND_ASSETS } from '@/constants/brandAssets'
@@ -39,17 +40,24 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${outfit.variable} font-sans antialiased bg-background text-foreground`}
       >
-        <QueryProvider>
-          <RouteGuard>
-            <TopLoader />
-            {children}
-            <Toaster richColors position="top-center" />
-          </RouteGuard>
-        </QueryProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange={false}
+        >
+          <QueryProvider>
+            <RouteGuard>
+              <TopLoader />
+              {children}
+              <Toaster richColors position="top-center" />
+            </RouteGuard>
+          </QueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

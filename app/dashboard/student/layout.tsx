@@ -2,7 +2,7 @@
 
 import { AppSidebar } from '@/components/appSidebar'
 import { SidebarProvider, useSidebar } from '@/components/ui/sidebar'
-import { StudentProvider } from '@/contexts/studentContext'
+import { StudentProvider, useStudent } from '@/contexts/studentContext'
 import { footerNavItems, studentNavItems } from '@/lib/navlinks'
 import { Menu } from 'lucide-react'
 import Image from 'next/image'
@@ -28,6 +28,17 @@ function MobileTrigger() {
   )
 }
 
+function SidebarWithUser() {
+  const { student } = useStudent()
+  return (
+    <AppSidebar
+      mainNavItems={studentNavItems}
+      footerNavItems={footerNavItems}
+      username={student?.username}
+    />
+  )
+}
+
 export default function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
 
@@ -40,10 +51,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <StudentProvider>
       <SidebarProvider className="!min-h-0 h-full">
         <div className="flex h-screen w-full overflow-hidden bg-background">
-          <AppSidebar
-            mainNavItems={studentNavItems}
-            footerNavItems={footerNavItems}
-          />
+          <SidebarWithUser />
           <main className="flex-1 flex flex-col overflow-hidden">
             {!isChatRoute && !isSessionRoute && (
               <div className="p-4 md:hidden">

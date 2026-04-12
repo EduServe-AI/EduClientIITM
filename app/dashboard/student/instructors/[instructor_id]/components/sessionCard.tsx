@@ -153,7 +153,7 @@ export default function SessionCard({
                 id="instructor"
                 value={instructorName}
                 disabled
-                className="bg-gray-50"
+                className="bg-secondary"
               />
             </div>
 
@@ -288,7 +288,7 @@ export default function SessionCard({
           </Button>
           <Button
             onClick={handleBookSession}
-            className="w-full sm:w-auto bg-black text-white hover:bg-gray-800"
+            className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90"
             disabled={createSessionMutation.isPending}
           >
             {createSessionMutation.isPending ? 'Booking...' : 'Book Session'}

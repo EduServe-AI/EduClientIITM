@@ -132,7 +132,7 @@ function ChatItem({ chat, href }: ChatItemProps) {
       className={`
         group relative flex items-center gap-3 p-2 rounded-lg cursor-pointer
         transition-all duration-200
-        group-data-[state=closed]:justify-center hover:bg-neutral-600
+        group-data-[state=closed]:justify-center hover:bg-sidebar-accent
         
       `}
     >

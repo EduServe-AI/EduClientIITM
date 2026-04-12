@@ -73,7 +73,7 @@ export default function MessageInput() {
           </DropdownMenu>
 
           {/* Usage */}
-          <InputGroupText className="ml-auto text-gray-800">
+          <InputGroupText className="ml-auto text-foreground">
             57% used
           </InputGroupText>
           <Separator orientation="vertical" className="!h-4" />

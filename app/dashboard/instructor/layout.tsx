@@ -2,7 +2,7 @@
 
 import { AppSidebar } from '@/components/appSidebar'
 import { SidebarProvider, useSidebar } from '@/components/ui/sidebar'
-import { InstructorProvider } from '@/contexts/instructorContext'
+import { InstructorProvider, useInstructor } from '@/contexts/instructorContext'
 import { footerNavItems, instructorNavItems } from '@/lib/navlinks'
 import { Menu } from 'lucide-react'
 import Image from 'next/image'
@@ -28,6 +28,17 @@ function MobileTrigger() {
   )
 }
 
+function SidebarWithUser() {
+  const { instructor } = useInstructor()
+  return (
+    <AppSidebar
+      mainNavItems={instructorNavItems}
+      footerNavItems={footerNavItems}
+      username={instructor?.username}
+    />
+  )
+}
+
 export default function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
 
@@ -39,10 +50,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <InstructorProvider>
       <SidebarProvider className="">
         <div className="flex h-screen w-full overflow-hidden bg-background">
-          <AppSidebar
-            mainNavItems={instructorNavItems}
-            footerNavItems={footerNavItems}
-          />
+          <SidebarWithUser />
           <main className="flex-1 flex flex-col overflow-hidden">
             {!isSessionRoute && (
               <div className="p-4 md:hidden">

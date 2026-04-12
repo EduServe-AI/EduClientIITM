@@ -33,12 +33,12 @@ export default function StudentBotsPage() {
           EXPLORE
         </h1>
         <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-5 w-5" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
           <Input
             placeholder="Search for bots..."
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            className="w-full pl-10 rounded-md border-2 border-black focus:border-primary focus:outline-none h-10"
+            className="w-full pl-10 rounded-md border-2 border-border focus:border-primary focus:outline-none h-10"
           />
         </div>
       </div>
@@ -59,7 +59,7 @@ export default function StudentBotsPage() {
             className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
               level === 'all'
                 ? 'bg-primary text-primary-foreground'
-                : 'bg-secondary hover:bg-neutral-200 text-secondary-foreground'
+                : 'bg-secondary hover:bg-accent text-secondary-foreground'
             }`}
           >
             All Levels
@@ -71,7 +71,7 @@ export default function StudentBotsPage() {
               className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                 level === filterLevel
                   ? 'bg-primary text-primary-foreground'
-                  : 'bg-secondary hover:bg-neutral-200 text-secondary-foreground'
+                  : 'bg-secondary hover:bg-accent text-secondary-foreground'
               }`}
             >
               {filterLevel.charAt(0).toUpperCase() + filterLevel.slice(1)}
@@ -92,7 +92,7 @@ export default function StudentBotsPage() {
               <p className="text-red-500 font-semibold mb-2">
                 Failed to load bots
               </p>
-              <p className="text-gray-600 text-sm">
+              <p className="text-muted-foreground text-sm">
                 {error instanceof Error ? error.message : 'An error occurred'}
               </p>
             </div>
@@ -113,7 +113,7 @@ export default function StudentBotsPage() {
           </div>
         ) : (
           <div className="flex justify-center items-center max-h-svh">
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               No bots found. Try adjusting your filters or search.
             </p>
           </div>
