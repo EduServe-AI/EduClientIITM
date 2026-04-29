@@ -1,7 +1,7 @@
 'use client'
 
-import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { apiService } from '@/lib/api'
 import { saveAccessToken } from '@/lib/auth'
 import { EyeClosed, EyeOff, Loader2 } from 'lucide-react'
@@ -155,7 +155,7 @@ export default function InstructorLogin({ setIsSignin }: InstructorLoginProps) {
         <Button
           type="button"
           variant="outline"
-          className="w-full h-12 rounded-full gap-3 border border-gray-300 text-gray-600 font-medium hover:bg-gray-50 hover:border-gray-400 transition-all cursor-pointer"
+          className="w-full h-12 rounded-full gap-3 border border-gray-300 bg-white text-gray-600 font-medium hover:bg-gray-50 hover:text-gray-900 hover:border-gray-400 transition-all cursor-pointer"
           onClick={() => {
             const apiUrl = process.env.NEXT_PUBLIC_API_URL
             if (!apiUrl) {

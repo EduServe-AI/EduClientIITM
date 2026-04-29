@@ -39,7 +39,7 @@ export default function EditProfileField({
         <Button
           variant="ghost"
           size="icon"
-          className="text-gray-500 hover:text-black cursor-pointer mr-3"
+          className="text-muted-foreground hover:text-foreground cursor-pointer mr-3"
         >
           <Pencil className="h-4 w-4" />
         </Button>

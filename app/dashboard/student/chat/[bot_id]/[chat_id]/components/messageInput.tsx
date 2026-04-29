@@ -31,7 +31,7 @@ export default function MessageInput() {
   return (
     <div className="w-full max-w-5xl mx-auto px-0 md:px-0 flex flex-col items-center justify-center gap-2">
       {/* Input component will go here */}
-      <InputGroup className="border-2 border-black rounded-2xl">
+      <InputGroup className="border-2 rounded-2xl border-black dark:border-neutral-800 dark:bg-neutral-900 bg-background transition-colors">
         <InputGroupTextarea
           placeholder="Ask anything ...."
           value={userPrompt}
@@ -50,7 +50,7 @@ export default function MessageInput() {
           {/* plus button - non-clickable */}
           <InputGroupButton
             variant="outline"
-            className="cursor-not-allowed hover:bg-gray-200"
+            className="cursor-not-allowed hover:bg-gray-200 dark:hover:bg-neutral-800 dark:border-neutral-700"
             size="icon-xs"
           >
             <CirclePlus />

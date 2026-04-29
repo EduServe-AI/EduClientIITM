@@ -29,16 +29,18 @@ export default function Slidercarousel() {
         {studentCarouselItems.map((item, index) => (
           <CarouselItem key={index} className="">
             <div className="p-1">
-              <Card className="border-black border-2 overflow-hidden">
+              <Card className="border-border overflow-hidden bg-card">
                 <CardContent className="flex flex-col md:flex-row items-center justify-between p-6 md:p-8 gap-6">
                   {/* Left-Side : Text Content */}
                   <div className="flex-1 space-y-4 text-center md:text-left">
                     {/* Title on the top */}
-                    <h2 className="text-3xl md:text-4xl text-black font-semibold font-serif">
+                    <h2 className="text-3xl md:text-4xl text-foreground font-semibold font-serif">
                       {item.title}
                     </h2>
                     {/* Subtitle on the bottom */}
-                    <p className="text-lg text-black italic">{item.subtitle}</p>
+                    <p className="text-lg text-muted-foreground italic">
+                      {item.subtitle}
+                    </p>
                   </div>
 
                   {/* Right-Side : Image */}
@@ -47,7 +49,7 @@ export default function Slidercarousel() {
                       src={item.image} // Use the image property from your object
                       alt={item.title}
                       fill
-                      className="object-cover rounded-lg shadow-md border-1 border-black"
+                      className="object-cover rounded-lg shadow-md border border-border"
                     />
                   </div>
                 </CardContent>

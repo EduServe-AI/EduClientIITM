@@ -1,5 +1,6 @@
 'use client'
 
+import { ThemeSelector } from '@/components/themeSelector'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -8,7 +9,14 @@ import { Separator } from '@/components/ui/separator'
 import { useStudent } from '@/contexts/studentContext'
 import { getAccessToken } from '@/lib/auth'
 import { useImageUrl } from '@/lib/utils'
-import { BookOpen, EditIcon, GraduationCap, Mail, User } from 'lucide-react'
+import {
+  BookOpen,
+  EditIcon,
+  GraduationCap,
+  Mail,
+  Palette,
+  User,
+} from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import EditProfileField from './components/editField'
@@ -110,7 +118,7 @@ export default function Profile() {
         </h1>
 
         {/* Main Profile Card */}
-        <div className="rounded-3xl border border-gray-200 bg-white p-6 md:p-8 space-y-8 shadow-sm">
+        <div className="rounded-3xl border border-border bg-card p-6 md:p-8 space-y-8 shadow-sm">
           {/* Profile Image Section */}
           <div className="flex flex-col items-center py-4">
             {/* Image uploading */}
@@ -124,7 +132,7 @@ export default function Profile() {
 
             {/* Avatar with edit button */}
             <div className="relative">
-              <Avatar className="h-24 w-24 md:h-32 md:w-32 border-4 border-black">
+              <Avatar className="h-24 w-24 md:h-32 md:w-32 border-4 border-border">
                 <AvatarImage src={displayImageUrl} alt="profile" />
                 <AvatarFallback className="text-lg md:text-2xl">
                   {student.username.substring(0, 2).toUpperCase()}
@@ -133,7 +141,7 @@ export default function Profile() {
               <Button
                 variant="outline"
                 size="icon"
-                className="absolute bottom-0 right-0 h-9 w-9 md:h-10 md:w-10 rounded-full cursor-pointer shadow-md hover:bg-gray-100"
+                className="absolute bottom-0 right-0 h-9 w-9 md:h-10 md:w-10 rounded-full cursor-pointer shadow-md hover:bg-accent"
                 onClick={() => fileInputRef.current?.click()}
               >
                 <EditIcon size={20} />
@@ -147,16 +155,16 @@ export default function Profile() {
           {/* Profile Fields Container */}
           <div className="space-y-4">
             {/* Username Card */}
-            <div className="flex items-center justify-between gap-4 rounded-lg border border-gray-200 p-4 hover:bg-gray-50 transition-colors">
+            <div className="flex items-center justify-between gap-4 rounded-lg border border-border p-4 hover:bg-accent/50 transition-colors">
               <div className="flex items-center gap-4 flex-1 min-w-0">
-                <div className="bg-white p-3 rounded-full border shadow-sm">
-                  <User className="h-5 w-5 text-black" />
+                <div className="bg-secondary p-3 rounded-full border border-border shadow-sm">
+                  <User className="h-5 w-5 text-foreground" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs md:text-sm font-medium text-gray-500 uppercase tracking-wide">
+                  <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
                     Username
                   </p>
-                  <p className="text-base md:text-lg font-semibold text-gray-900 truncate">
+                  <p className="text-base md:text-lg font-semibold text-foreground truncate">
                     {student.username}
                   </p>
                 </div>
@@ -170,16 +178,16 @@ export default function Profile() {
             </div>
 
             {/* Email Card */}
-            <div className="flex items-center justify-between gap-4 rounded-lg border border-gray-200 p-4 hover:bg-gray-50 transition-colors">
+            <div className="flex items-center justify-between gap-4 rounded-lg border border-border p-4 hover:bg-accent/50 transition-colors">
               <div className="flex items-center gap-4 flex-1 min-w-0">
-                <div className="bg-white p-3 rounded-full border shadow-sm">
-                  <Mail className="h-5 w-5 text-black" />
+                <div className="bg-secondary p-3 rounded-full border border-border shadow-sm">
+                  <Mail className="h-5 w-5 text-foreground" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs md:text-sm font-medium text-gray-500 uppercase tracking-wide">
+                  <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
                     Email
                   </p>
-                  <p className="text-base md:text-lg font-semibold text-gray-900 truncate">
+                  <p className="text-base md:text-lg font-semibold text-foreground truncate">
                     {student.email}
                   </p>
                 </div>
@@ -190,16 +198,16 @@ export default function Profile() {
             </div>
 
             {/* Level Card */}
-            <div className="flex items-center justify-between gap-4 rounded-lg border border-gray-200 p-4 hover:bg-gray-50 transition-colors">
+            <div className="flex items-center justify-between gap-4 rounded-lg border border-border p-4 hover:bg-accent/50 transition-colors">
               <div className="flex items-center gap-4 flex-1 min-w-0">
-                <div className="bg-white p-3 rounded-full border shadow-sm">
-                  <GraduationCap className="h-5 w-5 text-black" />
+                <div className="bg-secondary p-3 rounded-full border border-border shadow-sm">
+                  <GraduationCap className="h-5 w-5 text-foreground" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs md:text-sm font-medium text-gray-500 uppercase tracking-wide">
+                  <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
                     Level
                   </p>
-                  <p className="text-base md:text-lg font-semibold text-gray-900 truncate">
+                  <p className="text-base md:text-lg font-semibold text-foreground truncate">
                     {student.level?.toLocaleUpperCase()}
                   </p>
                 </div>
@@ -210,14 +218,14 @@ export default function Profile() {
             </div>
 
             {/* Enrolled Courses Card */}
-            <div className="rounded-lg border border-gray-200 p-4 hover:bg-gray-50 transition-colors space-y-4">
+            <div className="rounded-lg border border-border p-4 hover:bg-accent/50 transition-colors space-y-4">
               <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-4 flex-1 min-w-0">
-                  <div className="bg-white p-3 rounded-full border shadow-sm">
-                    <BookOpen className="h-5 w-5 text-black" />
+                  <div className="bg-secondary p-3 rounded-full border border-border shadow-sm">
+                    <BookOpen className="h-5 w-5 text-foreground" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs md:text-sm font-medium text-gray-500 uppercase tracking-wide">
+                    <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
                       Enrolled Courses
                     </p>
                   </div>
@@ -237,16 +245,33 @@ export default function Profile() {
                     <Badge
                       key={course.id}
                       variant="secondary"
-                      className="px-3 py-1 text-sm font-medium text-black hover:bg-blue-100 border border-blue-100 transition-colors"
+                      className="px-3 py-1 text-sm font-medium text-foreground hover:bg-accent border border-border transition-colors"
                     >
                       {course.name}
                     </Badge>
                   ))
                 ) : (
-                  <span className="text-sm text-gray-400 italic">
+                  <span className="text-sm text-muted-foreground italic">
                     No active courses found.
                   </span>
                 )}
+              </div>
+            </div>
+
+            {/* Theme Card */}
+            <div className="rounded-lg border border-border p-4 hover:bg-accent/50 transition-colors space-y-4">
+              <div className="flex items-center gap-4 flex-1 min-w-0">
+                <div className="bg-secondary p-3 rounded-full border border-border shadow-sm">
+                  <Palette className="h-5 w-5 text-foreground" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
+                    Theme
+                  </p>
+                </div>
+              </div>
+              <div className="md:pl-16">
+                <ThemeSelector />
               </div>
             </div>
           </div>

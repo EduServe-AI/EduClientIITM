@@ -1,5 +1,6 @@
 'use client'
 
+import { ThemeSelector } from '@/components/themeSelector'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -22,7 +23,7 @@ import { apiService } from '@/lib/api'
 import { getAccessToken } from '@/lib/auth'
 import { useImageUrl } from '@/lib/utils'
 import { ProgramLevelId } from '@/types/types'
-import { Clock, EditIcon, MoonIcon } from 'lucide-react'
+import { Clock, EditIcon, MoonIcon, Palette } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { EditAvailabilities } from './components/editAvailabilities'
@@ -333,7 +334,7 @@ export default function Profile() {
 
       <div className="relative w-full max-w-full">
         {/* Banner image section */}
-        <div className="relative w-full h-48 md:h-56 overflow-hidden rounded-lg border border-black">
+        <div className="relative w-full h-48 md:h-56 overflow-hidden rounded-lg border border-border">
           <img
             src={displayBannerUrl}
             alt="banner"
@@ -360,7 +361,7 @@ export default function Profile() {
           <Button
             variant="outline"
             size="sm"
-            className="absolute top-4 right-4 bg-white/80 backdrop-blur-sm hover:bg-white"
+            className="absolute top-4 right-4 bg-card/80 backdrop-blur-sm hover:bg-card"
             onClick={() => bannerInputRef.current?.click()}
           >
             <EditIcon className="h-4 w-4" />
@@ -377,16 +378,16 @@ export default function Profile() {
             accept="image/jpeg,image/png,image/webp"
           />
           <div className="relative group">
-            <Avatar className="h-28 w-28 border-2 border-neutral-400 shadow-sm">
+            <Avatar className="h-28 w-28 border-2 border-border shadow-sm">
               <AvatarImage src={displayImageUrl} alt="profile" />
-              <AvatarFallback className="text-lg font-medium bg-neutral-100">
+              <AvatarFallback className="text-lg font-medium bg-secondary">
                 {instructor.username.substring(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <Button
               variant="outline"
               size="icon"
-              className="absolute bottom-0 right-0 h-8 w-8 border-neutral-400 bg-white hover:bg-neutral-100 transition"
+              className="absolute bottom-0 right-0 h-8 w-8 border-border bg-card hover:bg-accent transition"
               onClick={() => fileInputRef.current?.click()}
             >
               <EditIcon className="h-4 w-4" />
@@ -494,7 +495,7 @@ export default function Profile() {
             level={formData.level}
           />
         </div>
-        <div className="rounded-md border border-black p-2 min-h-24">
+        <div className="rounded-md border border-border p-2 min-h-24">
           <div className="flex flex-wrap gap-4 m-4 overflow-x-auto">
             {formData.skills?.map(skill => (
               <div key={skill.id}>
@@ -516,7 +517,7 @@ export default function Profile() {
             setLanguages={handleLanguagesChange}
           />
         </div>
-        <div className="rounded-md border border-black p-2 min-h-24">
+        <div className="rounded-md border border-border p-2 min-h-24">
           <div className="flex flex-wrap gap-4 m-4 overflow-x-auto">
             {formData.languages?.map(language => (
               <div key={language.languageId}>
@@ -538,7 +539,7 @@ export default function Profile() {
             setAvailabilities={handleAvailabilityChange}
           />
         </div>
-        <div className="rounded-md border border-black p-2 min-h-24 overflow-x-auto">
+        <div className="rounded-md border border-border p-2 min-h-24 overflow-x-auto">
           <div className="flex flex-col gap-4 m-4">
             {formData.availabilities?.map(availability => (
               <div key={availability.id}>
@@ -562,8 +563,8 @@ export default function Profile() {
                     </div>
                   ) : (
                     <div className="flex items-center gap-2">
-                      <MoonIcon className="h-4 w-4 text-gray-500" />
-                      <p className="text-gray-500">Unavailable</p>
+                      <MoonIcon className="h-4 w-4 text-muted-foreground" />
+                      <p className="text-muted-foreground">Unavailable</p>
                     </div>
                   )}
                 </div>
@@ -573,9 +574,27 @@ export default function Profile() {
         </div>
       </div>
 
+      {/* Appearance Section */}
+      <div className="rounded-3xl border border-border bg-card p-6 md:p-8 space-y-4 shadow-sm">
+        <div className="flex items-center gap-4">
+          <div className="bg-secondary p-3 rounded-full border border-border shadow-sm">
+            <Palette className="h-5 w-5 text-foreground" />
+          </div>
+          <div>
+            <p className="text-xs md:text-sm font-medium text-muted-foreground uppercase tracking-wide">
+              Appearance
+            </p>
+            <p className="text-base md:text-lg font-semibold text-foreground">
+              Theme
+            </p>
+          </div>
+        </div>
+        <ThemeSelector />
+      </div>
+
       {/* Sticky footer with Save and Reset buttons - Only show when changes are made */}
       {hasChanges() && (
-        <div className="fixed bottom-0 left-0 md:left-64 right-0 bg-white border-t border-gray-200 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] py-4 z-50">
+        <div className="fixed bottom-0 left-0 md:left-64 right-0 bg-card border-t border-border shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] py-4 z-50">
           <div className="max-w-3xl mx-auto flex justify-end gap-4 px-4 md:px-6 lg:px-8">
             <Button
               variant="outline"

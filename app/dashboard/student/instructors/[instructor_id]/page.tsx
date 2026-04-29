@@ -44,7 +44,7 @@ export default function InstructorProfile() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-white">
+      <div className="flex min-h-screen items-center justify-center bg-background">
         <Spinner width="20" />
       </div>
     )
@@ -52,9 +52,9 @@ export default function InstructorProfile() {
 
   if (isError || !instructor) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-white">
+      <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="text-center">
-          <p className="text-lg font-medium text-black">
+          <p className="text-lg font-medium text-foreground">
             Failed to load instructor details
           </p>
           <Link href="/dashboard/student/instructors">
@@ -69,7 +69,7 @@ export default function InstructorProfile() {
   }
 
   return (
-    <div className="min-h-screen bg-white overflow-y-auto">
+    <div className="min-h-screen bg-background overflow-y-auto">
       {/* Main content */}
       <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-8">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-8">
@@ -81,17 +81,17 @@ export default function InstructorProfile() {
               <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
                 <div className="flex-1 space-y-3">
                   <div>
-                    <h1 className="text-2xl sm:text-3xl font-bold text-black">
+                    <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
                       {instructor.bio}
                     </h1>
                     {/* Level with icon and label */}
                     <div className="mt-3 sm:mt-4 flex items-center gap-2 sm:gap-3 flex-wrap">
-                      <span className="text-sm sm:text-base font-semibold text-black">
+                      <span className="text-sm sm:text-base font-semibold text-foreground">
                         Current Level &nbsp;:
                       </span>
-                      <div className="inline-flex items-center gap-2 rounded-md bg-gray-100 px-3 py-1.5 border border-gray-300">
-                        <Award className="h-4 w-4 text-gray-700" />
-                        <span className="text-xs sm:text-sm font-semibold uppercase tracking-wide text-gray-700">
+                      <div className="inline-flex items-center gap-2 rounded-md bg-secondary px-3 py-1.5 border border-border">
+                        <Award className="h-4 w-4 text-muted-foreground" />
+                        <span className="text-xs sm:text-sm font-semibold uppercase tracking-wide text-muted-foreground">
                           {instructor.level}
                         </span>
                       </div>
@@ -103,21 +103,21 @@ export default function InstructorProfile() {
               {/* About */}
               <Card className="shadow-sm">
                 <CardContent className="p-4 sm:p-6">
-                  <div className="mb-3 text-xl sm:text-2xl flex items-center gap-2 font-bold text-black">
+                  <div className="mb-3 text-xl sm:text-2xl flex items-center gap-2 font-bold text-foreground">
                     {instructor.name} - Know your tutor
                   </div>
-                  <p className="leading-relaxed text-sm sm:text-base text-gray-700">
+                  <p className="leading-relaxed text-sm sm:text-base text-muted-foreground">
                     {instructor.about ||
                       "Experienced educator passionate about helping students achieve their academic goals. Specializes in creating personalized learning experiences tailored to each student's unique needs."}
                   </p>
 
                   {/* Languages - Inline Display */}
                   {instructor.languages && instructor.languages.length > 0 && (
-                    <div className="mt-6 border-t border-gray-200 pt-4">
+                    <div className="mt-6 border-t border-border pt-4">
                       <div className="flex items-center gap-2 flex-wrap">
                         <div className="flex items-center gap-2">
-                          <Languages className="h-5 w-5 text-gray-700" />
-                          <h3 className="text-sm font-semibold text-gray-900">
+                          <Languages className="h-5 w-5 text-muted-foreground" />
+                          <h3 className="text-sm font-semibold text-foreground">
                             Languages :
                           </h3>
                           <TooltipProvider>
@@ -131,7 +131,7 @@ export default function InstructorProfile() {
                             </Tooltip>
                           </TooltipProvider>
                         </div>
-                        <span className="text-sm font-medium text-neutral-800 ml-3">
+                        <span className="text-sm font-medium text-foreground/80 ml-3">
                           {instructor.languages.join(', ')}
                         </span>
                       </div>
@@ -139,16 +139,16 @@ export default function InstructorProfile() {
                   )}
 
                   {/* Academic Performance (CGPA) - Inline Display */}
-                  <div className="mt-6 border-t border-gray-200 pt-4">
+                  <div className="mt-6 border-t border-border pt-4">
                     <div className="flex items-center gap-2 flex-wrap">
                       <div className="flex items-center gap-2">
-                        <Trophy className="h-5 w-5 text-gray-700" />
-                        <h3 className="text-sm font-semibold text-gray-900">
+                        <Trophy className="h-5 w-5 text-muted-foreground" />
+                        <h3 className="text-sm font-semibold text-foreground">
                           Academic Performance :
                         </h3>
                       </div>
-                      <span className="text-sm font-medium text-gray-700">
-                        <span className="font-bold text-black">
+                      <span className="text-sm font-medium text-muted-foreground">
+                        <span className="font-bold text-foreground">
                           {instructor.cgpa?.toString() || 'N/A'}
                         </span>
                       </span>
@@ -160,9 +160,9 @@ export default function InstructorProfile() {
 
             {/* Subjects/Skills */}
             {instructor.skills && instructor.skills.length > 0 && (
-              <Card className="border-2 border-gray-200 shadow-sm">
+              <Card className="border-2 border-border shadow-sm">
                 <CardContent className="p-6">
-                  <h2 className="mb-4 flex items-center gap-2 text-xl font-bold text-black">
+                  <h2 className="mb-4 flex items-center gap-2 text-xl font-bold text-foreground">
                     <GraduationCap className="h-5 w-5" />
                     Subjects Taught
                   </h2>
@@ -171,7 +171,7 @@ export default function InstructorProfile() {
                       <Badge
                         key={skill}
                         variant="outline"
-                        className="border-2 border-black bg-white px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-black hover:text-white"
+                        className="border-2 border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
                       >
                         {skill}
                       </Badge>

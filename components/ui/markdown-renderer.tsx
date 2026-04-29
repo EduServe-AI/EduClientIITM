@@ -1,8 +1,12 @@
 import { Check, Copy } from 'lucide-react'
-import { useState, type ComponentPropsWithoutRef } from 'react'
+import { useTheme } from 'next-themes'
+import { useEffect, useState, type ComponentPropsWithoutRef } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import {
+  atomDark,
+  oneLight,
+} from 'react-syntax-highlighter/dist/esm/styles/prism'
 import rehypeKatex from 'rehype-katex'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
@@ -12,7 +16,15 @@ interface MarkdownRendererProps {
 }
 
 export function MarkdownRenderer({ content }: MarkdownRendererProps) {
+  const { resolvedTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
   const [copiedCode, setCopiedCode] = useState<string | null>(null)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const isDark = !mounted ? true : resolvedTheme === 'dark'
 
   const handleCopyCode = async (code: string) => {
     try {
@@ -81,14 +93,20 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
 
           return renderAsBlock ? (
             // BLOCK CODE (e.g. ```python print("hi") ```)
-            <div className="rounded-md overflow-hidden my-2 max-w-full">
-              <div className="bg-gray-800 px-4 py-1 flex justify-between items-center">
-                <span className="text-xs text-gray-400 font-mono">
+            <div
+              className={`rounded-xl overflow-hidden my-5 border ${isDark ? 'border-gray-800 shadow-sm' : 'border-gray-200 shadow-md'} w-full`}
+            >
+              <div
+                className={`px-4 py-2 flex justify-between items-center ${isDark ? 'bg-gray-800' : 'bg-gray-100 border-b border-gray-200'}`}
+              >
+                <span
+                  className={`text-xs font-mono font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
+                >
                   {displayLanguage}
                 </span>
                 <button
                   onClick={() => handleCopyCode(codeString)}
-                  className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-white cursor-pointer transition-colors px-2 py-1 rounded hover:bg-gray-700"
+                  className={`flex items-center gap-1.5 text-xs transition-colors px-2.5 py-1.5 flex-shrink-0 cursor-pointer rounded-md ${isDark ? 'text-gray-400 hover:text-white hover:bg-gray-700' : 'text-gray-600 hover:text-black hover:bg-gray-200 shadow-sm'}`}
                   aria-label="Copy code"
                 >
                   {copiedCode === codeString ? (
@@ -104,13 +122,18 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
                   )}
                 </button>
               </div>
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto relative">
                 <SyntaxHighlighter
                   {...props}
-                  style={atomDark}
+                  style={isDark ? atomDark : oneLight}
                   language={language}
                   PreTag="div"
-                  customStyle={{ margin: 0, borderRadius: '0 0 4px 4px' }}
+                  customStyle={{
+                    margin: 0,
+                    padding: '1.25rem',
+                    borderRadius: '0 0 0.75rem 0.75rem',
+                    background: isDark ? undefined : '#fafafa', // explicit backgrounds to fit border
+                  }}
                 >
                   {codeString}
                 </SyntaxHighlighter>
@@ -120,7 +143,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             // INLINE CODE (e.g. `const x = 1`)
             <code
               {...props}
-              className="bg-blue-50 rounded-lg px-1.5 py-1.5 font-mono text-sm"
+              className="rounded-lg px-1.5 py-1.5 font-semibold text-sm"
             >
               {children}
             </code>
@@ -128,31 +151,48 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
         },
         // Style other markdown elements to match your theme
         h1: ({ ...props }) => (
-          <h1 className="text-2xl font-bold mt-4 mb-2" {...props} />
+          <h1
+            className="text-2xl font-semibold mt-4 mb-2 text-gray-900 dark:text-gray-100"
+            {...props}
+          />
         ),
         h2: ({ ...props }) => (
-          <h2 className="text-xl font-bold mt-3 mb-2" {...props} />
+          <h2
+            className="text-xl font-semibold mt-3 mb-2 text-gray-900 dark:text-gray-100"
+            {...props}
+          />
         ),
         h3: ({ ...props }) => (
-          <h3 className="text-lg font-semibold mt-3 mb-2" {...props} />
+          <h3
+            className="text-lg font-medium mt-3 mb-2 text-gray-900 dark:text-gray-100"
+            {...props}
+          />
         ),
         ul: ({ ...props }) => (
-          <ul className="list-disc list-outside ml-6 mb-4" {...props} />
+          <ul
+            className="list-disc list-outside ml-6 mb-4 text-gray-800 dark:text-gray-300"
+            {...props}
+          />
         ),
         ol: ({ ...props }) => (
-          <ol className="list-decimal list-outside ml-6 mb-4" {...props} />
+          <ol
+            className="list-decimal list-outside ml-6 mb-4 text-gray-800 dark:text-gray-300"
+            {...props}
+          />
         ),
-        li: ({ ...props }) => <li className="mb-1" {...props} />,
+        li: ({ ...props }) => (
+          <li className="mb-1 leading-relaxed" {...props} />
+        ),
         p: ({ ...props }) => (
           <p
-            className="mb-4 leading-relaxed break-words"
+            className="mb-4 leading-relaxed break-words text-gray-800 dark:text-gray-300 tracking-normal"
             style={{ overflowWrap: 'anywhere' }}
             {...props}
           />
         ),
         a: ({ ...props }) => (
           <a
-            className="text-blue-600 underline hover:text-blue-800"
+            className="text-blue-500 dark:text-blue-400 underline hover:text-blue-600 dark:hover:text-blue-300"
             target="_blank"
             rel="noopener noreferrer"
             {...props}
@@ -160,27 +200,27 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
         ),
         blockquote: ({ ...props }) => (
           <blockquote
-            className="border-l-4 border-gray-300 pl-4 italic my-4 text-gray-700"
+            className="border-l-4 border-gray-300 dark:border-gray-600 pl-4 italic my-4 text-gray-600 dark:text-gray-400"
             {...props}
           />
         ),
         table: ({ ...props }) => (
           <div className="overflow-x-auto my-4 -mx-1 px-1">
             <table
-              className="border-collapse border border-gray-300 min-w-full w-max"
+              className="border-collapse border border-border min-w-full w-max"
               {...props}
             />
           </div>
         ),
         th: ({ ...props }) => (
           <th
-            className="border border-gray-300 px-4 py-2 bg-gray-100 font-semibold text-left whitespace-nowrap"
+            className="border border-border px-4 py-2 bg-secondary font-semibold text-left whitespace-nowrap"
             {...props}
           />
         ),
         td: ({ ...props }) => (
           <td
-            className="border border-gray-300 px-4 py-2 whitespace-nowrap"
+            className="border border-border px-4 py-2 whitespace-nowrap"
             {...props}
           />
         ),

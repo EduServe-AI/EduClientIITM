@@ -31,10 +31,10 @@ export default function FeauturedChatBots() {
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                className="hidden md:flex bg-fuchsia-50 hover:bg-gray-400 cursor-pointer"
+                className="hidden md:flex bg-secondary hover:bg-accent cursor-pointer"
                 size="icon"
               >
-                <Info size={20} className="" color="black" />
+                <Info size={20} className="text-foreground" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
@@ -109,7 +109,7 @@ export default function FeauturedChatBots() {
                   </CarouselItem>
                 ))
               ) : (
-                <div className="col-span-full text-center text-gray-500 py-10">
+                <div className="col-span-full text-center text-muted-foreground py-10">
                   No featured chatbots found.
                 </div>
               )}

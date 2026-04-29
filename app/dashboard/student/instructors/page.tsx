@@ -103,12 +103,12 @@ export default function Instructors() {
       <div className="flex-shrink-0 px-4 pt-4">
         {/* Search Box */}
         <div className="relative w-full max-w-md mx-auto mb-4">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-5 w-5" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
           <Input
             placeholder={`Search ${PLACEHOLDERS[placeholderIndex]}`}
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            className="w-full pl-10 rounded-full border-2 border-black h-12 placeholder:text-neutral-600"
+            className="w-full pl-10 rounded-full border-2 border-border h-12 placeholder:text-muted-foreground"
           />
         </div>
 
@@ -122,7 +122,7 @@ export default function Instructors() {
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
-                className="rounded-full border-2 border-gray-300 px-4 py-2 text-sm font-medium hover:bg-gray-50"
+                className="rounded-full border-2 border-border px-4 py-2 text-sm font-medium hover:bg-accent"
               >
                 {getLevelButtonText()}
                 <ChevronDown className="ml-2 h-4 w-4" />
@@ -171,14 +171,14 @@ export default function Instructors() {
                     variant="ghost"
                     size="sm"
                     onClick={handleClearAll}
-                    className="text-sm text-gray-600 hover:text-gray-900"
+                    className="text-sm text-muted-foreground hover:text-foreground"
                   >
                     Clear All
                   </Button>
                   <Button
                     size="sm"
                     onClick={handleApplyFilters}
-                    className="bg-black text-white hover:bg-gray-800 rounded-md px-4"
+                    className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-4"
                   >
                     Apply Filters
                   </Button>
@@ -190,7 +190,7 @@ export default function Instructors() {
           {/* Price Filter Button (non-functional for now) */}
           <Button
             variant="outline"
-            className="rounded-full border-2 border-gray-300 px-4 py-2 text-sm font-medium hover:bg-gray-50"
+            className="rounded-full border-2 border-border px-4 py-2 text-sm font-medium hover:bg-accent"
           >
             Price
           </Button>
@@ -214,7 +214,7 @@ export default function Instructors() {
               <p className="text-red-500 font-semibold mb-2">
                 Failed to load instructors
               </p>
-              <p className="text-gray-600 text-sm">
+              <p className="text-muted-foreground text-sm">
                 {error instanceof Error ? error.message : 'An error occurred'}
               </p>
             </div>
@@ -237,7 +237,7 @@ export default function Instructors() {
           </div>
         ) : (
           <div className="flex justify-center items-center min-h-[400px]">
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               No instructors found. Try adjusting your filters or search.
             </p>
           </div>

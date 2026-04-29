@@ -153,6 +153,7 @@ export interface Instructor {
   username: string
   instructorProfile: InstructorProfile
   userLanguages?: Language[]
+  instructorId: string
 }
 
 // ✅ API response type

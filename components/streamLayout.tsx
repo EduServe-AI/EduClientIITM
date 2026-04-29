@@ -48,12 +48,12 @@ export default function MyUILayout({ onLeave }: MyUILayoutProps) {
 
   if (callingState !== CallingState.JOINED) {
     return (
-      <div className="flex items-center justify-center h-screen bg-white">
+      <div className="flex items-center justify-center h-screen bg-background">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
-          <p className="mt-4 text-gray-900">Joining session...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-foreground mx-auto"></div>
+          <p className="mt-4 text-foreground">Joining session...</p>
           {wasJoinedRef.current && (
-            <p className="mt-2 text-sm text-gray-600">
+            <p className="mt-2 text-sm text-muted-foreground">
               Session may have ended. Redirecting...
             </p>
           )}
@@ -76,7 +76,7 @@ export default function MyUILayout({ onLeave }: MyUILayoutProps) {
         } as React.CSSProperties
       }
     >
-      <div className="flex flex-col h-full w-full relative bg-white">
+      <div className="flex flex-col h-full w-full relative bg-background">
         <SpeakerLayout participantsBarPosition="bottom" />
         <CallControls onLeave={onLeave} />
       </div>

@@ -2,14 +2,15 @@
 
 import { useStudent } from '@/contexts/studentContext'
 import { useImageUrl } from '@/lib/utils'
-import { AvatarFallback } from '@radix-ui/react-avatar'
-import { BellIcon, Loader2 } from 'lucide-react'
+import { BellIcon, Loader2, Menu } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { Avatar, AvatarImage } from '../ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { Button } from '../ui/button'
+import { useSidebar } from '../ui/sidebar'
 
 export default function Header() {
   const { student, isLoading } = useStudent()
+  const { state, toggleSidebar, isMobile } = useSidebar()
   const imageUrl = useImageUrl(student?.id, 'profile')
   const router = useRouter()
   if (isLoading) {
@@ -24,16 +25,28 @@ export default function Header() {
     <header className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4">
       {/* Left side: Welcome Text */}
       <div className="flex flex-col gap-1 sm:gap-2">
-        <h1 className="text-md sm:text-base md:text-lg font-serif text-neutral-800 tracking-wide">
-          Welcome back,
-        </h1>
+        <div className="flex items-center gap-2">
+          {state === 'collapsed' && !isMobile && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleSidebar}
+              className="h-8 w-8 hover:bg-accent text-foreground"
+            >
+              <Menu size={20} />
+            </Button>
+          )}
+          <h1 className="text-md sm:text-base md:text-lg font-serif text-muted-foreground tracking-wide m-0">
+            Welcome back,
+          </h1>
+        </div>
         {/* Profile Button - Redirects to profile page */}
         <Button
           variant="ghost"
           onClick={() => router.push('/dashboard/student/profile')}
           className="justify-start gap-2 sm:gap-3 px-0 hover:bg-transparent group"
         >
-          <Avatar className="w-7 h-7 sm:w-8 sm:h-8 ring-2 ring-black transition-all">
+          <Avatar className="w-5 h-5 sm:w-5 sm:h-5 ring-1 ring-border transition-all">
             <AvatarImage
               src={imageUrl || '/student_fallback.jpg'}
               alt="profile"
@@ -53,7 +66,7 @@ export default function Header() {
         <Button
           variant="ghost"
           size="icon"
-          className="hover:bg-muted transition-colors rounded-full relative h-10 w-10 sm:h-11 sm:w-11 bg-neutral-200"
+          className="hover:bg-muted transition-colors rounded-full relative h-10 w-10 sm:h-11 sm:w-11 bg-secondary"
           aria-label="Notifications"
         >
           <BellIcon className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" />

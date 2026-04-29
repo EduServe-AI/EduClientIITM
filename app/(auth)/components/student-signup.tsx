@@ -147,7 +147,7 @@ export default function StudentSignup({ setIsSignin }: StudentSignupProps) {
 
         <Button
           variant="outline"
-          className="w-full h-12 rounded-full gap-3 border border-gray-300 text-gray-600 font-medium hover:bg-gray-50 hover:border-gray-400 transition-all cursor-pointer"
+          className="w-full h-12 rounded-full gap-3 border border-gray-300 bg-white text-gray-600 font-medium hover:bg-gray-50 hover:text-gray-900 hover:border-gray-400 transition-all cursor-pointer"
           onClick={() => {
             window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google/student`
           }}

@@ -6,7 +6,7 @@ export const studentCarouselItems: CarouselItem[] = [
   {
     title: 'On-Demand Human and AI Assistance',
     subtitle: 'Choose flexibly',
-    image: '/Student.jpeg',
+    image: '/online-tutorials-concept_52683-37480.avif',
   },
   {
     title: 'Human Assistance',
