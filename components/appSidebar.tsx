@@ -204,9 +204,9 @@ export function AppSidebar({ mainNavItems, username, userId }: SidebarProps) {
           <>
             <Separator className="my-2 border-sidebar-border" />
 
-            <p className="text-lg font-semibold px-4 py-3 group-data-[state=closed]:hidden">
+            <h3 className="text-lg  px-4 py-3 group-data-[state=closed]:hidden">
               Chats
-            </p>
+            </h3>
 
             <div className="flex-1 min-h-0 overflow-auto">
               <RecentChatsList />

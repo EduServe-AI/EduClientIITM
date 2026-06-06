@@ -67,14 +67,6 @@ export default function ImageAuthLayout({
               <ArrowLeft size={16} />
               Back to Home
             </Link>
-            <Image
-              src="/EDU_WM2.png"
-              alt="EduServe AI"
-              width={200}
-              height={52}
-              className="drop-shadow-md"
-              priority
-            />
           </div>
 
           {/* Full-cover illustration image */}
@@ -90,14 +82,7 @@ export default function ImageAuthLayout({
         {/* ─── Right Form Section (70% on desktop, 100% on mobile) ─── */}
         <div className="w-full lg:w-[70%] flex flex-col">
           {/* Mobile/tablet logo bar */}
-          <div className="lg:hidden flex items-center justify-between px-6 pt-5 pb-1">
-            <Image
-              src="/EDU_WM2.png"
-              alt="EduServe AI"
-              width={180}
-              height={46}
-              priority
-            />
+          <div className="lg:hidden flex items-center justify-end px-6 pt-5 pb-1">
             <Link
               href="/"
               className="flex items-center gap-1.5 text-gray-500 hover:text-gray-800 text-sm font-medium transition-colors bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-full"

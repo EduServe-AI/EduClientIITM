@@ -1,16 +1,13 @@
 'use client'
 
 import { getFeaturedInstructorsQueryFn } from '@/lib/api'
-import { Tooltip } from '@radix-ui/react-tooltip'
 import { useQuery } from '@tanstack/react-query'
 import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
-import { Info } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { FeaturedInstructorCard } from './instructor/featuredInstructorCard'
 import { Button } from './ui/button'
 import { Carousel, CarouselContent, CarouselItem } from './ui/carousel'
 import { Skeleton } from './ui/skeleton'
-import { TooltipContent, TooltipTrigger } from './ui/tooltip'
 
 export default function FeauturedInstructors() {
   const router = useRouter()
@@ -31,10 +28,10 @@ export default function FeauturedInstructors() {
       <div className="flex items-center justify-between mb-2">
         {/* ---- Heading ---- */}
         <div className="flex items-center gap-2">
-          <h3 className="text-lg md:text-xl font-bold font-serif">
+          <h3 className="text-lg font-bold font-serif tracking-wider text-white uppercase ml-1 mb-1">
             Featured Instructors
           </h3>
-          <Tooltip>
+          {/* <Tooltip>
             <TooltipTrigger asChild>
               <Button
                 className="hidden md:flex bg-secondary hover:bg-accent cursor-pointer"
@@ -46,7 +43,7 @@ export default function FeauturedInstructors() {
             <TooltipContent>
               <p>Top Rated Instructors </p>
             </TooltipContent>
-          </Tooltip>
+          </Tooltip> */}
         </div>
 
         {/* ---- Explore Section ---- */}

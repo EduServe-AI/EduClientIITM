@@ -130,7 +130,7 @@ export default function StudentSignup({ setIsSignin }: StudentSignupProps) {
           <Button
             variant="outline"
             onClick={() => setIsSignin(true)}
-            className="flex-1 h-12 rounded-full border-2 border-[#0a66c2] text-[#0a66c2] font-semibold text-[15px] bg-transparent hover:bg-[#0a66c2]/5 transition-all duration-200 cursor-pointer"
+            className="flex-1 h-12 rounded-full border-2 border-[#0a66c2] dark:border-[#0a66c2] text-[#0a66c2] dark:text-[#0a66c2] font-semibold text-[15px] bg-transparent dark:bg-transparent hover:bg-[#0a66c2]/5 dark:hover:bg-[#0a66c2]/5 hover:text-[#0a66c2] dark:hover:text-[#0a66c2] transition-all duration-200 cursor-pointer"
           >
             Login
           </Button>
@@ -147,7 +147,7 @@ export default function StudentSignup({ setIsSignin }: StudentSignupProps) {
 
         <Button
           variant="outline"
-          className="w-full h-12 rounded-full gap-3 border border-gray-300 bg-white text-gray-600 font-medium hover:bg-gray-50 hover:text-gray-900 hover:border-gray-400 transition-all cursor-pointer"
+          className="w-full h-12 rounded-full gap-3 border border-gray-300 dark:border-gray-300 bg-white dark:bg-white text-gray-600 dark:text-gray-600 font-medium hover:bg-gray-50 dark:hover:bg-gray-50 hover:text-gray-900 dark:hover:text-gray-900 hover:border-gray-400 dark:hover:border-gray-400 transition-all cursor-pointer"
           onClick={() => {
             window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google/student`
           }}

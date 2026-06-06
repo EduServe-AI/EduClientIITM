@@ -4,7 +4,6 @@ import { useStudent } from '@/contexts/studentContext'
 import { useImageUrl } from '@/lib/utils'
 import { BellIcon, Loader2, Menu } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { Button } from '../ui/button'
 import { useSidebar } from '../ui/sidebar'
 
@@ -24,7 +23,7 @@ export default function Header() {
   return (
     <header className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4">
       {/* Left side: Welcome Text */}
-      <div className="flex flex-col gap-1 sm:gap-2">
+      <div className="flex flex-row gap-1 sm:gap-2">
         <div className="flex items-center gap-2">
           {state === 'collapsed' && !isMobile && (
             <Button
@@ -36,12 +35,12 @@ export default function Header() {
               <Menu size={20} />
             </Button>
           )}
-          <h1 className="text-md sm:text-base md:text-lg font-serif text-muted-foreground tracking-wide m-0">
-            Welcome back,
+          <h1 className="text-md sm:text-base md:text-lg font-serif  tracking-wide m-0 text-white">
+            Hi @{student?.username},
           </h1>
         </div>
         {/* Profile Button - Redirects to profile page */}
-        <Button
+        {/* <Button
           variant="ghost"
           onClick={() => router.push('/dashboard/student/profile')}
           className="justify-start gap-2 sm:gap-3 px-0 hover:bg-transparent group"
@@ -58,7 +57,7 @@ export default function Header() {
           <span className="text-base sm:text-lg md:text-xl font-serif text-foreground group-hover:text-primary transition-colors">
             {student?.username}
           </span>
-        </Button>
+        </Button> */}
       </div>
 
       {/* Right side: Notification Icon */}

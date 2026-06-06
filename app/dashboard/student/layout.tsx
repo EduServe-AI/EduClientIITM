@@ -5,7 +5,6 @@ import { SidebarProvider, useSidebar } from '@/components/ui/sidebar'
 import { StudentProvider, useStudent } from '@/contexts/studentContext'
 import { footerNavItems, studentNavItems } from '@/lib/navlinks'
 import { Menu } from 'lucide-react'
-import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 
 function MobileTrigger() {
@@ -16,13 +15,13 @@ function MobileTrigger() {
       className="flex items-center gap-2 p-1 rounded-lg hover:bg-accent transition-colors"
       aria-label="Toggle Sidebar"
     >
-      <Image
-        src="/Brand_Logo.png"
+      {/* <Image
+        src="/favicon-96x96.png"
         alt="EduServe"
         width={28}
         height={28}
         className="object-contain"
-      />
+      /> */}
       <Menu className="h-5 w-5 text-foreground" />
     </button>
   )

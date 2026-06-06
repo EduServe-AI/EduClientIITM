@@ -1,7 +1,6 @@
 import { ThemeProvider } from '@/components/themeProvider'
 import TopLoader from '@/components/topLoader'
 import { Toaster } from '@/components/ui/sonner'
-import { BRAND_ASSETS } from '@/constants/brandAssets'
 import QueryProvider from '@/contexts/queryProvider'
 import 'katex/dist/katex.min.css'
 import type { Metadata, Viewport } from 'next'
@@ -19,7 +18,8 @@ export const metadata: Metadata = {
   description: 'On Demand Human and AI Teaching Assistance',
   manifest: '/manifest.json',
   icons: {
-    icon: BRAND_ASSETS.FAVICON,
+    icon: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
   },
 }
 

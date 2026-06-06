@@ -2,15 +2,12 @@
 
 import FeaturedChatBotCard from '@/components/bot/featuredChatBotCard'
 import { getFeatureChatBotsQueryFn } from '@/lib/api'
-import { Tooltip } from '@radix-ui/react-tooltip'
 import { useQuery } from '@tanstack/react-query'
 import WheelGesturesPlugin from 'embla-carousel-wheel-gestures'
-import { Info } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { Button } from './ui/button'
 import { Carousel, CarouselContent, CarouselItem } from './ui/carousel'
 import { Skeleton } from './ui/skeleton'
-import { TooltipContent, TooltipTrigger } from './ui/tooltip'
 
 export default function FeauturedChatBots() {
   const router = useRouter()
@@ -25,14 +22,14 @@ export default function FeauturedChatBots() {
       <div className="flex items-center justify-between mb-2">
         {/* ---- Heading ---- */}
         <div className="flex items-center gap-2">
-          <h3 className="text-lg md:text-xl font-bold font-serif">
+          <h3 className="text-lg font-bold font-serif tracking-wider text-white uppercase ml-1 mb-1">
             Featured ChatBots
           </h3>
-          <Tooltip>
+          {/* <Tooltip>
             <TooltipTrigger asChild>
               <Button
                 className="hidden md:flex bg-secondary hover:bg-accent cursor-pointer"
-                size="icon"
+                size="sm"
               >
                 <Info size={20} className="text-foreground" />
               </Button>
@@ -40,7 +37,7 @@ export default function FeauturedChatBots() {
             <TooltipContent>
               <p>Top Rated Chat Bots </p>
             </TooltipContent>
-          </Tooltip>
+          </Tooltip> */}
         </div>
 
         {/* ---- Explore Section ---- */}

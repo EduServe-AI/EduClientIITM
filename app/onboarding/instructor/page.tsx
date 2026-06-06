@@ -648,7 +648,7 @@ export default function InstructorOnboarding() {
           <div className="relative z-10 px-8 pt-8 pb-6 border-b border-white/5">
             <div className="flex items-center justify-center">
               <Image
-                src="/EDU_WM2.png"
+                src="/favicon.svg"
                 alt="EduServe Logo"
                 width={180}
                 height={50}

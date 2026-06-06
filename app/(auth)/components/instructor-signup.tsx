@@ -76,7 +76,7 @@ export default function InstructorSignup({
           value={username}
           onChange={e => setUsername(e.target.value)}
           placeholder="Username"
-          className="h-12 rounded-md border-gray-300 bg-[#faf3f6] text-[15px] px-4 focus-visible:ring-2 focus-visible:ring-[#9b2d5e] focus-visible:border-[#9b2d5e] transition-all placeholder:text-[#9b2d5e]/60"
+          className="text-black h-12 rounded-md border-gray-300 bg-[#faf3f6] text-[15px] px-4 focus-visible:ring-2 focus-visible:ring-[#9b2d5e] focus-visible:border-[#9b2d5e] transition-all placeholder:text-[#9b2d5e]/60"
         />
 
         {/* Email */}
@@ -86,7 +86,7 @@ export default function InstructorSignup({
           value={email}
           onChange={e => setEmail(e.target.value)}
           placeholder="Email"
-          className="h-12 rounded-md border-gray-300 bg-[#faf3f6] text-[15px] px-4 focus-visible:ring-2 focus-visible:ring-[#9b2d5e] focus-visible:border-[#9b2d5e] transition-all placeholder:text-[#9b2d5e]/60"
+          className=" text-black h-12 rounded-md border-gray-300 bg-[#faf3f6] text-[15px] px-4 focus-visible:ring-2 focus-visible:ring-[#9b2d5e] focus-visible:border-[#9b2d5e] transition-all placeholder:text-[#9b2d5e]/60"
         />
 
         {/* Password */}
@@ -97,7 +97,7 @@ export default function InstructorSignup({
             value={password}
             onChange={e => setPassword(e.target.value)}
             placeholder="Password"
-            className="h-12 rounded-md border-gray-300 bg-[#faf3f6] text-[15px] px-4 pr-12 focus-visible:ring-2 focus-visible:ring-[#9b2d5e] focus-visible:border-[#9b2d5e] transition-all placeholder:text-[#9b2d5e]/60"
+            className="text-black h-12 rounded-md border-gray-300 bg-[#faf3f6] text-[15px] px-4 pr-12 focus-visible:ring-2 focus-visible:ring-[#9b2d5e] focus-visible:border-[#9b2d5e] transition-all placeholder:text-[#9b2d5e]/60"
           />
           <button
             type="button"
@@ -134,7 +134,7 @@ export default function InstructorSignup({
           <Button
             variant="outline"
             onClick={() => setIsSignin(true)}
-            className="flex-1 h-12 rounded-full border-2 border-[#9b2d5e] text-[#9b2d5e] font-semibold text-[15px] bg-transparent hover:bg-[#9b2d5e]/5 transition-all duration-200 cursor-pointer"
+            className="flex-1 h-12 rounded-full border-2 border-[#9b2d5e] dark:border-[#9b2d5e] text-[#9b2d5e] dark:text-[#9b2d5e] font-semibold text-[15px] bg-transparent dark:bg-transparent hover:bg-[#9b2d5e]/5 dark:hover:bg-[#9b2d5e]/5 hover:text-[#9b2d5e] dark:hover:text-[#9b2d5e] transition-all duration-200 cursor-pointer"
           >
             Login
           </Button>
@@ -153,7 +153,7 @@ export default function InstructorSignup({
         <Button
           type="button"
           variant="outline"
-          className="w-full h-12 rounded-full gap-3 border border-gray-300 bg-white text-gray-600 font-medium hover:bg-gray-50 hover:text-gray-900 hover:border-gray-400 transition-all cursor-pointer"
+          className="w-full h-12 rounded-full gap-3 border border-gray-300 dark:border-gray-300 bg-white dark:bg-white text-gray-600 dark:text-gray-600 font-medium hover:bg-gray-50 dark:hover:bg-gray-50 hover:text-gray-900 dark:hover:text-gray-900 hover:border-gray-400 dark:hover:border-gray-400 transition-all cursor-pointer"
           onClick={() => {
             const apiUrl = process.env.NEXT_PUBLIC_API_URL
             if (!apiUrl) {

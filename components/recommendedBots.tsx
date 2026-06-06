@@ -31,7 +31,9 @@ export function RecommendedBots() {
     <div className="">
       {bots.length > 0 && (
         <>
-          <h1 className="text-2xl font-serif font-semibold mb-4">For you</h1>
+          <h3 className="text-lg font-bold font-serif tracking-wider text-white uppercase ml-1 mb-1">
+            For you
+          </h3>
 
           <div className="relative">
             <Carousel
