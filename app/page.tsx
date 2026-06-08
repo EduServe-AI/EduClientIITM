@@ -51,7 +51,7 @@ export default function Home() {
               onClick={() => window.scrollTo(0, 0)}
             >
               <span className="text-2xl font-black tracking-tight text-black">
-                eduserve.ai
+                Eduserve.ai
               </span>
             </div>
 
@@ -384,7 +384,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
             <div className="col-span-1 md:col-span-2">
               <span className="text-xl font-black tracking-tight text-black opacity-80 mb-6 block">
-                eduserve.ai
+                Eduserve.ai
               </span>
               <p className="text-gray-500 max-w-sm mb-6">
                 Bridging the gap between students and success through human
