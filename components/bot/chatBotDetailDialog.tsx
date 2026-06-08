@@ -228,7 +228,7 @@ export default function ChatBotDetailDialog({
           <div className="pt-2">
             <Button
               onClick={handleChat}
-              className="w-full bg-black hover:bg-black/90 text-white font-semibold py-5 sm:py-6 text-sm sm:text-base rounded-lg shadow-lg hover:shadow-xl transition-all"
+              className="w-full bg-foreground hover:bg-foreground/90 text-background font-semibold py-5 sm:py-6 text-sm sm:text-base rounded-lg shadow-lg hover:shadow-xl transition-all"
             >
               Chat
             </Button>

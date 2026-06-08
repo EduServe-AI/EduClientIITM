@@ -2,10 +2,9 @@
 
 import { AppSidebar } from '@/components/appSidebar'
 import { SidebarProvider, useSidebar } from '@/components/ui/sidebar'
-import { InstructorProvider } from '@/contexts/instructorContext'
+import { InstructorProvider, useInstructor } from '@/contexts/instructorContext'
 import { footerNavItems, instructorNavItems } from '@/lib/navlinks'
 import { Menu } from 'lucide-react'
-import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 
 function MobileTrigger() {
@@ -13,18 +12,30 @@ function MobileTrigger() {
   return (
     <button
       onClick={toggleSidebar}
-      className="flex items-center gap-2 p-1 rounded-lg hover:bg-neutral-100 transition-colors"
+      className="flex items-center gap-2 p-1 rounded-lg hover:bg-accent transition-colors"
       aria-label="Toggle Sidebar"
     >
-      <Image
-        src="/Brand_Logo.png"
+      {/* <Image
+        src="/favicon-96x96.png"
         alt="EduServe"
         width={28}
         height={28}
         className="object-contain"
-      />
-      <Menu className="h-5 w-5 text-neutral-700" />
+      /> */}
+      <Menu className="h-5 w-5 text-foreground" />
     </button>
+  )
+}
+
+function SidebarWithUser() {
+  const { instructor } = useInstructor()
+  return (
+    <AppSidebar
+      mainNavItems={instructorNavItems}
+      footerNavItems={footerNavItems}
+      username={instructor?.username}
+      userId={instructor?.instructorId}
+    />
   )
 }
 
@@ -38,11 +49,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <InstructorProvider>
       <SidebarProvider className="">
-        <div className="flex h-screen w-full overflow-hidden bg-white">
-          <AppSidebar
-            mainNavItems={instructorNavItems}
-            footerNavItems={footerNavItems}
-          />
+        <div className="flex h-screen w-full overflow-hidden bg-background">
+          <SidebarWithUser />
           <main className="flex-1 flex flex-col overflow-hidden">
             {!isSessionRoute && (
               <div className="p-4 md:hidden">

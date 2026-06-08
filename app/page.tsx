@@ -50,15 +50,9 @@ export default function Home() {
               className="flex items-center space-x-3 cursor-pointer"
               onClick={() => window.scrollTo(0, 0)}
             >
-              <div className="relative h-14 w-56">
-                <Image
-                  src="/EDU_WM2.png"
-                  alt="EduServe AI"
-                  fill
-                  className="object-contain object-left"
-                  priority
-                />
-              </div>
+              <span className="text-2xl font-black tracking-tight text-black">
+                Eduserve.ai
+              </span>
             </div>
 
             {/* Desktop Navigation */}
@@ -389,15 +383,9 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
             <div className="col-span-1 md:col-span-2">
-              <div className="relative h-10 w-48 mb-6">
-                {/* Footer logo size increased also */}
-                <Image
-                  src="/EDU_WM2.png"
-                  alt="Logo"
-                  fill
-                  className="object-contain object-left opacity-80"
-                />
-              </div>
+              <span className="text-xl font-black tracking-tight text-black opacity-80 mb-6 block">
+                Eduserve.ai
+              </span>
               <p className="text-gray-500 max-w-sm mb-6">
                 Bridging the gap between students and success through human
                 connection and artificial intelligence.

@@ -1,6 +1,6 @@
+import { ThemeProvider } from '@/components/themeProvider'
 import TopLoader from '@/components/topLoader'
 import { Toaster } from '@/components/ui/sonner'
-import { BRAND_ASSETS } from '@/constants/brandAssets'
 import QueryProvider from '@/contexts/queryProvider'
 import 'katex/dist/katex.min.css'
 import type { Metadata, Viewport } from 'next'
@@ -18,12 +18,13 @@ export const metadata: Metadata = {
   description: 'On Demand Human and AI Teaching Assistance',
   manifest: '/manifest.json',
   icons: {
-    icon: BRAND_ASSETS.FAVICON,
+    icon: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
   },
 }
 
 export const viewport: Viewport = {
-  themeColor: '#ffffff',
+  themeColor: '#1a1a1d',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
@@ -31,21 +32,32 @@ export const viewport: Viewport = {
   viewportFit: 'cover',
 }
 
+import RouteGuard from '@/components/common/routeGuard'
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${outfit.variable} font-sans antialiased bg-white text-black`}
+        className={`${outfit.variable} font-sans antialiased bg-background text-foreground`}
       >
-        <QueryProvider>
-          <TopLoader />
-          {children}
-          <Toaster richColors position="top-center" />
-        </QueryProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange={false}
+        >
+          <QueryProvider>
+            <RouteGuard>
+              <TopLoader />
+              {children}
+              <Toaster richColors position="top-center" />
+            </RouteGuard>
+          </QueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

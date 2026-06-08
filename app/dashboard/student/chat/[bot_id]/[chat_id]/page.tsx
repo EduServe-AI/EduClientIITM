@@ -1,12 +1,11 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
+import { useSidebar } from '@/components/ui/sidebar'
 import { useChat } from '@/contexts/chatContext'
 import { useStudent } from '@/contexts/studentContext'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { useImageUrl } from '@/lib/utils'
-import { ChevronLeft, Heart, Settings } from 'lucide-react'
-import Image from 'next/image'
+import { ChevronLeft, EllipsisIcon, Heart, Menu } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import MessageInput from './components/messageInput'
@@ -14,6 +13,7 @@ import MessageList from './components/messageList'
 
 export default function BotChat() {
   const { chat, messages, isLoading } = useChat()
+  const { state, toggleSidebar } = useSidebar()
   const [isFavourite, setIsFavourite] = useState<boolean>(false)
   const { student, isLoading: studenLoading } = useStudent()
   const scrollContainerRef = useRef<HTMLElement>(null)
@@ -26,8 +26,6 @@ export default function BotChat() {
   const handleBack = () => {
     router.back()
   }
-
-  const BotImageUrl = useImageUrl(chat?.botName, 'bot')
 
   const isMobile = useIsMobile()
 
@@ -83,17 +81,31 @@ export default function BotChat() {
               className="md:hidden hover:bg-accent"
               onClick={handleBack}
             >
-              <ChevronLeft size={28} className="text-black" />
+              <ChevronLeft size={28} className="text-foreground" />
             </Button>
 
+            {/* Desktop Hamburger - Shows only when sidebar is collapsed */}
+            <div className="hidden md:block">
+              {state === 'collapsed' && (
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className="hover:bg-accent text-foreground"
+                  onClick={toggleSidebar}
+                >
+                  <Menu size={20} />
+                </Button>
+              )}
+            </div>
+
             {/* Bot Image - Fully Rounded */}
-            <Image
+            {/* <Image
               src={BotImageUrl || '/Chat-Bot.jpg'}
               alt="Bot-Image"
               width={40}
               height={40}
               className="shrink-0 rounded-full object-cover"
-            />
+            /> */}
 
             <div className="min-w-0">
               <h2 className="font-serif text-base md:text-xl truncate font-semibold">
@@ -113,7 +125,7 @@ export default function BotChat() {
             >
               <Heart
                 className={`${
-                  isFavourite ? 'text-red-600 fill-red-600' : 'text-black'
+                  isFavourite ? 'text-red-600 fill-red-600' : 'text-foreground'
                 }`}
                 size={isMobile ? 18 : 24}
               />
@@ -121,7 +133,10 @@ export default function BotChat() {
 
             {/* Settings icon */}
             <Button size="icon" variant="ghost" className="hover:bg-accent">
-              <Settings className="text-black" size={isMobile ? 18 : 24} />
+              <EllipsisIcon
+                className="text-foreground"
+                size={isMobile ? 18 : 24}
+              />
             </Button>
           </div>
         </div>
@@ -132,7 +147,7 @@ export default function BotChat() {
         ref={scrollContainerRef}
         className="flex-1 overflow-y-auto overflow-x-hidden min-h-0 scroll-smooth"
       >
-        <div className="px-4 py-4 md:py-6 max-w-5xl mx-auto w-full">
+        <div className="px-4 py-4 md:py-6 max-w-3xl lg:max-w-4xl mx-auto w-full">
           {hasMessages ? (
             <div className="flex flex-col">
               <MessageList />
@@ -141,11 +156,11 @@ export default function BotChat() {
             </div>
           ) : (
             <div className="flex items-center justify-center min-h-[60vh]">
-              <div className="text-center text-black px-4">
+              <div className="text-center text-foreground px-4">
                 <h2 className="text-2xl md:text-4xl font-semibold">
                   Hello, {student?.username}
                 </h2>
-                <p className="text-sm md:text-base text-gray-600 mt-2">
+                <p className="text-sm md:text-base text-muted-foreground mt-2">
                   Start a conversation with {chat.botName}
                 </p>
               </div>
@@ -155,8 +170,8 @@ export default function BotChat() {
       </main>
 
       {/* Fixed Input Area */}
-      <footer className="flex-shrink-0 w-full bg-background border-t px-2 md:px-4 py-3 md:py-4 safe-area-bottom">
-        <div className="px-2 md:px-0">
+      <footer className="flex-shrink-0 w-full bg-background px-2 py-3 md:py-4 safe-area-bottom">
+        <div className="px-2 max-w-3xl lg:max-w-4xl mx-auto">
           <MessageInput />
         </div>
       </footer>

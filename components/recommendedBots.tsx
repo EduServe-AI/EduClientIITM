@@ -3,7 +3,7 @@
 import { getFeatureChatBotsQueryFn } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
 import WheelGesturesPlugin from 'embla-carousel-wheel-gestures'
-import FeaturedChatBotCard from './featuredChatBotCard'
+import FeaturedChatBotCard from './bot/featuredChatBotCard'
 import { Carousel, CarouselContent, CarouselItem } from './ui/carousel'
 
 // interface ChatBot {
@@ -31,7 +31,9 @@ export function RecommendedBots() {
     <div className="">
       {bots.length > 0 && (
         <>
-          <h1 className="text-2xl font-serif font-semibold mb-4">For you</h1>
+          <h3 className="text-lg font-bold font-serif tracking-wider text-white uppercase ml-1 mb-1">
+            For you
+          </h3>
 
           <div className="relative">
             <Carousel

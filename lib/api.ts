@@ -27,6 +27,7 @@ export async function apiService<T>(
   // setting up default headers
   const defaultHeaders: HeadersInit = {
     'Content-Type': 'application/json',
+    'ngrok-skip-browser-warning': 'true',
   }
   if (accessToken) {
     defaultHeaders['Authorization'] = `Bearer ${accessToken}`

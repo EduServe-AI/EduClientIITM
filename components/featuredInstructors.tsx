@@ -1,16 +1,13 @@
 'use client'
 
 import { getFeaturedInstructorsQueryFn } from '@/lib/api'
-import { Tooltip } from '@radix-ui/react-tooltip'
 import { useQuery } from '@tanstack/react-query'
 import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures'
-import { Info } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { FeaturedInstructorCard } from './featuredInstructorCard'
+import { FeaturedInstructorCard } from './instructor/featuredInstructorCard'
 import { Button } from './ui/button'
 import { Carousel, CarouselContent, CarouselItem } from './ui/carousel'
 import { Skeleton } from './ui/skeleton'
-import { TooltipContent, TooltipTrigger } from './ui/tooltip'
 
 export default function FeauturedInstructors() {
   const router = useRouter()
@@ -31,22 +28,22 @@ export default function FeauturedInstructors() {
       <div className="flex items-center justify-between mb-2">
         {/* ---- Heading ---- */}
         <div className="flex items-center gap-2">
-          <h3 className="text-lg md:text-xl font-bold font-serif">
+          <h3 className="text-lg font-bold font-serif tracking-wider text-white uppercase ml-1 mb-1">
             Featured Instructors
           </h3>
-          <Tooltip>
+          {/* <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                className="hidden md:flex bg-fuchsia-50 hover:bg-gray-400 cursor-pointer"
+                className="hidden md:flex bg-secondary hover:bg-accent cursor-pointer"
                 size="icon"
               >
-                <Info size={20} className="" color="black" />
+                <Info size={20} className="text-foreground" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>
               <p>Top Rated Instructors </p>
             </TooltipContent>
-          </Tooltip>
+          </Tooltip> */}
         </div>
 
         {/* ---- Explore Section ---- */}
@@ -95,7 +92,7 @@ export default function FeauturedInstructors() {
             <p className="text-red-500 font-semibold mb-2">
               Failed to load featured instructors
             </p>
-            <p className="text-gray-600 text-sm">
+            <p className="text-muted-foreground text-sm">
               {error instanceof Error ? error.message : 'An error occurred'}
             </p>
           </div>
@@ -136,7 +133,9 @@ export default function FeauturedInstructors() {
         </div>
       ) : (
         <div className="flex justify-center items-center py-12">
-          <p className="text-gray-600">No featured instructors available.</p>
+          <p className="text-muted-foreground">
+            No featured instructors available.
+          </p>
         </div>
       )}
     </div>

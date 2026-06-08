@@ -70,7 +70,7 @@ export default function StudentLogin({ setIsSignin }: StudentLoginProps) {
     <>
       {/* Welcome heading */}
       <h1 className="text-3xl sm:text-4xl font-bold text-[#0a66c2] italic mb-8">
-        Welcome, Back
+        Welcome
       </h1>
 
       <div className="flex flex-col gap-5">
@@ -81,8 +81,8 @@ export default function StudentLogin({ setIsSignin }: StudentLoginProps) {
             type="email"
             value={email}
             onChange={e => setEmail(e.target.value)}
-            placeholder="Email or Phone"
-            className="h-12 rounded-md border-gray-300 bg-[#f3f6f8] text-[15px] px-4 focus-visible:ring-2 focus-visible:ring-[#0a66c2] focus-visible:border-[#0a66c2] transition-all placeholder:text-[#0a66c2]/60"
+            placeholder="Email"
+            className="text-black h-12 rounded-md border-gray-300 bg-[#f3f6f8] text-[15px] px-4 focus-visible:ring-2 focus-visible:ring-[#0a66c2] focus-visible:border-[#0a66c2] transition-all placeholder:text-[#0a66c2]/60"
           />
         </div>
 
@@ -95,7 +95,7 @@ export default function StudentLogin({ setIsSignin }: StudentLoginProps) {
               value={password}
               onChange={e => setPassword(e.target.value)}
               placeholder="Password"
-              className="h-12 rounded-md border-gray-300 bg-[#f3f6f8] text-[15px] px-4 pr-12 focus-visible:ring-2 focus-visible:ring-[#0a66c2] focus-visible:border-[#0a66c2] transition-all placeholder:text-[#0a66c2]/60"
+              className="text-black h-12 rounded-md border-gray-300 bg-[#f3f6f8] text-[15px] px-4 pr-12 focus-visible:ring-2 focus-visible:ring-[#0a66c2] focus-visible:border-[#0a66c2] transition-all placeholder:text-[#0a66c2]/60"
             />
             <button
               type="button"
@@ -139,7 +139,7 @@ export default function StudentLogin({ setIsSignin }: StudentLoginProps) {
           <Button
             variant="outline"
             onClick={() => setIsSignin(false)}
-            className="flex-1 h-12 rounded-full border-2 border-[#0a66c2] text-[#0a66c2] font-semibold text-[15px] bg-transparent hover:bg-[#0a66c2]/5 transition-all duration-200 cursor-pointer"
+            className="flex-1 h-12 rounded-full border-2 border-[#0a66c2] dark:border-[#0a66c2] text-[#0a66c2] dark:text-[#0a66c2] font-semibold text-[15px] bg-transparent dark:bg-transparent hover:bg-[#0a66c2]/5 dark:hover:bg-[#0a66c2]/5 hover:text-[#0a66c2] dark:hover:text-[#0a66c2] transition-all duration-200 cursor-pointer"
           >
             Sign up
           </Button>
@@ -156,7 +156,7 @@ export default function StudentLogin({ setIsSignin }: StudentLoginProps) {
 
         <Button
           variant="outline"
-          className="w-full h-12 rounded-full gap-3 border border-gray-300 text-gray-600 font-medium hover:bg-gray-50 hover:border-gray-400 transition-all cursor-pointer"
+          className="w-full h-12 rounded-full gap-3 border border-gray-300 dark:border-gray-300 bg-white dark:bg-white text-gray-600 dark:text-gray-600 font-medium hover:bg-gray-50 dark:hover:bg-gray-50 hover:text-gray-900 dark:hover:text-gray-900 hover:border-gray-400 dark:hover:border-gray-400 transition-all cursor-pointer"
           onClick={() => {
             window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google/student`
           }}

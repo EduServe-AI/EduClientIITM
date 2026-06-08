@@ -3,7 +3,7 @@
 import { getRecentChats } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
 import WheelGesturesPlugin from 'embla-carousel-wheel-gestures'
-import ChatBotCard from './chatBotCard'
+import ChatBotCard from './bot/chatBotCard'
 import { Carousel, CarouselContent, CarouselItem } from './ui/carousel'
 import { Skeleton } from './ui/skeleton'
 
@@ -16,9 +16,9 @@ export function RecentChats() {
   if (isLoading) {
     return (
       <div className="pt-2">
-        <h1 className="text-2xl font-serif font-semibold mb-4 ml-2">
+        <h3 className="text-lg font-bold font-serif tracking-wider text-white uppercase ml-1 mb-1">
           Continue ...
-        </h1>
+        </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[1, 2, 3].map(i => (
             <div key={i} className="space-y-3">
@@ -52,9 +52,9 @@ export function RecentChats() {
     <div className=" pt-2">
       {chats.length > 0 && (
         <>
-          <h1 className="text-2xl font-serif font-semibold mb-4 ml-2">
+          <h3 className="text-lg font-bold font-serif tracking-wider text-white uppercase ml-1 mb-1">
             Continue ...
-          </h1>
+          </h3>
 
           <div className="relative">
             <Carousel
