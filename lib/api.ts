@@ -85,6 +85,13 @@ export const getRecentChats = async () => {
   return response.data.data.chats
 }
 
+// Deleting a chat
+export const deleteChat = async (chatId: string) => {
+  const response = await api.delete(`/chat/${chatId}`)
+
+  return response.data.message
+}
+
 // Searching the bots
 export const getBotsQueryFn = async (search: string, level: string) => {
   const response = await api.get<searchResponseType>('/bot', {

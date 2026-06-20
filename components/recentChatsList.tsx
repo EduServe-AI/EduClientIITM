@@ -1,8 +1,8 @@
 'use client'
 
-import { getRecentChats } from '@/lib/api'
+import { deleteChat, getRecentChats } from '@/lib/api'
 import { useImageUrl } from '@/lib/utils'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   AlertCircle,
   MessageCircle,
@@ -10,6 +10,7 @@ import {
   Trash2,
 } from 'lucide-react'
 import Link from 'next/link'
+import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
@@ -117,6 +118,23 @@ interface ChatItemProps {
 function ChatItem({ chat, href }: ChatItemProps) {
   const imageUrl = useImageUrl(chat.botName, 'bot')
   const [menuOpen, setMenuOpen] = useState(false)
+  const queryClient = useQueryClient()
+  const router = useRouter()
+  const pathname = usePathname()
+
+  const deleteChatMutation = useMutation({
+    mutationFn: deleteChat,
+    onSuccess: message => {
+      toast.success(message || 'Chat Deleted successfully')
+      queryClient.invalidateQueries({ queryKey: ['recentChats'] })
+      if (pathname?.includes(chat.id)) {
+        router.push('/dashboard/student')
+      }
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || 'Failed to delete chat')
+    },
+  })
 
   const formatTime = (date: Date) => {
     const now = new Date()
@@ -198,13 +216,16 @@ function ChatItem({ chat, href }: ChatItemProps) {
           <DropdownMenuContent side="bottom" align="end" className="w-40">
             <DropdownMenuItem
               className="cursor-pointer gap-2 text-red-500 focus:text-red-500"
+              disabled={deleteChatMutation.isPending}
               onClick={e => {
                 e.stopPropagation()
-                toast.info('This feature is coming soon!')
+                deleteChatMutation.mutate(chat.id)
               }}
             >
-              <Trash2 className="h-4 w-4" color="red" />
-              <span>Delete Chat</span>
+              <Trash2 className="h-4 w-4 text-red-500" />
+              <span>
+                {deleteChatMutation.isPending ? 'Deleting...' : 'Delete Chat'}
+              </span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
