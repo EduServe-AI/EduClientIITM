@@ -39,7 +39,7 @@ export default function MessageActions({ content }: MessageActionsProps) {
       {/* Copy */}
       <button
         onClick={handleCopy}
-        className="p-1.5 rounded-md text-neutral-500 hover:text-black hover:bg-neutral-100 transition-colors duration-150 cursor-pointer"
+        className="p-1.5 rounded-md text-neutral-500 hover:text-neutral-200 transition-colors duration-150 cursor-pointer"
         title="Copy"
       >
         {copied ? (
@@ -52,7 +52,7 @@ export default function MessageActions({ content }: MessageActionsProps) {
       {/* Like */}
       <button
         onClick={handleLike}
-        className="p-1.5 rounded-md text-neutral-500 hover:text-black hover:bg-neutral-100 transition-colors duration-150 cursor-pointer"
+        className="p-1.5 rounded-md text-neutral-500 hover:text-neutral-200 transition-colors duration-150 cursor-pointer"
         title="Like"
       >
         <ThumbsUp
@@ -63,7 +63,7 @@ export default function MessageActions({ content }: MessageActionsProps) {
       {/* Dislike */}
       <button
         onClick={handleDislike}
-        className="p-1.5 rounded-md text-neutral-500 hover:text-black hover:bg-neutral-100 transition-colors duration-150 cursor-pointer"
+        className="p-1.5 rounded-md text-neutral-500 hover:text-neutral-200 transition-colors duration-150 cursor-pointer"
         title="Dislike"
       >
         <ThumbsDown

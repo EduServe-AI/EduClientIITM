@@ -58,7 +58,7 @@ export default function MessageInput() {
 
           {/* Change Model */}
           <DropdownMenu>
-            <DropdownMenuTrigger asChild className="cursor-pointer">
+            <DropdownMenuTrigger asChild className="cursor-not-allowed">
               <InputGroupButton variant="secondary">Auto</InputGroupButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent
