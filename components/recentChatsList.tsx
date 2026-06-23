@@ -185,7 +185,7 @@ function ChatItem({ chat, href }: ChatItemProps) {
           </span>
           {/* Timestamp — hidden on hover / when menu is open */}
           <span
-            className={`text-[11px] text-muted-foreground whitespace-nowrap flex-shrink-0 ml-auto group-hover/chat:opacity-0 ${menuOpen ? 'opacity-0' : ''}`}
+            className={`text-[11px] text-muted-foreground whitespace-nowrap flex-shrink-0 ml-auto hidden md:block md:group-hover/chat:opacity-0 ${menuOpen ? 'md:opacity-0' : ''}`}
           >
             {formatTime(chat.lastInteractionTime)}
           </span>
@@ -195,13 +195,15 @@ function ChatItem({ chat, href }: ChatItemProps) {
         </p>
       </div>
 
-      {/* Three-dot menu — visible on hover or when dropdown is open */}
+      {/* Three-dot menu — always visible on mobile, hover-reveal on desktop */}
       <div
         className={`
           absolute right-2 top-1/2 -translate-y-1/2 z-[2] flex-shrink-0
           group-data-[state=closed]:!hidden
           transition-opacity duration-150
-          ${menuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none group-hover/chat:opacity-100 group-hover/chat:pointer-events-auto'}
+          opacity-100 pointer-events-auto
+          md:opacity-0 md:pointer-events-none
+          ${menuOpen ? 'md:opacity-100 md:pointer-events-auto' : 'md:group-hover/chat:opacity-100 md:group-hover/chat:pointer-events-auto'}
         `}
       >
         <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
