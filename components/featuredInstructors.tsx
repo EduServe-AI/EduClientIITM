@@ -28,7 +28,7 @@ export default function FeauturedInstructors() {
       <div className="flex items-center justify-between mb-2">
         {/* ---- Heading ---- */}
         <div className="flex items-center gap-2">
-          <h3 className="text-lg font-bold font-serif tracking-wider text-white uppercase ml-1 mb-1">
+          <h3 className="text-lg font-bold font-serif tracking-wider text-foreground uppercase ml-1 mb-1">
             Featured Instructors
           </h3>
           {/* <Tooltip>

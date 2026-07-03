@@ -7,18 +7,13 @@ import { useRouter } from 'next/navigation'
 import { Button } from '../ui/button'
 import { useSidebar } from '../ui/sidebar'
 
+import { Skeleton } from '../ui/skeleton'
+
 export default function Header() {
   const { student, isLoading } = useStudent()
   const { state, toggleSidebar, isMobile } = useSidebar()
   const imageUrl = useImageUrl(student?.id, 'profile')
   const router = useRouter()
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center p-6">
-        <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
-      </div>
-    )
-  }
 
   return (
     <header className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4">
@@ -35,9 +30,16 @@ export default function Header() {
               <Menu size={20} />
             </Button>
           )}
-          <h1 className="text-md sm:text-base md:text-lg font-serif  tracking-wide m-0 text-white">
-            Hi @{student?.username},
-          </h1>
+          <div className="flex items-center h-7">
+            <h1 className="text-md sm:text-base md:text-lg font-serif tracking-wide m-0 text-foreground flex items-center gap-1.5">
+              <span>Hi</span>
+              {isLoading ? (
+                <Skeleton className="h-5 w-24 rounded bg-muted-foreground/20" />
+              ) : (
+                <span>@{student?.username},</span>
+              )}
+            </h1>
+          </div>
         </div>
         {/* Profile Button - Redirects to profile page */}
         {/* <Button

@@ -91,7 +91,14 @@ function AuthCallbackContent() {
           // Check onboarding status
           if (student.onboarded) {
             toast.success('Welcome back!')
-            router.push('/dashboard/student')
+            // Check for stored redirect (e.g., from shared bot link)
+            const redirectPath = localStorage.getItem('redirectAfterAuth')
+            if (redirectPath) {
+              localStorage.removeItem('redirectAfterAuth')
+              router.push(redirectPath)
+            } else {
+              router.push('/dashboard/student')
+            }
           } else {
             toast.info('Please complete your profile')
             router.push('/onboarding/student')

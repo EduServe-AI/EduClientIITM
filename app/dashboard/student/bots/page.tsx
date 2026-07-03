@@ -2,7 +2,7 @@
 import FeaturedChatBotCard from '@/components/bot/featuredChatBotCard'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Spinner } from '@/components/ui/spinner'
+import { ChatBotSkeletonGrid } from '@/components/bot/chatBotSkeleton'
 import { getBotsQueryFn } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
 import { Search, SlidersHorizontal } from 'lucide-react'
@@ -83,8 +83,8 @@ export default function StudentBotsPage() {
       {/* List of chatbots */}
       <div className="">
         {isLoading ? (
-          <div className="max-h-svh flex justify-center items-center">
-            <Spinner className="w-16 h-16" />
+          <div className="py-4">
+            <ChatBotSkeletonGrid count={6} />
           </div>
         ) : isError ? (
           <div className="flex justify-center items-center max-h-svh">

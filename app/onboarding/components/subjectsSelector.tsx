@@ -6,18 +6,18 @@ import { DIPLOMAPR_SUBJECTS } from '@/constants/diplomapr-subjects'
 import { FOUNDATION_SUBJECTS } from '@/constants/foundation-subjects'
 import { apiService } from '@/lib/api'
 import { ProgramLevelId } from '@/types/types'
+import { motion } from 'framer-motion'
 import {
-  Loader2,
   BookOpen,
-  FlaskConical,
-  Code,
   BrainCircuit,
+  Code,
+  FlaskConical,
+  Loader2,
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { toast } from 'sonner'
 import { getLevelProperties } from './levelSelector'
-import { motion } from 'framer-motion'
 
 interface Subject {
   name: string
@@ -28,6 +28,11 @@ interface Subject {
 interface SubjectSelectorProps {
   selectedLevel: ProgramLevelId | null
   onBack: () => void
+  onChangeSubmitState?: (state: {
+    onConfirm: () => void
+    disabled: boolean
+    isPending: boolean
+  }) => void
 }
 
 // Accent colors per level for the gradient cards
@@ -97,6 +102,7 @@ export default function SubjectSelector({
   selectedLevel,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onBack: _onBack,
+  onChangeSubmitState,
 }: SubjectSelectorProps) {
   if (!selectedLevel) {
     toast.error('No selected Programme Level')
@@ -145,7 +151,7 @@ export default function SubjectSelector({
     }
   }
 
-  const handleNext = async () => {
+  const handleNext = useCallback(async () => {
     const accessToken = localStorage.getItem('accessToken')
     if (!accessToken) {
       toast.error('No access token found. Please log in again')
@@ -188,7 +194,23 @@ export default function SubjectSelector({
     } finally {
       setIsSubmitting(false)
     }
-  }
+  }, [selectedSubjects, selectedProjects, router])
+
+  useEffect(() => {
+    onChangeSubmitState?.({
+      onConfirm: handleNext,
+      disabled:
+        (selectedSubjects.length === 0 && selectedProjects.length === 0) ||
+        isSubmitting,
+      isPending: isSubmitting,
+    })
+  }, [
+    selectedSubjects,
+    selectedProjects,
+    isSubmitting,
+    handleNext,
+    onChangeSubmitState,
+  ])
 
   const renderSubjects = (subjects: Subject[]) => (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mb-6">
@@ -327,7 +349,7 @@ export default function SubjectSelector({
                 {selectedSubjects.map((subject, index) => (
                   <span
                     key={index}
-                    className={`text-sm px-3 py-1 rounded-full ${color.color} border ${color.selectedColor}`}
+                    className={`text-sm px-3 py-1 text-black rounded-full ${color.color} border ${color.selectedColor}`}
                   >
                     {subject}
                   </span>
@@ -348,7 +370,7 @@ export default function SubjectSelector({
                 {selectedProjects.map((project, index) => (
                   <span
                     key={index}
-                    className={`text-sm px-3 py-1 rounded-full bg-amber-50 border-2 border-amber-500`}
+                    className={`text-sm px-3 py-1 text-black rounded-full bg-amber-50 border-2 border-amber-500`}
                   >
                     {project}
                   </span>
@@ -359,27 +381,6 @@ export default function SubjectSelector({
               </div>
             </div>
           )}
-        </div>
-
-        <div className="flex gap-3 sm:mt-0">
-          <Button
-            onClick={handleNext}
-            disabled={
-              (selectedSubjects.length === 0 &&
-                selectedProjects.length === 0) ||
-              isSubmitting
-            }
-            className="px-6 py-2.5 text-md rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white hover:cursor-pointer shadow-md shadow-emerald-500/20 disabled:opacity-40 disabled:cursor-not-allowed"
-          >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Submitting...
-              </>
-            ) : (
-              '🎉 Submit Enrollment'
-            )}
-          </Button>
         </div>
       </div>
     </div>
