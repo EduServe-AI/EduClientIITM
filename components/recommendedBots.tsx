@@ -31,7 +31,7 @@ export function RecommendedBots() {
     <div className="">
       {bots.length > 0 && (
         <>
-          <h3 className="text-lg font-bold font-serif tracking-wider text-white uppercase ml-1 mb-1">
+          <h3 className="text-lg font-bold font-serif tracking-wider text-foreground uppercase ml-1 mb-1">
             For you
           </h3>
 

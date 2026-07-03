@@ -79,10 +79,16 @@ export async function apiService<T>(
 
 // Retreiving the list of recent chats of a user
 export const getRecentChats = async () => {
-  const response = await api.get<UserChatsResponse>('/chat/user-chats')
-
-  // Returning the chats array
-  return response.data.data.chats
+  try {
+    const response = await api.get<UserChatsResponse>('/chat/user-chats')
+    return response.data?.data?.chats || []
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error)
+    if (/no chats|not found|empty|no conversations/i.test(errorMessage)) {
+      return []
+    }
+    throw error
+  }
 }
 
 // Deleting a chat
@@ -99,14 +105,14 @@ export const getBotsQueryFn = async (search: string, level: string) => {
   })
 
   // Return the bots array from the nested data structure
-  return response.data.data.bots
+  return response.data?.data?.bots || []
 }
 
 export const getFeatureChatBotsQueryFn = async () => {
   const response = await api.get<featureChatBotsResponseType>('/bot/featured')
 
   // Return the bots array from the nested data structure
-  return response.data.data.featuredChatBots ?? []
+  return response.data?.data?.featuredChatBots ?? []
 }
 
 export const getrecommendedChatBotsQueryFn = async () => {
@@ -114,7 +120,7 @@ export const getrecommendedChatBotsQueryFn = async () => {
     await api.get<recommendedBotsResponseType>('/bot/recommended')
 
   // Return the bots array from the nested data structure
-  return response.data.data.recommendedBots ?? []
+  return response.data?.data?.recommendedBots ?? []
 }
 
 // Searching the instructors
@@ -123,7 +129,7 @@ export const getFeaturedInstructorsQueryFn = async () => {
     '/instructor/featured'
   )
   // Return the instructors array from the nested data structure
-  return response.data.data.featuredInstructors
+  return response.data?.data?.featuredInstructors || []
 }
 
 export const getInstructorsQueryFn = async (search: string, level: string) => {
@@ -132,7 +138,7 @@ export const getInstructorsQueryFn = async (search: string, level: string) => {
   })
 
   // Return the instructors array from the nested data structure
-  return response.data.data.instructors
+  return response.data?.data?.instructors || []
 }
 
 // Retreiving instructors detailed profile view
@@ -161,7 +167,7 @@ export const getSessionsQueryFn = async () => {
   const response = await api.get<UserSessionsResponse>('/session/list')
 
   // Returning the sessions list
-  return response.data.data.userSessions
+  return response.data?.data?.userSessions || []
 }
 
 // Retrieving the stream token for the session call

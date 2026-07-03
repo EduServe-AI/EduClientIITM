@@ -8,7 +8,7 @@ import Image from 'next/image'
 import { toast } from 'sonner'
 import { apiService } from '@/lib/api'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, ChevronRight, Check } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Check, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 // ─── Step definitions (2 steps for student) ─────────────────────────────────
@@ -27,6 +27,11 @@ export default function StudentOnboarding() {
   const [selectedLevel, setSelectedLevel] = useState<ProgramLevelId | null>(
     null
   )
+  const [submitAction, setSubmitAction] = useState<{
+    onConfirm: () => void
+    disabled: boolean
+    isPending: boolean
+  } | null>(null)
 
   const progressPercentage = (currentStep / STEPS.length) * 100
 
@@ -343,6 +348,7 @@ export default function StudentOnboarding() {
                     <SubjectSelector
                       selectedLevel={selectedLevel}
                       onBack={() => setCurrentStep(1)}
+                      onChangeSubmitState={setSubmitAction}
                     />
                   )}
                 </motion.div>
@@ -383,7 +389,25 @@ export default function StudentOnboarding() {
                   <ChevronRight className="w-4 h-4" />
                 </Button>
               ) : (
-                <span />
+                submitAction && (
+                  <Button
+                    onClick={submitAction.onConfirm}
+                    disabled={submitAction.disabled}
+                    className="px-6 py-2.5 flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white disabled:opacity-40 disabled:cursor-not-allowed rounded-xl shadow-md cursor-pointer transition-colors"
+                  >
+                    {submitAction.isPending ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Submitting...
+                      </>
+                    ) : (
+                      <>
+                        Submit Enrollment
+                        <ChevronRight className="w-4 h-4" />
+                      </>
+                    )}
+                  </Button>
+                )
               )}
             </div>
           </motion.div>

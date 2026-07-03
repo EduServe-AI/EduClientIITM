@@ -16,7 +16,7 @@ export function RecentChats() {
   if (isLoading) {
     return (
       <div className="pt-2">
-        <h3 className="text-lg font-bold font-serif tracking-wider text-white uppercase ml-1 mb-1">
+        <h3 className="text-lg font-bold font-serif tracking-wider text-foreground uppercase ml-1 mb-1">
           Continue ...
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -52,7 +52,7 @@ export function RecentChats() {
     <div className=" pt-2">
       {chats.length > 0 && (
         <>
-          <h3 className="text-lg font-bold font-serif tracking-wider text-white uppercase ml-1 mb-1">
+          <h3 className="text-lg font-bold font-serif tracking-wider text-foreground uppercase ml-1 mb-1">
             Continue ...
           </h3>
 

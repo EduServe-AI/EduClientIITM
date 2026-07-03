@@ -1,5 +1,6 @@
 'use client'
 
+import { DeleteChatConfirmation } from '@/components/common/deleteChatConfirmation'
 import { deleteChat, getRecentChats } from '@/lib/api'
 import { useImageUrl } from '@/lib/utils'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -69,6 +70,17 @@ export function RecentChatsList() {
     const errorMessage =
       error instanceof Error ? error.message : 'Failed to load recent chats'
 
+    if (/no chats|not found|empty|no conversations/i.test(errorMessage)) {
+      return (
+        <div className="flex flex-col items-center justify-center py-8 px-4 text-center">
+          <MessageCircle className="h-12 w-12 text-muted-foreground mb-3 opacity-50" />
+          <p className="text-xs text-muted-foreground mt-1">
+            Start a conversation with a bot
+          </p>
+        </div>
+      )
+    }
+
     return (
       <div className="flex flex-col items-center justify-center py-8 px-4 text-center">
         <div className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-red-100 mb-3">
@@ -118,6 +130,7 @@ interface ChatItemProps {
 function ChatItem({ chat, href }: ChatItemProps) {
   const imageUrl = useImageUrl(chat.botName, 'bot')
   const [menuOpen, setMenuOpen] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
   const queryClient = useQueryClient()
   const router = useRouter()
   const pathname = usePathname()
@@ -127,12 +140,14 @@ function ChatItem({ chat, href }: ChatItemProps) {
     onSuccess: message => {
       toast.success(message || 'Chat Deleted successfully')
       queryClient.invalidateQueries({ queryKey: ['recentChats'] })
+      setShowDeleteModal(false)
       if (pathname?.includes(chat.id)) {
         router.push('/dashboard/student')
       }
     },
     onError: (error: Error) => {
       toast.error(error.message || 'Failed to delete chat')
+      setShowDeleteModal(false)
     },
   })
 
@@ -178,14 +193,14 @@ function ChatItem({ chat, href }: ChatItemProps) {
       </Avatar>
 
       {/* Chat info - Hidden when sidebar is collapsed */}
-      <div className="flex-1 min-w-0 overflow-hidden group-data-[state=closed]:hidden relative z-[1] pointer-events-none">
+      <div className="flex-1 min-w-0 overflow-hidden group-data-[state=closed]:hidden relative z-[1] pointer-events-none pr-6 md:pr-0">
         <div className="flex items-baseline justify-between gap-1">
           <span className="text-sm font-medium text-sidebar-foreground truncate">
             {chat.botName}
           </span>
           {/* Timestamp — hidden on hover / when menu is open */}
           <span
-            className={`text-[11px] text-muted-foreground whitespace-nowrap flex-shrink-0 ml-auto hidden md:block md:group-hover/chat:opacity-0 ${menuOpen ? 'md:opacity-0' : ''}`}
+            className={`text-[11px] text-muted-foreground whitespace-nowrap flex-shrink-0 ml-auto transition-opacity duration-150 md:group-hover/chat:opacity-0 ${menuOpen ? 'md:opacity-0' : ''}`}
           >
             {formatTime(chat.lastInteractionTime)}
           </span>
@@ -221,17 +236,27 @@ function ChatItem({ chat, href }: ChatItemProps) {
               disabled={deleteChatMutation.isPending}
               onClick={e => {
                 e.stopPropagation()
-                deleteChatMutation.mutate(chat.id)
+                setShowDeleteModal(true)
               }}
             >
               <Trash2 className="h-4 w-4 text-red-500" />
-              <span>
-                {deleteChatMutation.isPending ? 'Deleting...' : 'Delete Chat'}
-              </span>
+              <span>Delete Chat</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
+      {showDeleteModal && (
+        <DeleteChatConfirmation
+          isOpen={showDeleteModal}
+          onClose={() => setShowDeleteModal(false)}
+          onConfirm={() => {
+            deleteChatMutation.mutate(chat.id)
+          }}
+          isPending={deleteChatMutation.isPending}
+          botName={chat.botName}
+        />
+      )}
     </div>
   )
 }

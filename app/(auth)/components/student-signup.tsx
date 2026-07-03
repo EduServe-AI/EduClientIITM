@@ -46,6 +46,8 @@ export default function StudentSignup({ setIsSignin }: StudentSignupProps) {
 
       saveAccessToken(data.data.accessToken)
       toast.success('User Signed Up Successfully!')
+
+      // Preserve redirectAfterAuth through onboarding — it will be used after onboarding completes
       router.push('/onboarding/student')
     } catch (error) {
       if (error instanceof Error) {
@@ -74,7 +76,7 @@ export default function StudentSignup({ setIsSignin }: StudentSignupProps) {
           value={username}
           onChange={e => setUsername(e.target.value)}
           placeholder="Username"
-          className="h-12 rounded-md border-gray-300 bg-[#f3f6f8] text-[15px] px-4 focus-visible:ring-2 focus-visible:ring-[#0a66c2] focus-visible:border-[#0a66c2] transition-all placeholder:text-[#0a66c2]/60"
+          className="h-12 rounded-md border-gray-300 bg-[#f3f6f8] text-black text-[15px] px-4 focus-visible:ring-2 focus-visible:ring-[#0a66c2] focus-visible:border-[#0a66c2] transition-all placeholder:text-[#0a66c2]/60"
         />
 
         {/* Email */}
@@ -84,7 +86,7 @@ export default function StudentSignup({ setIsSignin }: StudentSignupProps) {
           value={email}
           onChange={e => setEmail(e.target.value)}
           placeholder="Email"
-          className="h-12 rounded-md border-gray-300 bg-[#f3f6f8] text-[15px] px-4 focus-visible:ring-2 focus-visible:ring-[#0a66c2] focus-visible:border-[#0a66c2] transition-all placeholder:text-[#0a66c2]/60"
+          className="h-12 rounded-md text-black border-gray-300 bg-[#f3f6f8] text-[15px] px-4 focus-visible:ring-2 focus-visible:ring-[#0a66c2] focus-visible:border-[#0a66c2] transition-all placeholder:text-[#0a66c2]/60"
         />
 
         {/* Password */}
@@ -95,7 +97,7 @@ export default function StudentSignup({ setIsSignin }: StudentSignupProps) {
             value={password}
             onChange={e => setPassword(e.target.value)}
             placeholder="Password"
-            className="h-12 rounded-md border-gray-300 bg-[#f3f6f8] text-[15px] px-4 pr-12 focus-visible:ring-2 focus-visible:ring-[#0a66c2] focus-visible:border-[#0a66c2] transition-all placeholder:text-[#0a66c2]/60"
+            className="h-12 rounded-md text-black border-gray-300 bg-[#f3f6f8] text-[15px] px-4 pr-12 focus-visible:ring-2 focus-visible:ring-[#0a66c2] focus-visible:border-[#0a66c2] transition-all placeholder:text-[#0a66c2]/60"
           />
           <button
             type="button"

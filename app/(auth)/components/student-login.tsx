@@ -49,7 +49,12 @@ export default function StudentLogin({ setIsSignin }: StudentLoginProps) {
       saveAccessToken(accessToken)
       toast.success('Student Signed In Successfully!')
 
-      if (studentData.onboarded) {
+      // Check if there's a stored redirect (e.g., from shared bot link)
+      const redirectPath = localStorage.getItem('redirectAfterAuth')
+      if (redirectPath) {
+        localStorage.removeItem('redirectAfterAuth')
+        router.push(redirectPath)
+      } else if (studentData.onboarded) {
         router.push('/dashboard/student')
       } else {
         router.push('/onboarding/student')

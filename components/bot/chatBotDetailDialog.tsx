@@ -9,6 +9,7 @@ import { Heart, MessageCircle, Share, X } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { toast } from 'sonner'
 
 interface ChatBotDetailDialogProps {
   open: boolean
@@ -60,6 +61,11 @@ export default function ChatBotDetailDialog({
       ? chatBot.description.slice(0, DESCRIPTION_LIMIT) + '...'
       : chatBot.description
 
+  const shareUrl =
+    typeof window !== 'undefined'
+      ? `${window.location.origin}/bot/${chatBot.id}`
+      : ''
+
   const handleChat = () => {
     if (existingChatId) {
       // Navigate to existing chat
@@ -77,20 +83,13 @@ export default function ChatBotDetailDialog({
     // TODO: Implement actual favorite logic with API call
   }
 
-  const handleShare = (e: React.MouseEvent) => {
+  const handleShare = async (e: React.MouseEvent) => {
     e.stopPropagation()
-    // TODO: Implement share logic
-    if (navigator.share) {
-      navigator
-        .share({
-          title: chatBot.name,
-          text: chatBot.description,
-          url: window.location.href,
-        })
-        .catch(err => console.log('Error sharing:', err))
-    } else {
-      // Fallback: copy link to clipboard
-      navigator.clipboard.writeText(window.location.href)
+    try {
+      await navigator.clipboard.writeText(shareUrl)
+      toast.success('Bot link copied to clipboard!')
+    } catch (error) {
+      toast.error('Failed to copy link')
     }
   }
 
@@ -157,7 +156,7 @@ export default function ChatBotDetailDialog({
               <div className="flex gap-2">
                 <button
                   onClick={handleFavorite}
-                  className="p-2 rounded-full hover:bg-red-300 dark:hover:bg-red-300 transition-colors cursor-pointer"
+                  className="p-2 rounded-full hover:bg-red-600 dark:hover:bg-red-600 transition-colors cursor-pointer"
                   aria-label="Favorite"
                 >
                   <Heart
@@ -167,7 +166,7 @@ export default function ChatBotDetailDialog({
                 </button>
                 <button
                   onClick={handleShare}
-                  className="p-2 rounded-full hover:bg-sky-200 dark:hover:bg-blue-200 transition-colors cursor-pointer"
+                  className="p-2 rounded-full transition-colors cursor-pointer"
                   aria-label="Share"
                 >
                   <Share size={20} className="text-muted-foreground" />
