@@ -1,5 +1,6 @@
 'use client'
 
+import Loading from '@/app/loading'
 import { Button } from '@/components/ui/button'
 import { useChat } from '@/contexts/chatContext'
 import { useStudent } from '@/contexts/studentContext'
@@ -59,21 +60,21 @@ export default function BotChat() {
   }, [chat])
 
   if (isLoading || !chat) {
-    return <div>Loading .....</div>
+    return <Loading />
   }
 
   if (studenLoading || !student) {
-    return <div>Loading...</div>
+    return <Loading />
   }
 
   // Check if there are any messages
   const hasMessages = messages && messages.length > 0
 
   return (
-    <div className="h-full w-full flex flex-col bg-background overflow-hidden">
+    <div className="h-full w-full flex flex-col bg-background overflow-hidden -mx-auto">
       {/* Fixed Header */}
       <header className="flex-shrink-0 w-full bg-background px-4 z-10 border-b">
-        <div className="w-full justify-between py-1 flex items-center h-14">
+        <div className="w-full justify-between py-1 flex items-center h-10">
           {/* Left side - Back Button (Mobile), Bot Name */}
           <div className="flex gap-1 md:gap-3 items-center min-w-0">
             {/* Back Button - Mobile Only */}
@@ -92,13 +93,11 @@ export default function BotChat() {
               alt="Bot-Image"
               width={40}
               height={40}
-              className="shrink-0 rounded-full object-cover"
+              className="shrink-0 size-6 rounded-full object-cover"
             />
 
             <div className="min-w-0">
-              <h2 className="font-serif text-base md:text-xl truncate font-semibold">
-                {chat.botName}
-              </h2>
+              <h2 className="truncate font-semibold">{chat.botName}</h2>
             </div>
           </div>
 
@@ -141,11 +140,11 @@ export default function BotChat() {
             </div>
           ) : (
             <div className="flex items-center justify-center min-h-[60vh]">
-              <div className="text-center text-black px-4">
+              <div className="text-center text-foreground px-4">
                 <h2 className="text-2xl md:text-4xl font-semibold">
                   Hello, {student?.username}
                 </h2>
-                <p className="text-sm md:text-base text-gray-600 mt-2">
+                <p className="text-sm md:text-base text-muted-foreground mt-2">
                   Start a conversation with {chat.botName}
                 </p>
               </div>
@@ -155,10 +154,8 @@ export default function BotChat() {
       </main>
 
       {/* Fixed Input Area */}
-      <footer className="flex-shrink-0 w-full bg-background border-t px-2 md:px-4 py-3 md:py-4 safe-area-bottom">
-        <div className="px-2 md:px-0">
-          <MessageInput />
-        </div>
+      <footer className="flex-shrink-0 w-full bg-background px-2 md:px-4 md:mx-auto md:max-w-5xl safe-area-bottom">
+        <MessageInput />
       </footer>
     </div>
   )

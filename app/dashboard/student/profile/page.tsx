@@ -31,7 +31,7 @@ export default function Profile() {
   // You can show a loading state while the context is initializing
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-muted/20">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
           <p className="text-gray-600">Loading...</p>
@@ -138,7 +138,7 @@ export default function Profile() {
                 <Button
                   variant="outline"
                   size="icon"
-                  className="absolute bottom-0 right-0 h-9 w-9 md:h-10 md:w-10 rounded-full cursor-pointer shadow-md hover:bg-gray-100"
+                  className="absolute bottom-0 right-0 h-9 w-9 md:h-10 md:w-10 rounded-full cursor-pointer shadow-md"
                   onClick={() => fileInputRef.current?.click()}
                 >
                   <EditIcon size={20} />
@@ -147,14 +147,14 @@ export default function Profile() {
             </div>
             <div className="mt-6 sm:flex-1 sm:min-w-0 sm:flex sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
               <div className="sm:hidden md:block mt-6 min-w-0 flex-1">
-                <h1 className="text-2xl font-bold text-gray-900 truncate">
+                <h1 className="text-2xl font-bold text-foreground truncate">
                   {student.username}
                 </h1>
               </div>
             </div>
           </div>
           <div className="hidden sm:block md:hidden mt-6 min-w-0 flex-1">
-            <h1 className="text-2xl font-bold text-gray-900 truncate">
+            <h1 className="text-2xl font-bold text-foreground truncate">
               {student.username}
             </h1>
           </div>
@@ -165,20 +165,20 @@ export default function Profile() {
         <div className="max-w-4xl mx-auto">
           <div className="border border-border shadow overflow-hidden sm:rounded-lg">
             <div className="px-4 py-5 sm:px-6">
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
+              <h3 className="text-lg leading-6 font-medium text-foreground">
                 Profile Information
               </h3>
-              <p className="mt-1 max-w-2xl text-sm text-gray-500">
+              <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
                 Personal details and application.
               </p>
             </div>
-            <div className="border-t border-gray-200">
+            <div className="border-t border-border">
               <dl>
                 <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">
+                  <dt className="text-sm font-medium text-muted-foreground">
                     Username
                   </dt>
-                  <dd className="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  <dd className="mt-1 flex text-sm text-foreground sm:mt-0 sm:col-span-2">
                     <span className="flex-grow">{student.username}</span>
                     <span className="ml-4 flex-shrink-0">
                       <EditProfileField
@@ -188,11 +188,11 @@ export default function Profile() {
                     </span>
                   </dd>
                 </div>
-                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">
+                <div className="bg-muted/20 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt className="text-sm font-medium text-muted-foreground">
                     Email address
                   </dt>
-                  <dd className="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  <dd className="mt-1 flex text-sm text-foreground sm:mt-0 sm:col-span-2">
                     <span className="flex-grow">{student.email}</span>
                     <span className="ml-4 flex-shrink-0">
                       <EditProfileField
@@ -203,8 +203,10 @@ export default function Profile() {
                   </dd>
                 </div>
                 <div className="px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">Level</dt>
-                  <dd className="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  <dt className="text-sm font-medium text-muted-foreground">
+                    Level
+                  </dt>
+                  <dd className="mt-1 flex text-sm text-foreground sm:mt-0 sm:col-span-2">
                     <span className="flex-grow">{student.level}</span>
                     <span className="ml-4 flex-shrink-0">
                       <EditProfileField
@@ -214,11 +216,11 @@ export default function Profile() {
                     </span>
                   </dd>
                 </div>
-                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">
+                <div className="bg-muted/20 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                  <dt className="text-sm font-medium text-muted-foreground">
                     Enrolled Courses
                   </dt>
-                  <dd className="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  <dd className="mt-1 flex text-sm text-foreground sm:mt-0 sm:col-span-2">
                     <span className="flex-grow flex gap-1">
                       {student.courses.map((course, i) => (
                         <Badge key={i}>{course.name}</Badge>
@@ -234,91 +236,6 @@ export default function Profile() {
                     </span>
                   </dd>
                 </div>
-                {/* <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">
-                    Salary expectation
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    $120,000
-                  </dd>
-                </div>
-                <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">About</dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    Fugiat ipsum ipsum deserunt culpa aute sint do nostrud anim
-                    incididunt cillum culpa consequat. Excepteur qui ipsum
-                    aliquip consequat sint. Sit id mollit nulla mollit nostrud
-                    in ea officia proident. Irure nostrud pariatur mollit ad
-                    adipisicing reprehenderit deserunt qui eu.
-                  </dd>
-                </div>
-                <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                  <dt className="text-sm font-medium text-gray-500">
-                    Attachments
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                    <ul className="border border-gray-200 rounded-md divide-y divide-gray-200">
-                      <li className="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
-                        <div className="w-0 flex-1 flex items-center">
-                          <svg
-                            className="flex-shrink-0 h-5 w-5 text-gray-400"
-                            x-description="Heroicon name: solid/paper-clip"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                            aria-hidden="true"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 012 0v4a1 1 0 102 0V7a3 3 0 00-3-3z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          <span className="ml-2 flex-1 w-0 truncate">
-                            resume_back_end_developer.pdf
-                          </span>
-                        </div>
-                        <div className="ml-4 flex-shrink-0">
-                          <a
-                            href="#"
-                            className="font-medium text-indigo-600 hover:text-indigo-500"
-                          >
-                            Download
-                          </a>
-                        </div>
-                      </li>
-                      <li className="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
-                        <div className="w-0 flex-1 flex items-center">
-                          <svg
-                            className="flex-shrink-0 h-5 w-5 text-gray-400"
-                            x-description="Heroicon name: solid/paper-clip"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                            aria-hidden="true"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 012 0v4a1 1 0 102 0V7a3 3 0 00-3-3z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                          <span className="ml-2 flex-1 w-0 truncate">
-                            coverletter_back_end_developer.pdf
-                          </span>
-                        </div>
-                        <div className="ml-4 flex-shrink-0">
-                          <a
-                            href="#"
-                            className="font-medium text-indigo-600 hover:text-indigo-500"
-                          >
-                            Download
-                          </a>
-                        </div>
-                      </li>
-                    </ul>
-                  </dd>
-                </div> */}
               </dl>
             </div>
           </div>

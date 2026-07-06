@@ -155,7 +155,7 @@ export default function Header() {
         </DropdownMenu>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Avatar className="h-[30px] w-[30px] rounded-full flex items-center justify-center bg-primary/20 p-1">
+            <Avatar className="h-[30px] w-[30px] rounded-full flex items-center justify-center bg-primary/20 p-0.5">
               <AvatarImage
                 src={imageUrl || '/student_fallback.jpg'}
                 alt={student?.username}
@@ -174,10 +174,7 @@ export default function Header() {
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-full flex items-center justify-center">
-                  <AvatarImage
-                    src={student?.username}
-                    alt={student?.username}
-                  />
+                  <AvatarImage src={imageUrl} alt={student?.username} />
                   <AvatarFallback className="rounded-full">
                     {getInitials(student?.username || '', true)}
                   </AvatarFallback>

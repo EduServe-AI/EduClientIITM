@@ -130,9 +130,9 @@ export default function SessionCard({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpen}>
-      <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col p-0">
+      <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col">
         {/* Fixed Header */}
-        <DialogHeader className="px-6 pt-6 pb-4 border-b">
+        <DialogHeader className="pb-4 border-b">
           <DialogTitle className="text-2xl font-bold">
             Book a Session
           </DialogTitle>
@@ -142,7 +142,7 @@ export default function SessionCard({
         </DialogHeader>
 
         {/* Scrollable Content Area */}
-        <div className="flex-1 overflow-y-auto px-6 py-4">
+        <div className="flex-1 overflow-y-auto py-4">
           <div className="space-y-6">
             {/* Instructor Name (Read-only display) */}
             <div className="space-y-2">
@@ -274,7 +274,7 @@ export default function SessionCard({
         </div>
 
         {/* Fixed Footer */}
-        <DialogFooter className="px-6 py-4 border-t flex flex-col sm:flex-row gap-2">
+        <DialogFooter>
           <Button
             variant="outline"
             onClick={() => {
@@ -288,7 +288,7 @@ export default function SessionCard({
           </Button>
           <Button
             onClick={handleBookSession}
-            className="w-full sm:w-auto bg-black text-white hover:bg-gray-800"
+            className="w-full sm:w-auto "
             disabled={createSessionMutation.isPending}
           >
             {createSessionMutation.isPending ? 'Booking...' : 'Book Session'}

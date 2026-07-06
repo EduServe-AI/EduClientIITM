@@ -36,11 +36,7 @@ export default function EditProfileField({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          size="icon"
-          className="text-gray-500 hover:text-black cursor-pointer mr-3"
-        >
+        <Button variant="outline" size="icon">
           <Pencil className="h-4 w-4" />
         </Button>
       </DialogTrigger>

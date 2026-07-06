@@ -38,7 +38,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <InstructorProvider>
       <SidebarProvider className="">
-        <div className="flex h-screen w-full overflow-hidden bg-white">
+        <div className="flex h-screen w-full overflow-hidden bg-background">
           <AppSidebar
             mainNavItems={instructorNavItems}
             footerNavItems={footerNavItems}

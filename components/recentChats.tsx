@@ -16,9 +16,9 @@ export function RecentChats() {
   if (isLoading) {
     return (
       <div className="pt-2">
-        <h1 className="text-2xl font-serif font-semibold mb-4 ml-2">
-          Continue ...
-        </h1>
+        <div className="pb-4 border-border border-b">
+          <h3 className="text-lg md:text-xl font-bold">Continue...</h3>
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[1, 2, 3].map(i => (
             <div key={i} className="space-y-3">
@@ -49,13 +49,12 @@ export function RecentChats() {
     )
   }
   return (
-    <div className=" pt-2">
+    <>
       {chats.length > 0 && (
         <>
-          <h1 className="text-2xl font-serif font-semibold mb-4 ml-2">
-            Continue ...
-          </h1>
-
+          <div className="pb-4 border-border border-b">
+            <h3 className="text-lg md:text-xl font-bold">Continue...</h3>
+          </div>
           <div className="relative">
             <Carousel
               opts={{
@@ -67,11 +66,11 @@ export function RecentChats() {
               plugins={[WheelGesturesPlugin()]}
               className="w-full"
             >
-              <CarouselContent className="-ml-2 md:-ml-4">
+              <CarouselContent className="pl-2 py-4 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 {chats.map(chat => (
                   <CarouselItem
                     key={chat.id}
-                    className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3"
+                    className="p-1 pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3"
                   >
                     <ChatBotCard
                       id={chat.id}
@@ -88,6 +87,6 @@ export function RecentChats() {
           </div>
         </>
       )}
-    </div>
+    </>
   )
 }

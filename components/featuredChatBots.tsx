@@ -22,17 +22,16 @@ export default function FeauturedChatBots() {
 
   return (
     <div className="w-full mb-8 mt-8">
-      <div className="flex items-center justify-between mb-2">
+      <div className="flex items-center justify-between pb-4 border-border border-b">
         {/* ---- Heading ---- */}
         <div className="flex items-center gap-2">
-          <h3 className="text-lg md:text-xl font-bold font-serif">
-            Featured ChatBots
-          </h3>
+          <h3 className="text-lg md:text-xl font-bold">Featured ChatBots</h3>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                className="hidden md:flex bg-fuchsia-50 hover:bg-gray-400 cursor-pointer"
-                size="icon"
+                variant={'ghost'}
+                className="hidden md:flex cursor-pointer"
+                size="icon-xs"
               >
                 <Info size={20} className="" color="black" />
               </Button>
@@ -53,7 +52,7 @@ export default function FeauturedChatBots() {
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 py-4">
           {[1, 2, 3].map(i => (
             <div key={i} className="space-y-3">
               {/* Image Skeleton - aspect-[4/3] for chatbots */}
@@ -92,12 +91,12 @@ export default function FeauturedChatBots() {
             plugins={[WheelGesturesPlugin()]}
             className="w-full"
           >
-            <CarouselContent className="-ml-2 md:-ml-4">
+            <CarouselContent className="pl-2 py-4 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {chatBots.length > 0 ? (
                 chatBots.map(feature_chatbot => (
                   <CarouselItem
                     key={feature_chatbot.id}
-                    className="pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3"
+                    className="p-1 pl-2 md:pl-4 basis-full sm:basis-1/2 lg:basis-1/3"
                   >
                     <FeaturedChatBotCard
                       id={feature_chatbot.id}

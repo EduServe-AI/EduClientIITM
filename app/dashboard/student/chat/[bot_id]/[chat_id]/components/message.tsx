@@ -39,8 +39,8 @@ export default function Message({ message }: { message: chatMessage }) {
         className={cn(
           'rounded-lg p-2.5 md:p-3 break-words overflow-hidden min-w-0',
           isUser
-            ? 'bg-black text-white ml-auto max-w-[85%] md:max-w-[75%]'
-            : 'text-gray-900 max-w-[85%] md:max-w-[90%]'
+            ? 'bg-accent text-accent-foreground ml-auto max-w-[85%] md:max-w-[75%]'
+            : 'text-foreground max-w-[85%] md:max-w-[90%]'
         )}
       >
         {message.id === 'loading' ? (

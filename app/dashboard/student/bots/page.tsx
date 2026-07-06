@@ -1,18 +1,12 @@
 'use client'
-import { Badge } from '@/components/ui/badge'
+import Loading from '@/app/loading'
+import FeaturedChatBotCard from '@/components/featuredChatBotCard'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
-import { Spinner } from '@/components/ui/spinner'
 import { getBotsQueryFn } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
-import {
-  BotMessageSquare,
-  MessageCircle,
-  Search,
-  SlidersHorizontal,
-} from 'lucide-react'
+import { Search, SlidersHorizontal } from 'lucide-react'
 import { useState } from 'react'
 
 export default function StudentBotsPage() {
@@ -60,6 +54,7 @@ export default function StudentBotsPage() {
             size={'sm'}
             onClick={() => setLevel('all')}
             variant={level === 'all' ? 'default' : 'outline'}
+            className="cursor-pointer"
           >
             All Levels
           </Button>
@@ -68,7 +63,7 @@ export default function StudentBotsPage() {
               size={'sm'}
               key={filterLevel}
               onClick={() => setLevel(filterLevel)}
-              className="border-dashed"
+              className="border-dashed cursor-pointer"
               variant={level === filterLevel ? 'default' : 'outline'}
             >
               {filterLevel.charAt(0).toUpperCase() + filterLevel.slice(1)}
@@ -89,9 +84,7 @@ export default function StudentBotsPage() {
       {/* List of chatbots */}
       <div className="">
         {isLoading ? (
-          <div className="max-h-svh flex justify-center items-center">
-            <Spinner className="w-16 h-16" />
-          </div>
+          <Loading />
         ) : isError ? (
           <div className="flex justify-center items-center max-h-svh">
             <div className="text-center">
@@ -106,39 +99,14 @@ export default function StudentBotsPage() {
         ) : bots && bots.length > 0 ? (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
             {bots.map(bot => (
-              <>
-                <Card key={bot.id} className="w-full max-w-xs">
-                  <CardContent className="flex flex-col gap-3">
-                    <div className="bg-primary rounded-md [&_svg]:text-primary-foreground flex size-11 items-center justify-center [&_svg]:size-5">
-                      <BotMessageSquare />
-                    </div>
-                    <a
-                      href="#"
-                      className="text-foreground hover:text-primary block text-sm leading-tight font-medium"
-                    >
-                      {bot.name}
-                    </a>
-                    <p className="text-muted-foreground line-clamp-2 text-xs leading-relaxed">
-                      {bot.description}
-                    </p>
-                    <div className="flex items-center justify-between gap-2">
-                      <Badge variant={'outline'}>{bot.level}</Badge>
-                      <div className="flex items-center gap-2 text-primary">
-                        <MessageCircle className="size-4" />
-                        <span>{bot.numInteractions}</span>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-                {/* <FeaturedChatBotCard
-                  key={bot.id}
-                  id={bot.id}
-                  name={bot.name}
-                  description={bot.description}
-                  numInteractions={bot.numInteractions}
-                  level={bot.level}
-                /> */}
-              </>
+              <FeaturedChatBotCard
+                key={bot.id}
+                id={bot.id}
+                name={bot.name}
+                description={bot.description}
+                numInteractions={bot.numInteractions}
+                level={bot.level}
+              />
             ))}
           </div>
         ) : (
@@ -151,4 +119,34 @@ export default function StudentBotsPage() {
       </div>
     </div>
   )
+}
+
+{
+  /* <Card key={bot.id} className="w-full max-w-xs relative">
+                  <div
+                    className="absolute inset-0 z-0"
+                    style={{
+                      background:
+                        'radial-gradient(38% 39% at 75% 0%, #ee783e38 44%, transparent 139%), #ffffff1c',
+                    }}
+                  />
+                  <CardContent className="flex flex-col gap-3">
+                    <div className="bg-primary rounded-md [&_svg]:text-primary-foreground flex size-11 items-center justify-center [&_svg]:size-5">
+                      <BotMessageSquare />
+                    </div>
+                    <p className="text-foreground hover:text-primary block text-sm leading-tight font-medium">
+                      {bot.name}
+                    </p>
+                    <p className="text-muted-foreground line-clamp-2 text-xs leading-relaxed">
+                      {bot.description}
+                    </p>
+                    <div className="flex items-center justify-between gap-2">
+                      <Badge variant={'outline'}>{bot.level}</Badge>
+                      <div className="flex items-center gap-2 text-primary">
+                        <MessageCircle className="size-4" />
+                        <span>{bot.numInteractions}</span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card> */
 }

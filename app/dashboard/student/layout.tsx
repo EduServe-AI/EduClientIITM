@@ -50,7 +50,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         />
         <SidebarInset className="h-[calc(100vh_-_0px)]">
           <Header />
-          <ScrollArea className="overflow-x-hidden flex flex-1 flex-col gap-4 px-4">
+          <ScrollArea className="overflow-x-hidden flex flex-1 flex-col gap-4">
             {children}
           </ScrollArea>
         </SidebarInset>

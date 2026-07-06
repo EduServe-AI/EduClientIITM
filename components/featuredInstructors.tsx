@@ -28,17 +28,16 @@ export default function FeauturedInstructors() {
 
   return (
     <div className="w-full mb-8 mt-8">
-      <div className="flex items-center justify-between mb-2">
+      <div className="flex items-center justify-between pb-4 border-border border-b">
         {/* ---- Heading ---- */}
         <div className="flex items-center gap-2">
-          <h3 className="text-lg md:text-xl font-bold font-serif">
-            Featured Instructors
-          </h3>
+          <h3 className="text-lg md:text-xl font-bold">Featured Instructors</h3>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                className="hidden md:flex bg-fuchsia-50 hover:bg-gray-400 cursor-pointer"
-                size="icon"
+                variant={'ghost'}
+                className="hidden md:flex cursor-pointer"
+                size="icon-xs"
               >
                 <Info size={20} className="" color="black" />
               </Button>
@@ -113,7 +112,7 @@ export default function FeauturedInstructors() {
             plugins={[WheelGesturesPlugin()]}
             className="w-full"
           >
-            <CarouselContent className="-ml-2 md:-ml-4">
+            <CarouselContent className="pl-2 py-4 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {instructors.map(feature_instructor => (
                 <CarouselItem
                   key={feature_instructor.id}

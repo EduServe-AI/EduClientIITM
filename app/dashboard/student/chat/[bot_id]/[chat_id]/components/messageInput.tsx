@@ -33,7 +33,7 @@ export default function MessageInput() {
   return (
     <div className="w-full max-w-5xl mx-auto px-0 md:px-0 flex flex-col items-center justify-center gap-2">
       {/* Input component will go here */}
-      <InputGroup className="border-2 border-black">
+      <InputGroup className="">
         <InputGroupTextarea
           placeholder="Ask anything ...."
           value={userPrompt}

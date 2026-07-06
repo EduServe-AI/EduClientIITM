@@ -1,14 +1,21 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import { useChatNavigation } from '@/hooks/use-chatNavigation'
 import { useImageUrl } from '@/lib/utils'
 import { ProgramLevelId } from '@/types/types'
-import { Heart, MessageCircle, Share, X } from 'lucide-react'
+import { Heart, MessageCircle, Share } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { Badge } from './ui/badge'
 
 interface ChatBotDetailDialogProps {
   open: boolean
@@ -53,7 +60,7 @@ export default function ChatBotDetailDialog({
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
 
   // Character limit for description truncation
-  const DESCRIPTION_LIMIT = 200
+  const DESCRIPTION_LIMIT = 100
   const shouldTruncate = chatBot.description.length > DESCRIPTION_LIMIT
   const displayedDescription =
     shouldTruncate && !isDescriptionExpanded
@@ -96,24 +103,11 @@ export default function ChatBotDetailDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent
-        className="max-w-2xl p-0 gap-0 overflow-hidden bg-background"
-        showCloseButton={false}
-      >
+      <DialogContent className="">
         {/* Hidden title for accessibility */}
         <DialogTitle className="sr-only">
           {chatBot.name} - Chatbot Details
         </DialogTitle>
-
-        {/* Close button */}
-        <button
-          onClick={() => onOpenChange(false)}
-          className="absolute right-4 top-4 z-50 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none"
-          aria-label="Close dialog"
-        >
-          <X className="h-5 w-5 text-white drop-shadow-lg" />
-          <span className="sr-only">Close</span>
-        </button>
 
         {/* Header Image Section */}
         <div className="relative w-full h-48 sm:h-64 bg-gradient-to-br from-purple-600 via-blue-600 to-cyan-600">
@@ -133,107 +127,106 @@ export default function ChatBotDetailDialog({
               {chatBot.name}
             </h2>
             {/* Level Badge - Right aligned */}
-            <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-white text-xs sm:text-sm font-medium border border-white/30 whitespace-nowrap flex-shrink-0">
+            <Badge className="px-3 h-6 flex items-center backdrop-blur-sm text-white text-xs sm:text-sm font-medium border border-white/30 whitespace-nowrap flex-shrink-0">
               {formatLevel(chatBot.level)}
-            </span>
+            </Badge>
           </div>
         </div>
 
         {/* Content Section */}
-        <div className="p-4 sm:p-6 space-y-4">
-          {/* Name, Level, Stats, and Action Buttons Row */}
-          <div className="flex flex-col gap-3">
-            {/* Stats and Action Buttons */}
-            <div className="flex items-center justify-between gap-2">
-              {/* Interactions Count */}
-              <div className="flex items-center gap-1 text-muted-foreground">
-                <MessageCircle size={18} className="flex-shrink-0" />
-                <span className="text-sm sm:text-base">
-                  {chatBot.numInteractions || 0}
-                </span>
-              </div>
-
-              {/* Action Buttons - Right aligned */}
-              <div className="flex gap-2">
-                <button
-                  onClick={handleFavorite}
-                  className="p-2 rounded-full hover:bg-red-300 dark:hover:bg-red-300 transition-colors cursor-pointer"
-                  aria-label="Favorite"
-                >
-                  <Heart
-                    size={20}
-                    className={`${isFavorited ? 'fill-red-700 text-red-700' : 'text-muted-foreground'}`}
-                  />
-                </button>
-                <button
-                  onClick={handleShare}
-                  className="p-2 rounded-full hover:bg-sky-200 dark:hover:bg-blue-200 transition-colors cursor-pointer"
-                  aria-label="Share"
-                >
-                  <Share size={20} className="text-muted-foreground" />
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Course Badge (if available) */}
-          {chatBot.course && (
-            <div className="flex gap-2 flex-wrap">
-              <span className="px-3 py-1 rounded-full bg-secondary/10 text-secondary-foreground text-xs sm:text-sm font-medium border border-secondary/20">
-                {chatBot.course.name}
+        {/* Name, Level, Stats, and Action Buttons Row */}
+        <div className="flex flex-col gap-3">
+          {/* Stats and Action Buttons */}
+          <div className="flex items-center justify-between gap-2">
+            {/* Interactions Count */}
+            <div className="flex items-center gap-1 text-muted-foreground">
+              <MessageCircle size={18} className="flex-shrink-0" />
+              <span className="text-sm sm:text-base">
+                {chatBot.numInteractions || 0}
               </span>
             </div>
-          )}
 
-          {/* Description Section */}
-          <div className="space-y-2">
-            <h3 className="text-base sm:text-lg font-bold font-serif text-foreground">
-              Description
-            </h3>
-            <div
-              className={`${isDescriptionExpanded ? 'max-h-48 overflow-y-auto' : ''}`}
-            >
-              <p className="text-sm sm:text-base text-foreground leading-relaxed whitespace-pre-wrap">
-                {displayedDescription}
-              </p>
-            </div>
-            {shouldTruncate && (
-              <button
-                onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
-                className="text-primary text-sm font-medium hover:underline cursor-pointer focus:outline-none"
+            {/* Action Buttons - Right aligned */}
+            <div className="flex gap-2">
+              <Button
+                variant={'ghost'}
+                size={'icon'}
+                onClick={handleFavorite}
+                className="p-2 rounded-full hover:bg-accent transition-colors cursor-pointer"
+                aria-label="Favorite"
               >
-                {isDescriptionExpanded ? 'View Less' : 'View More'}
-              </button>
-            )}
-          </div>
-
-          {/* Additional Info */}
-          {(chatBot.createdAt || chatBot.lastInteractionTime) && (
-            <div className="pt-2 border-t space-y-1 text-xs text-muted-foreground">
-              {chatBot.createdAt && (
-                <p>
-                  Created: {new Date(chatBot.createdAt).toLocaleDateString()}
-                </p>
-              )}
-              {chatBot.lastInteractionTime && (
-                <p>
-                  Last interaction:{' '}
-                  {new Date(chatBot.lastInteractionTime).toLocaleString()}
-                </p>
-              )}
+                <Heart
+                  size={20}
+                  className={`${isFavorited ? 'fill-red-700 text-red-700' : 'text-muted-foreground'}`}
+                />
+              </Button>
+              <Button
+                variant={'ghost'}
+                size={'icon'}
+                onClick={handleShare}
+                className="p-2 rounded-full transition-colors cursor-pointer"
+                aria-label="Share"
+              >
+                <Share size={20} className="text-muted-foreground" />
+              </Button>
             </div>
-          )}
-
-          {/* Chat Button */}
-          <div className="pt-2">
-            <Button
-              onClick={handleChat}
-              className="w-full bg-black hover:bg-black/90 text-white font-semibold py-5 sm:py-6 text-sm sm:text-base rounded-lg shadow-lg hover:shadow-xl transition-all"
-            >
-              Chat
-            </Button>
           </div>
         </div>
+
+        {/* Course Badge (if available) */}
+        {chatBot.course && (
+          <div className="flex gap-2 flex-wrap">
+            <span className="px-3 py-1 rounded-full bg-secondary/10 text-secondary-foreground text-xs sm:text-sm font-medium border border-secondary/20">
+              {chatBot.course.name}
+            </span>
+          </div>
+        )}
+
+        {/* Description Section */}
+        <DialogDescription className="space-y-2 pb-2">
+          <span className="text-base sm:text-lg text-foreground">
+            Description
+          </span>
+
+          <div
+            className={`text-sm sm:text-base text-muted-foreground leading-relaxed whitespace-pre-wrap ${
+              isDescriptionExpanded ? 'max-h-48 overflow-y-auto' : ''
+            }`}
+          >
+            {displayedDescription}
+          </div>
+          {shouldTruncate && (
+            <Button
+              variant={'link'}
+              onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
+              className="cursor-pointer px-0"
+            >
+              {isDescriptionExpanded ? 'View Less' : 'View More'}
+            </Button>
+          )}
+        </DialogDescription>
+
+        {/* Additional Info */}
+        {(chatBot.createdAt || chatBot.lastInteractionTime) && (
+          <div className="pt-2 border-t space-y-1 text-xs text-muted-foreground">
+            {chatBot.createdAt && (
+              <p>Created: {new Date(chatBot.createdAt).toLocaleDateString()}</p>
+            )}
+            {chatBot.lastInteractionTime && (
+              <p>
+                Last interaction:{' '}
+                {new Date(chatBot.lastInteractionTime).toLocaleString()}
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* Chat Button */}
+        <DialogFooter>
+          <Button onClick={handleChat} className="w-full" size={'lg'}>
+            Chat
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   )

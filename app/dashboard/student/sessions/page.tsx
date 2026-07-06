@@ -41,22 +41,22 @@ export default function Sessions() {
     <div className="flex flex-col gap-5 p-4 sm:p-7 max-w-7xl ml-5 h-full">
       {/* Top Heading - session */}
 
-      <div className="pb-4 border-b border-gray-200">
-        <h3 className="text-lg leading-6 font-medium text-gray-900">
+      <div className="pb-4 border-b border-border">
+        <h3 className="text-lg leading-6 font-medium text-foreground">
           My Sessions
         </h3>
-        <p className="mt-2 max-w-4xl text-sm text-gray-500">
+        <p className="mt-2 max-w-4xl text-sm text-muted-foreground">
           Workcation is a property rental website. Etiam ullamcorper massa
           viverra consequat, consectetur id nulla tempus. Fringilla egestas
           justo massa purus sagittis malesuada.
         </p>
         {/* List of Tabs - Upcoming , Completed , Cancelled */}
         <div className="flex flex-col gap-4 mt-4">
-          <div className="flex flex-row gap-2 flex-wrap">
+          <div className="flex flex-row gap-1 flex-wrap bg-accent p-1 rounded-md">
             {Tabs.map(tab => (
               <Button
                 key={tab}
-                className={`text-black ${currentTab === tab ? 'text-white bg-black' : 'text-black bg-transparent '} hover:bg-neutral-500`}
+                className={`text-foreground ${currentTab === tab ? 'text-white bg-primary hover:bg-primary hover:text-white' : 'text-foreground bg-transparent hover:bg-primary/20 hover:text-primary'} cursor-pointer`}
                 onClick={() => setCurrentTab(tab)}
               >
                 {tab}
@@ -67,20 +67,7 @@ export default function Sessions() {
       </div>
 
       {/* Sessions List with Scroll Shadow */}
-      <div
-        className="flex flex-col gap-4 items-center sm:items-start w-full mt-4 overflow-y-auto flex-1 relative"
-        style={{
-          background: `
-            linear-gradient(white 30%, rgba(255,255,255,0)),
-            linear-gradient(rgba(255,255,255,0), white 70%) 0 100%,
-            radial-gradient(farthest-side at 50% 0, rgba(0,0,0,.2), rgba(0,0,0,0)),
-            radial-gradient(farthest-side at 50% 100%, rgba(0,0,0,.2), rgba(0,0,0,0)) 0 100%
-          `,
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: '100% 40px, 100% 40px, 100% 14px, 100% 14px',
-          backgroundAttachment: 'local, local, scroll, scroll',
-        }}
-      >
+      <div className="flex flex-col gap-4 items-center sm:items-start w-full mt-4 overflow-y-auto flex-1 relative">
         {isLoading ? (
           <div className="text-center py-8 text-muted-foreground w-full">
             Loading sessions...

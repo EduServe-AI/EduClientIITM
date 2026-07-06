@@ -22,7 +22,7 @@ export default function ChatLayout({
 
   return (
     <ChatProvider botId={botId} chatId={chatId}>
-      <div className="h-full w-full">{children}</div>
+      <div className="h-[calc(100vh-3rem)] -px-2 w-full">{children}</div>
     </ChatProvider>
   )
 }
