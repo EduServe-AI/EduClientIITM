@@ -1,26 +1,11 @@
 'use client'
 
-import { DeleteChatConfirmation } from '@/components/common/deleteChatConfirmation'
-import { deleteChat, getRecentChats } from '@/lib/api'
+import { getRecentChats } from '@/lib/api'
 import { useImageUrl } from '@/lib/utils'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import {
-  AlertCircle,
-  MessageCircle,
-  MoreHorizontal,
-  Trash2,
-} from 'lucide-react'
+import { useQuery } from '@tanstack/react-query'
+import { AlertCircle, MessageCircle } from 'lucide-react'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
-import { useState } from 'react'
-import { toast } from 'sonner'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from './ui/dropdown-menu'
 import { ScrollArea } from './ui/scroll-area'
 import { Skeleton } from './ui/skeleton'
 
@@ -37,6 +22,34 @@ export interface UserChatsResponse {
   data: {
     chats: Chat[]
   }
+}
+
+function categorizeChats(chats: Chat[]) {
+  const today: Chat[] = []
+  const lastWeek: Chat[] = []
+  const aWhileAgo: Chat[] = []
+
+  const now = new Date()
+  const startOfToday = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate()
+  )
+  const oneDay = 24 * 60 * 60 * 1000
+  const sevenDaysAgo = new Date(startOfToday.getTime() - 7 * oneDay)
+
+  chats.forEach(chat => {
+    const chatDate = new Date(chat.lastInteractionTime)
+    if (chatDate >= startOfToday) {
+      today.push(chat)
+    } else if (chatDate >= sevenDaysAgo) {
+      lastWeek.push(chat)
+    } else {
+      aWhileAgo.push(chat)
+    }
+  })
+
+  return { today, lastWeek, aWhileAgo }
 }
 
 export function RecentChatsList() {
@@ -105,17 +118,62 @@ export function RecentChatsList() {
     )
   }
 
+  const categorized = categorizeChats(chats)
+
   return (
     <div className="flex flex-col">
       <ScrollArea className="max-h-[400px] px-2">
-        <div className="space-y-1">
-          {chats.map(chat => (
-            <ChatItem
-              key={chat.id}
-              chat={chat}
-              href={`/dashboard/student/chat/${chat.botId}/${chat.id}`}
-            />
-          ))}
+        <div className="space-y-4">
+          {categorized.today.length > 0 && (
+            <div className="space-y-1">
+              <h4 className="text-xs font-semibold text-muted-foreground px-2 py-1">
+                Today
+              </h4>
+              <div className="space-y-1">
+                {categorized.today.map(chat => (
+                  <ChatItem
+                    key={chat.id}
+                    chat={chat}
+                    href={`/dashboard/student/chat/${chat.botId}/${chat.id}`}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {categorized.lastWeek.length > 0 && (
+            <div className="space-y-1">
+              <h4 className="text-xs font-semibold text-muted-foreground px-2 py-1">
+                Last Week
+              </h4>
+              <div className="space-y-1">
+                {categorized.lastWeek.map(chat => (
+                  <ChatItem
+                    key={chat.id}
+                    chat={chat}
+                    href={`/dashboard/student/chat/${chat.botId}/${chat.id}`}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {categorized.aWhileAgo.length > 0 && (
+            <div className="space-y-1">
+              <h4 className="text-xs font-semibold text-muted-foreground px-2 py-1">
+                A While Ago
+              </h4>
+              <div className="space-y-1">
+                {categorized.aWhileAgo.map(chat => (
+                  <ChatItem
+                    key={chat.id}
+                    chat={chat}
+                    href={`/dashboard/student/chat/${chat.botId}/${chat.id}`}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </ScrollArea>
     </div>
@@ -129,49 +187,9 @@ interface ChatItemProps {
 
 function ChatItem({ chat, href }: ChatItemProps) {
   const imageUrl = useImageUrl(chat.botName, 'bot')
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const queryClient = useQueryClient()
-  const router = useRouter()
-  const pathname = usePathname()
-
-  const deleteChatMutation = useMutation({
-    mutationFn: deleteChat,
-    onSuccess: message => {
-      toast.success(message || 'Chat Deleted successfully')
-      queryClient.invalidateQueries({ queryKey: ['recentChats'] })
-      setShowDeleteModal(false)
-      if (pathname?.includes(chat.id)) {
-        router.push('/dashboard/student')
-      }
-    },
-    onError: (error: Error) => {
-      toast.error(error.message || 'Failed to delete chat')
-      setShowDeleteModal(false)
-    },
-  })
-
-  const formatTime = (date: Date) => {
-    const now = new Date()
-    const chatDate = new Date(date)
-    const diff = now.getTime() - chatDate.getTime()
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-
-    if (days === 0) {
-      return chatDate.toLocaleTimeString('en-US', {
-        hour: 'numeric',
-        minute: '2-digit',
-        hour12: true,
-      })
-    } else if (days < 7) {
-      return chatDate.toLocaleDateString('en-US', { weekday: 'short' })
-    } else {
-      return chatDate.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-      })
-    }
-  }
+  const showTitle =
+    chat.title &&
+    !chat.title.trim().toLowerCase().startsWith('conversation with')
 
   return (
     <div
@@ -193,70 +211,18 @@ function ChatItem({ chat, href }: ChatItemProps) {
       </Avatar>
 
       {/* Chat info - Hidden when sidebar is collapsed */}
-      <div className="flex-1 min-w-0 overflow-hidden group-data-[state=closed]:hidden relative z-[1] pointer-events-none pr-6 md:pr-0">
+      <div className="flex-1 min-w-0 overflow-hidden group-data-[state=closed]:hidden relative z-[1] pointer-events-none">
         <div className="flex items-baseline justify-between gap-1">
           <span className="text-sm font-medium text-sidebar-foreground truncate">
             {chat.botName}
           </span>
-          {/* Timestamp — hidden on hover / when menu is open */}
-          <span
-            className={`text-[11px] text-muted-foreground whitespace-nowrap flex-shrink-0 ml-auto transition-opacity duration-150 md:group-hover/chat:opacity-0 ${menuOpen ? 'md:opacity-0' : ''}`}
-          >
-            {formatTime(chat.lastInteractionTime)}
-          </span>
         </div>
-        <p className="text-xs text-muted-foreground truncate mt-0.5">
-          {chat.title || 'Conversation with ' + chat.botName}
-        </p>
+        {showTitle && (
+          <p className="text-xs text-muted-foreground truncate mt-0.5">
+            {chat.title}
+          </p>
+        )}
       </div>
-
-      {/* Three-dot menu — always visible on mobile, hover-reveal on desktop */}
-      <div
-        className={`
-          absolute right-2 top-1/2 -translate-y-1/2 z-[2] flex-shrink-0
-          group-data-[state=closed]:!hidden
-          transition-opacity duration-150
-          opacity-100 pointer-events-auto
-          md:opacity-0 md:pointer-events-none
-          ${menuOpen ? 'md:opacity-100 md:pointer-events-auto' : 'md:group-hover/chat:opacity-100 md:group-hover/chat:pointer-events-auto'}
-        `}
-      >
-        <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
-          <DropdownMenuTrigger asChild>
-            <button
-              className="h-6 w-6 flex items-center justify-center rounded-md hover:bg-sidebar-border transition-colors cursor-pointer"
-              onClick={e => e.stopPropagation()}
-            >
-              <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent side="bottom" align="end" className="w-40">
-            <DropdownMenuItem
-              className="cursor-pointer gap-2 text-red-500 focus:text-red-500"
-              disabled={deleteChatMutation.isPending}
-              onClick={e => {
-                e.stopPropagation()
-                setShowDeleteModal(true)
-              }}
-            >
-              <Trash2 className="h-4 w-4 text-red-500" />
-              <span>Delete Chat</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-
-      {showDeleteModal && (
-        <DeleteChatConfirmation
-          isOpen={showDeleteModal}
-          onClose={() => setShowDeleteModal(false)}
-          onConfirm={() => {
-            deleteChatMutation.mutate(chat.id)
-          }}
-          isPending={deleteChatMutation.isPending}
-          botName={chat.botName}
-        />
-      )}
     </div>
   )
 }
